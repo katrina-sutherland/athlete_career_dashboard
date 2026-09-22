@@ -1,0 +1,2541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Timothy ANDERSON · World Ranking and Race Experience</title>
+  <style>
+
+    :root {
+      --bg: #181818;
+      --text: #e8e8e8;
+      --text-2: #b8b8b8;
+      --text-3: #8a8a8a;
+      --stroke: #5a5a5a;
+      --stroke-soft: #333;
+      --fill: #2a2a2a;
+      --accent: #5a9ce6;
+      --green: #3fa266;
+      --purple: #9386f2;
+      --gray-border: #9a9a9a;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 24px 20px 40px; }
+    h1 { font-size: 24px; line-height: 30px; font-weight: 600; margin: 0 0 6px; }
+    .sub { font-weight: 600; margin: 0 0 6px; }
+    .lead { color: var(--text-2); font-size: 14px; line-height: 20px; margin: 0 0 20px; }
+    .controls { display: flex; flex-wrap: wrap; gap: 16px; align-items: end; margin-bottom: 16px; }
+    .field { display: flex; flex-direction: column; gap: 6px; min-width: 260px; flex: 1; }
+    .label { font-size: 12px; font-weight: 600; color: var(--text-2); }
+    select {
+      height: 36px;
+      background: var(--fill);
+      color: var(--text);
+      border: 1px solid var(--stroke);
+      border-radius: 6px;
+      padding: 0 10px;
+      font-size: 14px;
+    }
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+      border: 1px solid var(--stroke);
+      background: transparent;
+      color: var(--text-2);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .pill.active { background: #3a3a3a; color: var(--text); border-color: var(--gray-border); }
+    .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+    .tile {
+      border: 2px solid var(--gray-border);
+      background: rgba(255,255,255,0.06);
+      border-radius: 8px;
+      min-height: 92px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px;
+    }
+    .tile .val { font-size: 24px; line-height: 30px; font-weight: 590; }
+    .tile .lbl { font-size: 12px; font-weight: 500; color: var(--text-2); margin-top: 4px; }
+    .chart-wrap { position: relative; width: 100%; overflow: visible; }
+    svg { display: block; width: 100%; height: auto; }
+    .legend { display: flex; justify-content: center; gap: 16px; align-items: center; margin-top: 8px; font-size: 12px; color: var(--text-2); flex-wrap: wrap; width: 100%; text-align: center; }
+    .dot { display: inline-block; border-radius: 99px; }
+    .tip {
+      display: none;
+      position: absolute;
+      width: 360px;
+      background: #1c1c1c;
+      border: 1px solid var(--stroke);
+      border-radius: 6px;
+      padding: 10px 12px;
+      pointer-events: none;
+      z-index: 2;
+      font-size: 12px;
+    }
+    .tip-head { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 600; }
+    .tip-head span:last-child { color: var(--text-2); }
+    .rel { display: grid; grid-template-columns: 28px 1fr 36px; gap: 8px; padding: 2px 0; line-height: 18px; color: var(--text-2); }
+    .rel.best { color: var(--accent); font-weight: 650; }
+    .races { padding: 4px 0 6px 20px; }
+    .race-h, .race { display: grid; grid-template-columns: 40px 1fr 36px; gap: 8px; }
+    .race-h { color: var(--text-3); font-size: 10px; font-weight: 650; padding: 4px 0 2px; }
+    .race { color: var(--text-2); font-size: 11px; line-height: 16px; }
+    .race .flag { color: var(--text); font-weight: 600; }
+    .empty { color: var(--text-3); font-size: 14px; padding: 40px 0; text-align: center; }
+    @media (max-width: 800px) {
+      .tiles { grid-template-columns: 1fr 1fr; }
+    }
+
+    .hint { color: var(--text-3); font-size: 12px; line-height: 18px; margin: 8px 0 0; }
+    .error {
+      display: none;
+      background: rgba(180, 70, 70, 0.18);
+      border: 1px solid #c07070;
+      color: #f0c8c8;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+      line-height: 18px;
+      margin: 0 0 16px;
+    }
+    .error.show { display: block; }
+
+    .tabs { display: flex; gap: 8px; margin: 12px 0 16px; }
+    .tab {
+      border: 1px solid var(--stroke);
+      background: transparent;
+      color: var(--text-2);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .tab.active { background: #3a3a3a; color: var(--text); border-color: var(--gray-border); }
+    .tiles-2 { grid-template-columns: 1fr 1fr; max-width: 560px; }
+    .tiles-3 { grid-template-columns: 1fr 1fr 1fr; max-width: 840px; }
+    .legend[hidden] { display: none; }
+    .field[hidden] { display: none; }
+
+    .milestones {
+      margin: 20px 0 8px;
+      padding: 20px 20px 8px;
+      border: 1px solid var(--stroke-soft);
+      border-radius: 12px;
+      background:
+        radial-gradient(120% 80% at 0% 0%, rgba(90, 156, 230, 0.12), transparent 55%),
+        radial-gradient(100% 70% at 100% 100%, rgba(230, 126, 34, 0.08), transparent 50%),
+        linear-gradient(180deg, #1f1f1f 0%, #1a1a1a 100%);
+      overflow: hidden;
+    }
+    .milestones-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .milestones h3 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 650;
+      letter-spacing: 0.02em;
+      color: var(--text);
+    }
+    .milestones-count {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .milestones-list {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: 0 0 12px 0;
+    }
+    .milestones-list::before {
+      content: "";
+      position: absolute;
+      left: 86px;
+      top: 8px;
+      bottom: 20px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent), #e67e22 55%, var(--green));
+      opacity: 0.55;
+      border-radius: 2px;
+    }
+    .milestone {
+      position: relative;
+      display: grid;
+      grid-template-columns: 72px 28px 1fr;
+      gap: 0 12px;
+      align-items: center;
+      padding: 10px 4px 10px 0;
+      animation: milestone-in 0.45s ease both;
+    }
+    .milestone:nth-child(1) { animation-delay: 0.02s; }
+    .milestone:nth-child(2) { animation-delay: 0.06s; }
+    .milestone:nth-child(3) { animation-delay: 0.1s; }
+    .milestone:nth-child(4) { animation-delay: 0.14s; }
+    .milestone:nth-child(5) { animation-delay: 0.18s; }
+    .milestone:nth-child(6) { animation-delay: 0.22s; }
+    .milestone:nth-child(7) { animation-delay: 0.26s; }
+    .milestone:nth-child(8) { animation-delay: 0.3s; }
+    .milestone:nth-child(9) { animation-delay: 0.34s; }
+    .milestone:nth-child(10) { animation-delay: 0.38s; }
+    .milestone:nth-child(n+11) { animation-delay: 0.42s; }
+    @keyframes milestone-in {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .milestone-age {
+      text-align: right;
+      padding-right: 4px;
+    }
+    .milestone-age .age-lbl {
+      display: block;
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+    .milestone-age .age-num {
+      display: block;
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.1;
+      color: var(--text);
+      letter-spacing: 0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+    .milestone-mark {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .milestone-mark .dot-ring {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 0 4px rgba(90, 156, 230, 0.12);
+    }
+    .milestone:nth-child(odd) .milestone-mark .dot-ring {
+      border-color: #e67e22;
+      box-shadow: 0 0 0 4px rgba(230, 126, 34, 0.12);
+    }
+    .milestone:nth-child(3n) .milestone-mark .dot-ring {
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(63, 162, 102, 0.12);
+    }
+    .milestone-body {
+      min-width: 0;
+      padding: 8px 14px 10px;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.03);
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .milestone:hover .milestone-body {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.12);
+    }
+    .milestone-body .label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      color: var(--text);
+    }
+    .milestone-body .race {
+      display: block;
+      margin-top: 3px;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      color: var(--text-2);
+    }
+    .milestone-body .year {
+      display: inline-block;
+      margin-top: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+    }
+    .milestone-body .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      margin-top: 6px;
+    }
+    .milestone-body .meta span {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-3);
+      letter-spacing: 0.02em;
+    }
+    .milestone-body .meta strong {
+      color: var(--text-2);
+      font-weight: 650;
+    }
+
+    .panel[hidden] { display: none; }
+    .toggle-row { display: flex; align-items: center; gap: 8px; height: 36px; }
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-2);
+      font-size: 13px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .check input { accent-color: var(--accent); }
+    .bar-tip-list { margin-top: 6px; }
+    .bar-tip-list div { color: var(--text-2); font-size: 12px; line-height: 18px; padding: 1px 0; }
+
+    .age-detail {
+      margin-top: 20px;
+      padding-top: 4px;
+    }
+    .age-detail[hidden] { display: none; }
+    .age-detail-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .age-detail-head h3 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 650;
+      color: var(--text);
+    }
+    .age-detail-head .count {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .comp-tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    .comp-tile {
+      border: 1px solid var(--stroke-soft);
+      background: linear-gradient(180deg, #1f1f1f 0%, #1a1a1a 100%);
+      border-radius: 10px;
+      padding: 14px 14px 12px;
+      text-align: left;
+    }
+    .comp-tile .comp-name {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .comp-tile .comp-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      padding: 4px 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .comp-tile .comp-row:first-of-type { border-top: 0; }
+    .comp-tile .comp-lbl {
+      font-size: 12px;
+      color: var(--text-3);
+      font-weight: 500;
+    }
+    .comp-tile .comp-val {
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .comp-tile .comp-val.muted { color: var(--text-3); font-weight: 500; }
+    .cum-age {
+      cursor: pointer;
+      fill: #8a8a8a;
+    }
+    .cum-age:hover { fill: #e8e8e8; }
+    .cum-age.selected { fill: #5a9ce6; font-weight: 700; }
+
+    .field[hidden] { display: none; }
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Timothy ANDERSON</h1>
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-tab="rank">World Ranking</button>
+      <button class="tab" data-tab="races">Race Experience</button>
+    </div>
+    <p class="sub" id="who"></p>
+    <p class="error" id="load-error">The athlete data did not load in this preview. Download this HTML file to your computer, then double-click it to open in Chrome or Safari.</p>
+    <div class="controls">
+      <div class="field" style="flex:0" id="class-field">
+        <div class="label">Class</div>
+        <div class="pills" id="classes"></div>
+      </div>
+      <div class="field" style="flex:0" id="race-mode-field" hidden>
+        <div class="pills" id="race-modes"></div>
+      </div>
+    </div>
+    <div class="panel" id="panel-rank">
+      <div class="tiles" id="tiles"></div>
+      <div class="chart-wrap" id="chart"></div>
+      <div class="legend">
+        <span><span class="dot" style="width:11px;height:11px;background:var(--accent);border:2px solid var(--text);vertical-align:middle"></span> Best rank for age</span>
+        <span><span class="dot" style="width:8px;height:8px;background:#4a4a4a;border:1px solid var(--stroke);vertical-align:middle"></span> Other releases at that age</span>
+      </div>
+    </div>
+    <div class="panel" id="panel-races" hidden>
+      <div class="tiles tiles-2" id="race-tiles"></div>
+      <div class="chart-wrap" id="race-chart"></div>
+      <div class="legend" id="race-legend">
+        <span><span class="dot" style="width:11px;height:11px;background:#d4a017;opacity:0.55;vertical-align:middle"></span> Olympic Games</span>
+        <span><span class="dot" style="width:11px;height:11px;background:#3fa266;opacity:0.55;vertical-align:middle"></span> SNR World Championships &amp; World Cups</span>
+        <span><span class="dot" style="width:11px;height:11px;background:#e67e22;opacity:0.55;vertical-align:middle"></span> U23 &amp; JNR World Championships</span>
+        <span><span class="dot" style="width:11px;height:11px;background:#9386f2;opacity:0.55;vertical-align:middle"></span> ICF World Ranking races</span>
+        <span><span class="dot" style="width:11px;height:11px;background:#5a9ce6;opacity:0.55;vertical-align:middle"></span> All other races</span>
+        <span><span class="dot" style="width:11px;height:3px;border-radius:1px;background:#e8e8e8;vertical-align:middle"></span> World Ranking</span>
+      </div>
+      <div class="legend" id="cum-legend" hidden></div>
+      <div id="milestones" class="milestones" hidden></div>
+      <div id="age-detail" class="age-detail" hidden>
+        <div class="age-detail-head">
+          <h3 id="age-detail-title">Age</h3>
+          <span class="count" id="age-detail-count"></span>
+        </div>
+        <div class="comp-tiles" id="comp-tiles"></div>
+      </div>
+    </div>
+  </div>
+  <script type="application/json" id="race-data">
+{
+  "Timothy ANDERSON": {
+    "MK1": [
+      {
+        "y": 2010,
+        "r": [
+          [
+            "World Championships Foix 2010",
+            "uj"
+          ]
+        ],
+        "a": 16
+      },
+      {
+        "y": 2012,
+        "r": [
+          [
+            "ICF World Ranking Wausau 2012",
+            "wr"
+          ]
+        ],
+        "a": 18
+      },
+      {
+        "y": 2013,
+        "r": [
+          [
+            "ICF World Ranking Liptovsky Mikulas 2013",
+            "wr"
+          ]
+        ],
+        "a": 19
+      },
+      {
+        "y": 2014,
+        "r": [
+          [
+            "ICF World Ranking Penrith 2014",
+            "wr"
+          ],
+          [
+            "Oceania Championships Penrith 2014",
+            "ot"
+          ]
+        ],
+        "a": 20
+      },
+      {
+        "y": 2015,
+        "r": [
+          [
+            "ICF World Ranking Ivrea 2015",
+            "wr"
+          ],
+          [
+            "ICF World Ranking Meran 2015",
+            "wr"
+          ],
+          [
+            "ICF World Ranking Penrith 2015",
+            "wr"
+          ],
+          [
+            "ICF World Ranking Tacen 2015",
+            "wr"
+          ],
+          [
+            "Pyrenees Cup La Seu 2015",
+            "ot"
+          ],
+          [
+            "Slovak Open Bratislava 2015",
+            "ot"
+          ],
+          [
+            "World Championships Foz do Iguassu 2015",
+            "uj"
+          ]
+        ],
+        "a": 21
+      },
+      {
+        "y": 2016,
+        "r": [
+          [
+            "ICF World Ranking Penrith 2016",
+            "wr"
+          ],
+          [
+            "World Championships Krakow 2016",
+            "uj"
+          ],
+          [
+            "World Cup Prague 2016",
+            "sg"
+          ],
+          [
+            "World Cup Tacen 2016",
+            "sg"
+          ]
+        ],
+        "a": 22
+      },
+      {
+        "y": 2017,
+        "r": [
+          [
+            "ICF World Ranking Bratislava 2017",
+            "wr"
+          ],
+          [
+            "ICF World Ranking Penrith 2017",
+            "wr"
+          ],
+          [
+            "Oceania Championships Auckland 2017",
+            "ot"
+          ],
+          [
+            "Pyrenees Cup Pau 2017",
+            "ot"
+          ],
+          [
+            "World Championships Bratislava 2017",
+            "uj"
+          ],
+          [
+            "World Cup Augsburg 2017",
+            "sg"
+          ],
+          [
+            "World Cup Prague 2017",
+            "sg"
+          ]
+        ],
+        "a": 23
+      },
+      {
+        "y": 2018,
+        "r": [
+          [
+            "ICF World Ranking Penrith 2018",
+            "wr"
+          ],
+          [
+            "Oceania Championships Auckland 2018",
+            "ot"
+          ],
+          [
+            "World Championships Deodoro, Rio 2018",
+            "sg"
+          ],
+          [
+            "World Cup Augsburg 2018",
+            "sg"
+          ],
+          [
+            "World Cup Krakow 2018",
+            "sg"
+          ],
+          [
+            "World Cup La Seu 2018",
+            "sg"
+          ],
+          [
+            "World Cup Liptovsky Mikulas 2018",
+            "sg"
+          ]
+        ],
+        "a": 24
+      },
+      {
+        "y": 2019,
+        "r": [
+          [
+            "ICF World Ranking Penrith 2019",
+            "wr"
+          ],
+          [
+            "Oceania Championships Penrith 2019",
+            "ot"
+          ],
+          [
+            "World Championships La Seu 2019",
+            "sg"
+          ],
+          [
+            "World Cup Bratislava 2019",
+            "sg"
+          ],
+          [
+            "World Cup Lee Valley 2019",
+            "sg"
+          ],
+          [
+            "World Cup Prague 2019",
+            "sg"
+          ],
+          [
+            "World Cup Tacen 2019",
+            "sg"
+          ]
+        ],
+        "a": 25
+      },
+      {
+        "y": 2020,
+        "r": [
+          [
+            "Australian Open Penrith 2020",
+            "ot"
+          ],
+          [
+            "Oceania Championships Auckland 2020",
+            "ot"
+          ]
+        ],
+        "a": 26
+      },
+      {
+        "y": 2022,
+        "r": [
+          [
+            "Australian Open Penrith 2022",
+            "ot"
+          ],
+          [
+            "ICF World Ranking Augsburg 2022",
+            "wr"
+          ],
+          [
+            "Oceania Championships Penrith 2022",
+            "ot"
+          ],
+          [
+            "World Championships Augsburg 2022",
+            "sg"
+          ],
+          [
+            "World Cup Krakow 2022",
+            "sg"
+          ],
+          [
+            "World Cup La Seu 2022",
+            "sg"
+          ],
+          [
+            "World Cup Pau 2022",
+            "sg"
+          ],
+          [
+            "World Cup Prague 2022",
+            "sg"
+          ],
+          [
+            "World Cup Tacen 2022",
+            "sg"
+          ]
+        ],
+        "a": 28
+      },
+      {
+        "y": 2023,
+        "r": [
+          [
+            "Australian Open Penrith 2023",
+            "ot"
+          ],
+          [
+            "ICF World Ranking Penrith 2023",
+            "wr"
+          ],
+          [
+            "Penrith Open Penrith 2023",
+            "ot"
+          ],
+          [
+            "Pyrenees Cup La Seu 2023",
+            "ot"
+          ],
+          [
+            "World Championships Lee Valley 2023",
+            "sg"
+          ],
+          [
+            "World Cup Augsburg 2023",
+            "sg"
+          ],
+          [
+            "World Cup La Seu 2023",
+            "sg"
+          ],
+          [
+            "World Cup Prague 2023",
+            "sg"
+          ],
+          [
+            "World Cup Tacen 2023",
+            "sg"
+          ],
+          [
+            "World Cup Vaires sur Marne 2023",
+            "sg"
+          ]
+        ],
+        "a": 29
+      },
+      {
+        "y": 2024,
+        "r": [
+          [
+            "Australian Open Penrith 2024",
+            "ot"
+          ],
+          [
+            "Oceania Championships Penrith 2024",
+            "ot"
+          ],
+          [
+            "Olympic Games Paris 2024",
+            "ol"
+          ],
+          [
+            "World Cup Augsburg 2024",
+            "sg"
+          ],
+          [
+            "World Cup Ivrea 2024",
+            "sg"
+          ],
+          [
+            "World Cup Krakow 2024",
+            "sg"
+          ],
+          [
+            "World Cup La Seu 2024",
+            "sg"
+          ],
+          [
+            "World Cup Prague 2024",
+            "sg"
+          ]
+        ],
+        "a": 30
+      },
+      {
+        "y": 2025,
+        "r": [
+          [
+            "Australian Open Penrith 2025",
+            "ot"
+          ],
+          [
+            "Oceania Championships Penrith 2025",
+            "ot"
+          ],
+          [
+            "World Championships Penrith 2025",
+            "sg"
+          ],
+          [
+            "World Cup La Seu 2025",
+            "sg"
+          ],
+          [
+            "World Cup Pau 2025",
+            "sg"
+          ],
+          [
+            "World Cup Prague 2025",
+            "sg"
+          ]
+        ],
+        "a": 31
+      },
+      {
+        "y": 2026,
+        "r": [
+          [
+            "Australian Open Penrith 2026",
+            "ot"
+          ],
+          [
+            "ICF World Ranking Oklahoma 2026",
+            "wr"
+          ],
+          [
+            "ICF World Ranking Penrith 2026",
+            "wr"
+          ],
+          [
+            "Oceania Championships Auckland 2026",
+            "ot"
+          ],
+          [
+            "Penrith Open Penrith 2026",
+            "ot"
+          ],
+          [
+            "World Cup La Seu 2026",
+            "sg"
+          ],
+          [
+            "World Cup Prague 2026",
+            "sg"
+          ],
+          [
+            "World Cup Vaires sur Marne 2026",
+            "sg"
+          ]
+        ],
+        "a": 32
+      }
+    ]
+  }
+}
+  </script>
+  <script type="application/json" id="ranking-data">
+{
+  "Timothy ANDERSON": {
+    "MK1": [
+      {
+        "y": 2010,
+        "best": 369,
+        "rel": [
+          [
+            "21 Aug 2010",
+            369
+          ],
+          [
+            "9 Sep 2010",
+            373
+          ]
+        ],
+        "s": [
+          [
+            2010,
+            "World Championships Foix",
+            28.54
+          ]
+        ],
+        "a": 16
+      },
+      {
+        "y": 2011,
+        "best": 346,
+        "rel": [
+          [
+            "21 May 2011",
+            363
+          ],
+          [
+            "8 Jul 2011",
+            364
+          ],
+          [
+            "12 Aug 2011",
+            355
+          ],
+          [
+            "7 Sep 2011",
+            346
+          ]
+        ],
+        "s": [
+          [
+            2010,
+            "World Championships Foix",
+            28.54
+          ]
+        ],
+        "a": 17
+      },
+      {
+        "y": 2012,
+        "best": 294,
+        "rel": [
+          [
+            "5 May 2012",
+            335
+          ],
+          [
+            "22 Jun 2012",
+            324
+          ],
+          [
+            "28 Jul 2012",
+            300
+          ],
+          [
+            "31 Aug 2012",
+            294
+          ]
+        ],
+        "s": [
+          [
+            2012,
+            "ICF World Ranking Wausau",
+            36.37
+          ]
+        ],
+        "a": 18
+      },
+      {
+        "y": 2013,
+        "best": 236,
+        "rel": [
+          [
+            "13 Apr 2013",
+            309
+          ],
+          [
+            "25 May 2013",
+            315
+          ],
+          [
+            "23 Aug 2013",
+            236
+          ],
+          [
+            "11 Sep 2013",
+            236
+          ]
+        ],
+        "s": [
+          [
+            2013,
+            "ICF World Ranking Liptovsky Mikulas",
+            10.24
+          ],
+          [
+            2012,
+            "ICF World Ranking Wausau",
+            36.37
+          ]
+        ],
+        "a": 19
+      },
+      {
+        "y": 2014,
+        "best": 138,
+        "rel": [
+          [
+            "23 May 2014",
+            144
+          ],
+          [
+            "20 Jun 2014",
+            138
+          ],
+          [
+            "15 Aug 2014",
+            140
+          ],
+          [
+            "17 Sep 2014",
+            145
+          ]
+        ],
+        "s": [
+          [
+            2014,
+            "ICF World Ranking Penrith",
+            12.21
+          ],
+          [
+            2014,
+            "Oceania Championships Penrith",
+            2.54
+          ],
+          [
+            2014,
+            "ICF World Ranking Penrith",
+            11.02
+          ],
+          [
+            2013,
+            "ICF World Ranking Liptovsky Mikulas",
+            10.24
+          ]
+        ],
+        "a": 20
+      },
+      {
+        "y": 2015,
+        "best": 69,
+        "rel": [
+          [
+            "6 Jun 2015",
+            69
+          ],
+          [
+            "3 Jul 2015",
+            71
+          ],
+          [
+            "14 Aug 2015",
+            73
+          ],
+          [
+            "16 Sep 2015",
+            74
+          ]
+        ],
+        "s": [
+          [
+            2014,
+            "ICF World Ranking Penrith",
+            12.21
+          ],
+          [
+            2014,
+            "Oceania Championships Penrith",
+            2.54
+          ],
+          [
+            2015,
+            "ICF World Ranking Penrith",
+            4.3
+          ],
+          [
+            2015,
+            "Pyrenees Cup La Seu",
+            9.01
+          ],
+          [
+            2015,
+            "World Championships Foz do Iguassu",
+            15.87
+          ]
+        ],
+        "a": 21
+      },
+      {
+        "y": 2016,
+        "best": 77,
+        "rel": [
+          [
+            "30 Apr 2016",
+            86
+          ],
+          [
+            "17 Jun 2016",
+            83
+          ],
+          [
+            "7 Aug 2016",
+            86
+          ],
+          [
+            "9 Sep 2016",
+            77
+          ]
+        ],
+        "s": [
+          [
+            2016,
+            "ICF World Ranking Penrith",
+            4.2
+          ],
+          [
+            2015,
+            "ICF World Ranking Penrith",
+            4.3
+          ],
+          [
+            2016,
+            "World Cup Tacen",
+            0
+          ],
+          [
+            2016,
+            "World Cup Prague",
+            0
+          ],
+          [
+            2015,
+            "Pyrenees Cup La Seu",
+            9.01
+          ]
+        ],
+        "a": 22
+      },
+      {
+        "y": 2017,
+        "best": 71,
+        "rel": [
+          [
+            "26 May 2017",
+            76
+          ],
+          [
+            "30 Jun 2017",
+            71
+          ],
+          [
+            "8 Sep 2017",
+            73
+          ],
+          [
+            "27 Sep 2017",
+            72
+          ]
+        ],
+        "s": [
+          [
+            2016,
+            "ICF World Ranking Penrith",
+            4.2
+          ],
+          [
+            2017,
+            "ICF World Ranking Penrith",
+            3.85
+          ],
+          [
+            2017,
+            "World Cup Augsburg",
+            0
+          ],
+          [
+            2016,
+            "World Cup Tacen",
+            0
+          ],
+          [
+            2017,
+            "Oceania Championships Auckland",
+            8.31
+          ]
+        ],
+        "a": 23
+      },
+      {
+        "y": 2018,
+        "best": 43,
+        "rel": [
+          [
+            "8 Jun 2018",
+            57
+          ],
+          [
+            "6 Jul 2018",
+            44
+          ],
+          [
+            "7 Sep 2018",
+            43
+          ],
+          [
+            "25 Sep 2018",
+            45
+          ]
+        ],
+        "s": [
+          [
+            2018,
+            "ICF World Ranking Penrith",
+            1.54
+          ],
+          [
+            2018,
+            "World Cup Augsburg",
+            0
+          ],
+          [
+            2018,
+            "Oceania Championships Auckland",
+            8.72
+          ],
+          [
+            2018,
+            "World Cup Liptovsky Mikulas",
+            0
+          ],
+          [
+            2017,
+            "ICF World Ranking Bratislava",
+            22.75
+          ]
+        ],
+        "a": 24
+      },
+      {
+        "y": 2019,
+        "best": 33,
+        "rel": [
+          [
+            "11 May 2019",
+            33
+          ],
+          [
+            "28 Jun 2019",
+            34
+          ],
+          [
+            "6 Sep 2019",
+            36
+          ],
+          [
+            "25 Sep 2019",
+            33
+          ]
+        ],
+        "s": [
+          [
+            2019,
+            "Oceania Championships Penrith",
+            2.13
+          ],
+          [
+            2018,
+            "ICF World Ranking Penrith",
+            1.54
+          ],
+          [
+            2018,
+            "World Cup Augsburg",
+            0
+          ],
+          [
+            2018,
+            "Oceania Championships Auckland",
+            8.72
+          ],
+          [
+            2019,
+            "ICF World Ranking Penrith",
+            2.1
+          ]
+        ],
+        "a": 25
+      },
+      {
+        "y": 2020,
+        "best": 35,
+        "rel": [
+          [
+            "1 Feb 2020",
+            35
+          ]
+        ],
+        "s": [
+          [
+            2019,
+            "Oceania Championships Penrith",
+            2.13
+          ],
+          [
+            2018,
+            "ICF World Ranking Penrith",
+            1.54
+          ],
+          [
+            2018,
+            "World Cup Augsburg",
+            0
+          ],
+          [
+            2019,
+            "World Championships La Seu",
+            0
+          ],
+          [
+            2019,
+            "ICF World Ranking Penrith",
+            2.1
+          ]
+        ],
+        "a": 26
+      },
+      {
+        "y": 2021,
+        "best": 42,
+        "rel": [
+          [
+            "10 Sep 2021",
+            42
+          ],
+          [
+            "1 Nov 2021",
+            45
+          ]
+        ],
+        "s": [
+          [
+            2019,
+            "Oceania Championships Penrith",
+            2.13
+          ],
+          [
+            2018,
+            "World Cup Augsburg",
+            0
+          ],
+          [
+            2019,
+            "World Championships La Seu",
+            0
+          ],
+          [
+            2019,
+            "ICF World Ranking Penrith",
+            2.1
+          ],
+          [
+            2018,
+            "World Cup Liptovsky Mikulas",
+            0
+          ]
+        ],
+        "a": 27
+      },
+      {
+        "y": 2022,
+        "best": 44,
+        "rel": [
+          [
+            "1 May 2022",
+            45
+          ],
+          [
+            "1 Aug 2022",
+            46
+          ],
+          [
+            "23 Sep 2022",
+            44
+          ]
+        ],
+        "s": [
+          [
+            2019,
+            "Oceania Championships Penrith",
+            2.13
+          ],
+          [
+            2022,
+            "World Cup Pau",
+            0
+          ],
+          [
+            2019,
+            "World Championships La Seu",
+            0
+          ],
+          [
+            2022,
+            "World Cup Prague",
+            0
+          ],
+          [
+            2022,
+            "World Cup Tacen",
+            0
+          ]
+        ],
+        "a": 28
+      },
+      {
+        "y": 2023,
+        "best": 19,
+        "rel": [
+          [
+            "29 May 2023",
+            36
+          ],
+          [
+            "3 Jul 2023",
+            28
+          ],
+          [
+            "4 Sep 2023",
+            28
+          ],
+          [
+            "16 Nov 2023",
+            19
+          ]
+        ],
+        "s": [
+          [
+            2023,
+            "World Championships Lee Valley",
+            0
+          ],
+          [
+            2023,
+            "World Cup La Seu",
+            0
+          ],
+          [
+            2023,
+            "ICF World Ranking Penrith",
+            11.96
+          ],
+          [
+            2023,
+            "World Cup Tacen",
+            0
+          ],
+          [
+            2023,
+            "Pyrenees Cup La Seu",
+            10.62
+          ]
+        ],
+        "a": 29
+      },
+      {
+        "y": 2024,
+        "best": 11,
+        "rel": [
+          [
+            "22 May 2024",
+            18
+          ],
+          [
+            "20 Jun 2024",
+            14
+          ],
+          [
+            "25 Sep 2024",
+            11
+          ]
+        ],
+        "s": [
+          [
+            2024,
+            "Olympic Games Paris",
+            0
+          ],
+          [
+            2024,
+            "World Cup Augsburg",
+            0
+          ],
+          [
+            2023,
+            "World Championships Lee Valley",
+            0
+          ],
+          [
+            2024,
+            "Australian Open Penrith",
+            1.97
+          ],
+          [
+            2023,
+            "World Cup La Seu",
+            0
+          ]
+        ],
+        "a": 30
+      },
+      {
+        "y": 2025,
+        "best": 11,
+        "rel": [
+          [
+            "3 Apr 2025",
+            12
+          ],
+          [
+            "30 May 2025",
+            11
+          ],
+          [
+            "1 Jul 2025",
+            13
+          ],
+          [
+            "10 Sep 2025",
+            14
+          ],
+          [
+            "15 Oct 2025",
+            13
+          ]
+        ],
+        "s": [
+          [
+            2024,
+            "Olympic Games Paris",
+            0
+          ],
+          [
+            2024,
+            "World Cup Augsburg",
+            0
+          ],
+          [
+            2023,
+            "World Championships Lee Valley",
+            0
+          ],
+          [
+            2024,
+            "Australian Open Penrith",
+            1.97
+          ],
+          [
+            2023,
+            "World Cup La Seu",
+            0
+          ]
+        ],
+        "a": 31
+      },
+      {
+        "y": 2026,
+        "best": 13,
+        "rel": [
+          [
+            "31 Mar 2026",
+            13
+          ]
+        ],
+        "s": [
+          [
+            2024,
+            "Olympic Games Paris",
+            0
+          ],
+          [
+            2024,
+            "World Cup Augsburg",
+            0
+          ],
+          [
+            2025,
+            "World Championships Penrith",
+            0
+          ],
+          [
+            2026,
+            "Penrith Open Penrith",
+            4.99
+          ],
+          [
+            2026,
+            "Australian Open Penrith",
+            4.35
+          ]
+        ],
+        "a": 32
+      }
+    ]
+  }
+}
+  </script>
+  <script>
+    let DATA;
+    let RACES = {};
+    try {
+      DATA = JSON.parse(document.getElementById("ranking-data").textContent);
+      const raceEl = document.getElementById("race-data");
+      if (raceEl) RACES = JSON.parse(raceEl.textContent);
+    } catch (err) {
+      const el = document.getElementById("load-error");
+      if (el) el.classList.add("show");
+      throw err;
+    }
+    (function mergeAthleteAliases(aliasMap) {
+      function mergeMaps(target) {
+        Object.keys(aliasMap).forEach((canon) => {
+          (aliasMap[canon] || []).forEach((alias) => {
+            if (!target[alias]) return;
+            if (!target[canon]) target[canon] = {};
+            Object.keys(target[alias]).forEach((cls) => {
+              target[canon][cls] = (target[canon][cls] || []).concat(target[alias][cls] || []);
+            });
+            delete target[alias];
+          });
+        });
+      }
+      mergeMaps(DATA);
+      mergeMaps(RACES);
+    })({
+      "Georgia O'CALLAGHAN": ["Georgie O'CALLAGHAN", "Georgie O'Callaghan"]
+    });
+    if (!DATA || !Object.keys(DATA).length) {
+      const el = document.getElementById("load-error");
+      if (el) el.classList.add("show");
+    } else {
+      const el = document.getElementById("load-error");
+      if (el) el.classList.remove("show");
+    }
+    
+    function el(id) { return document.getElementById(id); }
+    const CLASS_ORDER = ["MK1", "MC1", "MX1", "WK1", "WC1", "WX1"];
+    const ATHLETES = ["Timothy ANDERSON"];
+    const VW = 880, VH = 460, PAD = { l: 56, r: 20, t: 18, b: 52 };
+    const RACE_VW = 1200;
+    const RACE_PAD_L = 88;
+    const RACE_PAD_R = 130;
+    /* Center each age in its own slot so first/last bars stay inside the plot
+       (edge-mapped min/max ages sit on the axes and overlap tick labels). */
+    function raceXOf(ages, padL, plotW) {
+      const n = Math.max(ages.length, 1);
+      const slot = plotW / n;
+      const idx = {};
+      ages.forEach((a, i) => { idx[a] = i; });
+      return (a) => {
+        if (idx[a] != null) return padL + slot * (idx[a] + 0.5);
+        const xMin = ages[0];
+        const xMax = ages[ages.length - 1];
+        if (xMax == null || xMax === xMin) return padL + plotW / 2;
+        return padL + ((a - xMin) / (xMax - xMin)) * plotW;
+      };
+    }
+    function classesFor(athlete) {
+      const available = Object.keys(DATA[athlete] || {});
+      const raceClasses = Object.keys(RACES[athlete] || {});
+      const set = {};
+      available.concat(raceClasses).forEach((c) => { set[c] = true; });
+      return CLASS_ORDER.filter((c) => set[c]);
+    }
+    function preferredClass(athlete, current) {
+      const classes = classesFor(athlete);
+      if (current && classes.includes(current)) return current;
+      return classes[0] || "MK1";
+    }
+    function niceMax(n) {
+      if (n <= 20) return 20;
+      if (n <= 50) return 50;
+      if (n <= 100) return 100;
+      const step = n <= 200 ? 25 : n <= 500 ? 50 : 100;
+      return Math.ceil(n / step) * step;
+    }
+    function rankScaleMax(ranks) {
+      if (!ranks.length) return 20;
+      const sorted = [...ranks].sort((a, b) => b - a);
+      let pool = sorted;
+      while (pool.length >= 2 && pool[0] > pool[1] * 2) {
+        pool = pool.slice(1);
+      }
+      return niceMax(Math.max(Math.ceil(pool[0] * 1.12), 20));
+    }
+    function yTicksFor(max) {
+      const ticks = [1];
+      const step = max <= 20 ? 5 : max <= 50 ? 10 : max <= 100 ? 20 : max <= 200 ? 25 : max <= 500 ? 50 : 100;
+      for (let v = step; v <= max; v += step) ticks.push(v);
+      return ticks;
+    }
+    const RANK_OVERLAY_COL = "#e8e8e8";
+    function rankingGroups() {
+      return ((DATA[athlete] || {})[boatClass] || [])
+        .filter((g) => g.a != null)
+        .slice()
+        .sort((a, b) => a.a - b.a || a.y - b.y);
+    }
+    function rankAxisScale(groups) {
+      const allRanks = (groups || []).flatMap((g) => (g.rel || []).map((r) => r[1]));
+      const rMax = rankScaleMax(allRanks.length ? allRanks : (groups || []).map((g) => g.best));
+      const ticks = yTicksFor(rMax);
+      const plotH = VH - PAD.t - PAD.b;
+      const yRank = (rank) => {
+        const clamped = Math.min(rank, rMax);
+        return PAD.t + plotH * (1 - clamped / rMax);
+      };
+      return { rMax, ticks, yRank, plotH };
+    }
+    function rankLineSvg(xOf, yRank, groups) {
+      if (!(groups || []).length) return "";
+      const path = groups.map((g, i) => `${i === 0 ? "M" : "L"} ${xOf(g.a)} ${yRank(g.best)}`).join(" ");
+      let s = `<path d="${path}" fill="none" stroke="${RANK_OVERLAY_COL}" stroke-width="2" opacity="0.75"/>`;
+      groups.forEach((g) => {
+        const x = xOf(g.a);
+        const y = yRank(g.best);
+        s += `<circle cx="${x}" cy="${y}" r="14" fill="transparent"/>`;
+        s += `<circle cx="${x}" cy="${y}" r="5" fill="${RANK_OVERLAY_COL}" stroke="#e8e8e8" stroke-width="1.5" opacity="0.9"/>`;
+      });
+      return s;
+    }
+    function birthYear(groups) {
+      const g = groups.find((x) => x.a != null);
+      return g && g.a != null ? g.y - g.a : null;
+    }
+    function isU23(race, born) {
+      if (born == null) return false;
+      if (!/world championships/i.test(race[1])) return false;
+      if (race[2] === 0) return false;
+      return race[0] - born <= 23;
+    }
+    function competitionLabel(race, born) {
+      if (!isU23(race, born)) return race[1];
+      return race[1].replace(/World Championships/i, "U23/JNR World Championships");
+    }
+    function esc(s) {
+      return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    }
+
+    let athlete = "Timothy ANDERSON";
+    let boatClass = "MK1";
+    let tab = "rank";
+    let raceMode = "year";
+    let selectedCumAge = null;
+
+    /* athlete select / gender / all-athletes controls removed (Tim-only) */
+
+    document.getElementById("tabs").querySelectorAll(".tab").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        tab = btn.dataset.tab;
+        document.getElementById("tabs").querySelectorAll(".tab").forEach((b) => {
+          b.classList.toggle("active", b === btn);
+        });
+        render();
+      });
+    });
+
+    /** Canonical names for the same competition listed under different venues/labels. */
+    const RACE_ALIASES = {
+      "olympic games vaires sur marne": "Olympic Games Paris"
+    };
+
+    function raceCanonicalName(name) {
+      const raw = String(name || "").trim();
+      const bare = raw.replace(/\s+\d{4}\s*$/, "").trim();
+      const yearMatch = raw.match(/(\d{4})\s*$/);
+      const year = yearMatch ? yearMatch[1] : "";
+      const mapped = RACE_ALIASES[bare.toLowerCase()];
+      if (mapped) return year ? mapped + " " + year : mapped;
+      return raw;
+    }
+
+    function dedupeRaceGroup(g) {
+      const seen = Object.create(null);
+      const r = [];
+      (g.r || []).forEach((item) => {
+        const name = raceCanonicalName(item[0]);
+        const key = name.toLowerCase();
+        if (seen[key]) return;
+        seen[key] = true;
+        r.push([name, item[1]]);
+      });
+      return Object.assign({}, g, { r: r });
+    }
+
+    function raceSeries(athlete, boatClass) {
+      const series = (RACES[athlete] && RACES[athlete][boatClass]) || [];
+      return series.map(dedupeRaceGroup);
+    }
+    /* SNR result milestones. Eligible medal events: ICF World Ranking, World Cup,
+       SNR World Championships, Olympic Games, Oceania Championships, Australian Open. */
+    const RESULT_MILESTONES = [
+      {"a": 23, "y": 2017, "label": "First SNR Semi Final", "race": "World Cup Augsburg 2017"},
+      {"a": 29, "y": 2023, "label": "First SNR Final", "race": "World Cup Tacen 2023"},
+      {"a": 32, "y": 2026, "label": "1st SNR Medal", "race": "Oceania Championships Auckland 2026"}
+    ];
+    /* Per-competition race results for Cumulative age drill-down.
+       overall = deepest phase rank; heatBehindPct / advanceBehindPct =
+       heat/advance values = athlete total time as % of phase winner
+       (100 = equal; 108.81 = 8.81% slower), using TOTAL_TIME else RAW+pen. */
+    const RACE_RESULT_DETAILS = {"World Cup Augsburg 2017":{"overall":27,"advanceBehindPct":111.88,"advancePhase":"Semi"},"World Cup Prague 2017":{"overall":16,"heatBehindPct":105.92},"World Championships Deodoro, Rio 2018":{"overall":18,"heatBehindPct":108.4},"World Cup Augsburg 2018":{"overall":16,"advanceBehindPct":103.79,"advancePhase":"Semi"},"World Cup Krakow 2018":{"overall":19,"heatBehindPct":107.15},"World Cup La Seu 2018":{"overall":16,"heatBehindPct":104.42},"World Cup Liptovsky Mikulas 2018":{"overall":25,"advanceBehindPct":108.59,"advancePhase":"Semi"},"World Championships La Seu 2019":{"overall":17,"heatBehindPct":105.57,"advanceBehindPct":104.78,"advancePhase":"Semi"},"World Cup Bratislava 2019":{"overall":24,"heatBehindPct":106.73,"advanceBehindPct":110.61,"advancePhase":"Semi"},"World Cup Lee Valley 2019":{"overall":26,"heatBehindPct":108.23,"advanceBehindPct":110.53,"advancePhase":"Semi"},"World Cup Prague 2019":{"overall":15,"heatBehindPct":105.96},"World Cup Tacen 2019":{"overall":30,"heatBehindPct":116.69},"Australian Open Penrith 2020":{"overall":38,"heatBehindPct":100.84,"advanceBehindPct":164.17,"advancePhase":"Semi"},"Oceania Championships Auckland 2020":{"overall":17,"heatBehindPct":163.14},"Australian Open Penrith 2022":{"overall":2,"advanceBehindPct":101.53,"advancePhase":"Final"},"ICF World Ranking Augsburg 2022":{"overall":20,"heatBehindPct":100.17,"advanceBehindPct":108.18,"advancePhase":"Semi"},"World Championships Augsburg 2022":{"overall":33,"heatBehindPct":102.84,"advanceBehindPct":154.61,"advancePhase":"Semi"},"World Cup Krakow 2022":{"overall":27,"heatBehindPct":101.27,"advanceBehindPct":108.1,"advancePhase":"Semi"},"World Cup La Seu 2022":{"overall":22,"heatBehindPct":105.4,"advanceBehindPct":111.61,"advancePhase":"Semi"},"World Cup Pau 2022":{"overall":15,"heatBehindPct":101.13,"advanceBehindPct":104.71,"advancePhase":"Semi"},"World Cup Prague 2022":{"overall":21,"heatBehindPct":101.21,"advanceBehindPct":105.54,"advancePhase":"Semi"},"World Cup Tacen 2022":{"overall":12,"heatBehindPct":106.57,"advanceBehindPct":105.71,"advancePhase":"Semi"},"Australian Open Penrith 2023":{"overall":1,"heatBehindPct":106.63,"advanceBehindPct":100.0,"advancePhase":"Final"},"Penrith Open Penrith 2023":{"overall":2,"advanceBehindPct":102.6,"advancePhase":"Final"},"Pyrenees Cup La Seu 2023":{"overall":2,"heatBehindPct":102.5,"advanceBehindPct":101.43,"advancePhase":"Final"},"World Championships Lee Valley 2023":{"overall":5,"heatBehindPct":100.92,"advanceBehindPct":103.48,"advancePhase":"Final"},"World Cup Augsburg 2023":{"overall":21,"heatBehindPct":101.79,"advanceBehindPct":107.84,"advancePhase":"Semi"},"World Cup La Seu 2023":{"overall":8,"heatBehindPct":103.02,"advanceBehindPct":107.4,"advancePhase":"Final"},"World Cup Prague 2023":{"overall":22,"heatBehindPct":104.26,"advanceBehindPct":108.31,"advancePhase":"Semi"},"World Cup Tacen 2023":{"overall":7,"heatBehindPct":108.81,"advanceBehindPct":108.43,"advancePhase":"Final"},"World Cup Vaires sur Marne 2023":{"overall":20,"heatBehindPct":100.25,"advanceBehindPct":111.23,"advancePhase":"Semi"},"Australian Open Penrith 2024":{"overall":5,"heatBehindPct":100.71,"advanceBehindPct":103.9,"advancePhase":"Final"},"Oceania Championships Penrith 2024":{"overall":4,"heatBehindPct":100.61,"advanceBehindPct":104.94,"advancePhase":"Final"},"Olympic Games Paris 2024":{"overall":7,"heatBehindPct":105.57,"advanceBehindPct":103.04,"advancePhase":"Final"},"World Cup Augsburg 2024":{"overall":5,"heatBehindPct":109.44,"advanceBehindPct":103.45,"advancePhase":"Final"},"World Cup Ivrea 2024":{"overall":32,"heatBehindPct":103.35,"advanceBehindPct":167.8,"advancePhase":"Semi"},"World Cup Krakow 2024":{"overall":31,"heatBehindPct":102.82,"advanceBehindPct":112.25,"advancePhase":"Semi"},"World Cup La Seu 2024":{"overall":32,"heatBehindPct":103.53,"advanceBehindPct":111.84,"advancePhase":"Semi"},"World Cup Prague 2024":{"overall":56,"heatBehindPct":162.28},"Australian Open Penrith 2025":{"overall":8,"heatBehindPct":102.04,"advanceBehindPct":108.42,"advancePhase":"Final"},"Oceania Championships Penrith 2025":{"overall":5,"heatBehindPct":103.08,"advanceBehindPct":105.19,"advancePhase":"Final"},"World Championships Penrith 2025":{"overall":10,"heatBehindPct":101.71,"advanceBehindPct":104.02,"advancePhase":"Final"},"World Cup La Seu 2025":{"overall":74,"heatBehindPct":165.3},"World Cup Pau 2025":{"overall":21,"heatBehindPct":108.61},"World Cup Prague 2025":{"overall":47,"heatBehindPct":163.7},"Australian Open Penrith 2026":{"overall":4,"heatBehindPct":100.0,"advanceBehindPct":104.13,"advancePhase":"Final"},"ICF World Ranking Oklahoma 2026":{"overall":13,"heatBehindPct":66.64,"advanceBehindPct":107.8,"advancePhase":"FinalB"},"Oceania Championships Auckland 2026":{"overall":1,"heatBehindPct":106.83,"advanceBehindPct":100.0,"advancePhase":"Final"},"Penrith Open Penrith 2026":{"overall":4,"heatBehindPct":103.98,"advanceBehindPct":102.55,"advancePhase":"Final"},"World Cup La Seu 2026":{"overall":8,"heatBehindPct":103.21,"advanceBehindPct":108.25,"advancePhase":"Final"},"World Cup Prague 2026":{"overall":12,"heatBehindPct":104.28,"advanceBehindPct":168.71,"advancePhase":"Final"},"World Cup Vaires sur Marne 2026":{"overall":74,"heatBehindPct":269.01}};
+    const RACE_COL = { ol: "#d4a017", sg: "#3fa266", uj: "#e67e22", wr: "#9386f2", ot: "#5a9ce6", o: "#5a9ce6", m: "#3fa266" };
+    const RACE_OPACITY = 0.55;
+
+    function render() {
+      if (tab === "rank" && raceMode !== "year") raceMode = "year";
+      const classes = classesFor(athlete);
+      boatClass = preferredClass(athlete, boatClass);
+      const showClass = !(tab === "races" && raceMode === "cum");
+      document.getElementById("who").textContent = "Men's Kayak";
+      document.getElementById("panel-rank").hidden = tab !== "rank";
+      document.getElementById("panel-races").hidden = tab !== "races";
+      document.getElementById("race-mode-field").hidden = tab !== "races";
+      document.getElementById("class-field").hidden = true; // Tim-only: MK1 only
+      const raceLegend = document.getElementById("race-legend");
+      if (raceLegend) raceLegend.hidden = tab !== "races" || raceMode !== "year";
+      const milestonesEl = document.getElementById("milestones");
+      if (milestonesEl) milestonesEl.hidden = tab !== "races" || raceMode !== "year";
+      const cumLegend = document.getElementById("cum-legend");
+      if (cumLegend) {
+        cumLegend.hidden = tab !== "races" || raceMode !== "cum";
+        if (raceMode !== "cum") cumLegend.innerHTML = "";
+      }
+      const ageDetail = document.getElementById("age-detail");
+      if (ageDetail) {
+        if (tab !== "races" || raceMode !== "cum") {
+          ageDetail.hidden = true;
+          selectedCumAge = null;
+        }
+      }
+      const classBox = document.getElementById("classes");
+      classBox.innerHTML = classes.map((c) =>
+        `<button class="pill${c === boatClass ? " active" : ""}" data-class="${c}">${c}</button>`
+      ).join("");
+      classBox.querySelectorAll(".pill").forEach((btn) => {
+        btn.addEventListener("click", () => { boatClass = btn.dataset.class; render(); });
+      });
+      const modeBox = document.getElementById("race-modes");
+      modeBox.innerHTML = [
+        ["year", "Races by Age"],
+        ["cum", "Cumulative Races"]
+      ].map(([id, label]) =>
+        `<button class="pill${raceMode === id ? " active" : ""}" data-mode="${id}">${label}</button>`
+      ).join("");
+      modeBox.querySelectorAll(".pill").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (btn.dataset.mode !== raceMode) selectedCumAge = null;
+          raceMode = btn.dataset.mode;
+          render();
+        });
+      });
+
+      const groups = ((DATA[athlete] || {})[boatClass] || []).filter((g) => g.a != null);
+      const last = groups[groups.length - 1];
+      const currentRank = last ? last.rel[last.rel.length - 1][1] : null;
+      const careerBest = groups.length ? Math.min(...groups.map((g) => g.best)) : null;
+      const yearsTop20 = groups.filter((g) => g.best <= 20).length;
+      const yearsTop50 = groups.filter((g) => g.best <= 50).length;
+      document.getElementById("tiles").innerHTML = `
+        <div class="tile"><div class="val" style="color:var(--green)">${currentRank == null ? "—" : currentRank}</div><div class="lbl">Current Rank</div></div>
+        <div class="tile"><div class="val" style="color:var(--purple)">${careerBest == null ? "—" : careerBest}</div><div class="lbl">Career Best</div></div>
+        <div class="tile"><div class="val">${yearsTop20}</div><div class="lbl">Number Of Years In Top 20</div></div>
+        <div class="tile"><div class="val">${yearsTop50}</div><div class="lbl">Number Of Years In Top 50</div></div>
+      `;
+      if (tab === "rank") drawChart(groups);
+      else if (raceMode === "cum") drawCumulativeChart(athlete);
+      else drawRaceChart(raceSeries(athlete, boatClass));
+    }
+
+
+    function firstRaceMatching(series, pred) {
+      const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
+      for (const g of aged) {
+        for (const item of g.r || []) {
+          if (pred(item[0] || "", item[1] || "", g)) {
+            return { a: g.a, y: g.y, name: item[0], kind: item[1] };
+          }
+        }
+      }
+      return null;
+    }
+
+    function firstRankMilestone(groups, pred) {
+      const aged = (groups || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
+      for (const g of aged) {
+        if (pred(g)) return { a: g.a, y: g.y, best: g.best };
+      }
+      return null;
+    }
+
+    function buildCareerMilestones(series) {
+      const rankGroups = ((DATA[athlete] || {})[boatClass] || []).filter((g) => g.a != null);
+      const items = [];
+      const add = (hit, label) => {
+        if (!hit) return;
+        items.push({ a: hit.a, y: hit.y, label });
+      };
+
+      add(
+        firstRaceMatching(series, (name, kind, g) =>
+          (kind === "uj" || /jnr|junior/i.test(name)) && g.a != null && g.a <= 18
+        ),
+        "1st JNR World Championships"
+      );
+      add(
+        firstRaceMatching(series, (name, kind, g) =>
+          (kind === "uj" || /u23/i.test(name)) && g.a != null && g.a > 18 && g.a <= 23
+        ),
+        "1st U23 World Championships"
+      );
+      add(
+        firstRaceMatching(series, (name, kind) => kind === "wr" || /icf world ranking/i.test(name)),
+        "1st ICF World Ranking Race"
+      );
+      add(
+        firstRaceMatching(series, (name, kind) => kind === "sg" && /world cup/i.test(name)),
+        "1st World Cup"
+      );
+      add(
+        firstRaceMatching(series, (name, kind) => kind === "sg" && /world championships/i.test(name)),
+        "1st SNR World Championships"
+      );
+      add(
+        firstRankMilestone(rankGroups, (g) => g.best <= 100),
+        "First time in Top 100"
+      );
+      add(
+        firstRankMilestone(rankGroups, (g) => g.best <= 50),
+        "First time in Top 50"
+      );
+      add(
+        firstRankMilestone(rankGroups, (g) => g.best <= 20),
+        "First time in Top 20"
+      );
+      add(
+        firstRaceMatching(series, (name, kind) => kind === "ol" || /olympic/i.test(name)),
+        "First Olympic Games"
+      );
+      const careerBest = rankGroups.length ? Math.min(...rankGroups.map((g) => g.best)) : null;
+      if (careerBest != null) {
+        add(
+          firstRankMilestone(rankGroups, (g) => g.best === careerBest),
+          "Career Best World Ranking (" + careerBest + ")"
+        );
+      }
+
+      (RESULT_MILESTONES || []).forEach((m) => {
+        if (m && m.a != null && m.label) {
+          items.push({ a: m.a, y: m.y, label: m.label, race: m.race || null });
+        }
+      });
+
+      // de-dupe same age+label, keep chronological
+      const seen = {};
+      const out = [];
+      items.sort((a, b) => a.a - b.a || a.y - b.y);
+      items.forEach((m) => {
+        const key = m.a + "|" + m.label;
+        if (seen[key]) return;
+        seen[key] = true;
+        out.push(m);
+      });
+
+      const rankByAge = {};
+      rankGroups.forEach((g) => { if (g.a != null) rankByAge[g.a] = g.best; });
+      const agedRaces = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
+      out.forEach((m) => {
+        m.wr = rankByAge[m.a] != null ? rankByAge[m.a] : null;
+        m.races = agedRaces
+          .filter((g) => g.a <= m.a)
+          .reduce((n, g) => n + ((g.r && g.r.length) || 0), 0);
+      });
+      return out;
+    }
+
+    function renderMilestones(series) {
+      const host = document.getElementById("milestones");
+      if (!host) return;
+      const milestones = buildCareerMilestones(series);
+      if (!milestones.length) {
+        host.innerHTML = "";
+        host.hidden = true;
+        return;
+      }
+      host.hidden = tab !== "races" || raceMode !== "year";
+      host.innerHTML =
+        "<div class=\"milestones-head\"><h3>Career Milestones</h3>" +
+        "<span class=\"milestones-count\">" + milestones.length + " reached</span></div>" +
+        "<div class=\"milestones-list\">" +
+        milestones.map((m) => {
+          const meta = [];
+          if (m.y != null) meta.push("<span>" + m.y + "</span>");
+          meta.push("<span>WR <strong>" + (m.wr != null ? m.wr : "—") + "</strong></span>");
+          meta.push("<span>Races <strong>" + (m.races != null ? m.races : "—") + "</strong></span>");
+          return (
+            "<div class=\"milestone\">" +
+              "<div class=\"milestone-age\">" +
+                "<span class=\"age-lbl\">Age</span>" +
+                "<span class=\"age-num\">" + m.a + "</span>" +
+              "</div>" +
+              "<div class=\"milestone-mark\" aria-hidden=\"true\"><span class=\"dot-ring\"></span></div>" +
+              "<div class=\"milestone-body\">" +
+                "<span class=\"label\">" + esc(m.label) + "</span>" +
+                (m.race ? "<span class=\"race\">" + esc(m.race) + "</span>" : "") +
+                "<div class=\"meta\">" + meta.join("") + "</div>" +
+              "</div>" +
+            "</div>"
+          );
+        }).join("") +
+        "</div>";
+    }
+
+    function drawRaceChart(series) {
+      const host = document.getElementById("race-chart");
+      const tiles = document.getElementById("race-tiles");
+      const total = series.reduce((n, g) => n + g.r.length, 0);
+      const yearsActive = new Set(series.map((g) => g.y).filter((y) => y != null)).size;
+      tiles.className = "tiles tiles-2";
+      tiles.innerHTML = `
+        <div class="tile"><div class="val" style="color:var(--green)">${total}</div><div class="lbl">Total Races Across Career</div></div>
+        <div class="tile"><div class="val" style="color:var(--purple)">${yearsActive}</div><div class="lbl">Years Active</div></div>
+      `;
+      host.innerHTML = "";
+      const aged = series.filter((g) => g.a != null);
+      if (!series.length) {
+        host.innerHTML = `<div class="empty">No unique ranking races are available for this athlete and class.</div>`;
+        renderMilestones([]);
+        return;
+      }
+      if (!aged.length) {
+        host.innerHTML = `<div class="empty">No athlete age is available for this series. A year of birth is needed to plot races by age.</div>`;
+        renderMilestones([]);
+        return;
+      }
+      const rankGroups = rankingGroups();
+      const ages = [...new Set(aged.map((g) => g.a).concat(rankGroups.map((g) => g.a)))].sort((a, b) => a - b);
+      const counts = aged.map((g) => g.r.length);
+      const countMax = Math.max(4, Math.ceil(Math.max(...counts) / 2) * 2);
+      const countTicks = [];
+      const countStep = countMax <= 8 ? 1 : 2;
+      for (let v = 0; v <= countMax; v += countStep) countTicks.push(v);
+      const { ticks: rankTicks, yRank } = rankAxisScale(rankGroups);
+      const padL = RACE_PAD_L;
+      const padR = RACE_PAD_R;
+      const chartW = RACE_VW;
+      const plotW = chartW - padL - padR;
+      const plotH = VH - PAD.t - PAD.b;
+      const xOf = raceXOf(ages, padL, plotW);
+      const yCount = (v) => PAD.t + plotH * (1 - v / countMax);
+      const slot = plotW / Math.max(ages.length, 1);
+      const barW = Math.min(36, Math.max(10, slot * 0.55));
+      const stackOrder = ["ot", "wr", "uj", "sg", "ol"];
+      const yMid = PAD.t + plotH / 2;
+      function barKind(code) {
+        if (RACE_COL[code]) return code;
+        return code === "m" ? "sg" : "ot";
+      }
+
+      let svg = `<svg viewBox="0 0 ${chartW} ${VH}" role="img" aria-label="World Ranking and count of races by athlete age">`;
+      svg += `<text x="16" y="${yMid}" fill="#b8b8b8" font-size="11" text-anchor="middle" transform="rotate(-90, 16, ${yMid})">World Rank</text>`;
+      rankTicks.forEach((tick) => {
+        const y = yRank(tick);
+        svg += `<line x1="${padL}" x2="${chartW - padR}" y1="${y}" y2="${y}" stroke="#2e2e2e" stroke-width="1"/>`;
+        svg += `<text x="${padL - 10}" y="${y + 4}" text-anchor="end" fill="#8a8a8a" font-size="11">${tick}</text>`;
+      });
+      svg += `<line x1="${padL}" x2="${padL}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#444" stroke-width="1"/>`;
+      svg += `<line x1="${chartW - padR}" x2="${chartW - padR}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#444" stroke-width="1"/>`;
+      countTicks.forEach((tick) => {
+        const y = yCount(tick);
+        svg += `<line x1="${chartW - padR}" x2="${chartW - padR + 5}" y1="${y}" y2="${y}" stroke="#666" stroke-width="1"/>`;
+        svg += `<text x="${chartW - padR + 12}" y="${y + 4}" fill="#8a8a8a" font-size="11">${tick}</text>`;
+      });
+      const rightLabelX = chartW - 22;
+      svg += `<text x="${rightLabelX}" y="${yMid}" fill="#b8b8b8" font-size="11" text-anchor="middle" transform="rotate(90, ${rightLabelX}, ${yMid})">Count of Races</text>`;
+      aged.forEach((g) => {
+        const x = xOf(g.a);
+        const parts = { ol: 0, sg: 0, uj: 0, wr: 0, ot: 0 };
+        g.r.forEach((item) => { parts[barKind(item[1])] += 1; });
+        let acc = 0;
+        stackOrder.forEach((k) => {
+          const n = parts[k];
+          if (!n) return;
+          const y1 = yCount(acc + n);
+          const h = Math.max(1, yCount(acc) - y1);
+          svg += `<rect class="age-bar" data-age="${g.a}" x="${x - barW / 2}" y="${y1}" width="${barW}" height="${h}" fill="${RACE_COL[k]}" opacity="${RACE_OPACITY}"/>`;
+          acc += n;
+        });
+      });
+      ages.forEach((a) => {
+        svg += `<text class="xlab" data-age="${a}" x="${xOf(a)}" y="${VH - PAD.b + 18}" text-anchor="middle" fill="#8a8a8a" font-size="11">${a}</text>`;
+      });
+      svg += rankLineSvg(xOf, yRank, rankGroups);
+      svg += `<text x="${padL + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#8a8a8a" font-size="11">Athlete Age</text>`;
+      svg += `</svg><div class="tip" id="race-tip" style="display:none"></div>`;
+      host.innerHTML = svg;
+      const tip = host.querySelector("#race-tip");
+      const byAge = {};
+      aged.forEach((g) => { byAge[g.a] = g; });
+      function showTip(age, evt) {
+        const g = byAge[age];
+        if (!g) return;
+        const list = g.r;
+        let body = `<div class="tip-head"><span>Age ${g.a} · ${g.y}</span><span>${list.length} race${list.length === 1 ? "" : "s"}</span></div><div class="bar-tip-list">`;
+        list.forEach((item) => { body += `<div>${esc(item[0])}</div>`; });
+        body += `</div>`;
+        tip.innerHTML = body;
+        tip.style.display = "block";
+        const rect = host.getBoundingClientRect();
+        const tipW = Math.min(360, rect.width - 16);
+        tip.style.width = tipW + "px";
+        let left = evt.clientX - rect.left + 12;
+        let top = evt.clientY - rect.top - 12;
+        const tipH = tip.offsetHeight || 80;
+        if (left + tipW > rect.width - 8) left = Math.max(8, rect.width - tipW - 8);
+        if (left < 8) left = 8;
+        if (top + tipH > rect.height - 8) top = Math.max(8, rect.height - tipH - 8);
+        if (top < 8) top = 8;
+        tip.style.left = left + "px";
+        tip.style.top = top + "px";
+        host.querySelectorAll(".age-bar").forEach((el) => {
+          el.setAttribute("opacity", el.dataset.age == age ? "0.75" : "0.22");
+        });
+      }
+      function hideTip() {
+        tip.style.display = "none";
+        tip.innerHTML = "";
+        host.querySelectorAll(".age-bar").forEach((el) => el.setAttribute("opacity", String(RACE_OPACITY)));
+      }
+      host.querySelectorAll(".age-bar").forEach((el) => {
+        el.addEventListener("mouseenter", (evt) => showTip(Number(el.dataset.age), evt));
+        el.addEventListener("mousemove", (evt) => showTip(Number(el.dataset.age), evt));
+      });
+      host.onmouseleave = hideTip;
+      renderMilestones(series);
+    }
+
+    const CLASS_LINE = { MK1: "#5a9ce6", WK1: "#5a9ce6", MC1: "#9386f2", WC1: "#9386f2", MX1: "#3fa266", WX1: "#c77dff" };
+
+    function renderCumulativeTiles(name) {
+      const tiles = document.getElementById("race-tiles");
+      const byClass = RACES[name] || {};
+      const classList = CLASS_ORDER.filter((c) => (byClass[c] || []).length);
+      const countCls = (cls) => (byClass[cls] || []).reduce((n, g) => n + g.r.length, 0);
+      const k1 = classList.find((c) => c === "MK1" || c === "WK1");
+      const c1 = classList.find((c) => c === "MC1" || c === "WC1");
+      const x1 = classList.find((c) => c === "MX1" || c === "WX1");
+      const all = classList.flatMap((c) => byClass[c]);
+      const yearsActive = new Set(all.map((g) => g.y).filter((y) => y != null)).size;
+      const parts = [];
+      if (k1 && c1) {
+        parts.push({ val: countCls(k1), lbl: "Total Races " + k1, color: CLASS_LINE[k1] });
+        parts.push({ val: countCls(c1), lbl: "Total Races " + c1, color: CLASS_LINE[c1] });
+        if (x1) parts.push({ val: countCls(x1), lbl: "Total Races " + x1, color: CLASS_LINE[x1] });
+      } else {
+        const slalom = classList.filter((c) => c !== "MX1" && c !== "WX1");
+        if (slalom.length === 1 && !x1) {
+          parts.push({ val: countCls(slalom[0]), lbl: "Total Races " + slalom[0], color: CLASS_LINE[slalom[0]] || "var(--green)" });
+          parts.push({ val: yearsActive, lbl: "Years Active", color: "var(--purple)" });
+        } else if (slalom.length === 1 && x1) {
+          parts.push({ val: countCls(slalom[0]), lbl: "Total Races " + slalom[0], color: CLASS_LINE[slalom[0]] });
+          parts.push({ val: countCls(x1), lbl: "Total Races " + x1, color: CLASS_LINE[x1] });
+        } else if (!slalom.length && x1) {
+          parts.push({ val: countCls(x1), lbl: "Total Races " + x1, color: CLASS_LINE[x1] });
+          parts.push({ val: yearsActive, lbl: "Years Active", color: "var(--purple)" });
+        } else if (classList.length) {
+          classList.forEach((c) => {
+            parts.push({ val: countCls(c), lbl: "Total Races " + c, color: CLASS_LINE[c] || "var(--green)" });
+          });
+        } else {
+          parts.push({ val: 0, lbl: "Total Races Across Career", color: "var(--green)" });
+          parts.push({ val: yearsActive, lbl: "Years Active", color: "var(--purple)" });
+        }
+      }
+      tiles.className = parts.length === 3 ? "tiles tiles-3" : "tiles tiles-2";
+      tiles.innerHTML = parts.map((p) =>
+        `<div class="tile"><div class="val" style="color:${p.color}">${p.val}</div><div class="lbl">${p.lbl}</div></div>`
+      ).join("");
+    }
+
+    function fmtPctBehind(v) {
+      if (v == null || v === "") return "—";
+      const n = Number(v);
+      if (!Number.isFinite(n)) return "—";
+      return (n % 1 === 0 ? String(n) : n.toFixed(2)) + "%";
+    }
+
+    function advancePctLabel(detail) {
+      const ph = detail && detail.advancePhase;
+      if (ph === "Final" || ph === "FinalB") return "% of Final winner";
+      if (ph === "Semi") return "% of Semi winner";
+      return "% of Semi / Final winner";
+    }
+
+    function racesForAge(name, age) {
+      const byClass = RACES[name] || {};
+      const classList = CLASS_ORDER.filter((c) => (byClass[c] || []).length);
+      const comps = [];
+      const seen = Object.create(null);
+      classList.forEach((cls) => {
+        (byClass[cls] || []).forEach((g) => {
+          if (g.a !== age) return;
+          (g.r || []).forEach((item) => {
+            const nm = raceCanonicalName(item[0]);
+            const key = nm.toLowerCase();
+            if (seen[key]) return;
+            seen[key] = true;
+            comps.push({ name: nm, year: g.y, kind: item[1] });
+          });
+        });
+      });
+      return comps;
+    }
+
+    function renderAgeCompetitionTiles(name, age) {
+      const host = document.getElementById("age-detail");
+      const tiles = document.getElementById("comp-tiles");
+      const title = document.getElementById("age-detail-title");
+      const countEl = document.getElementById("age-detail-count");
+      if (!host || !tiles) return;
+      if (age == null) {
+        host.hidden = true;
+        tiles.innerHTML = "";
+        return;
+      }
+      const comps = racesForAge(name, age);
+      const year = comps.length ? comps[0].year : (1994 + age);
+      title.textContent = "Age " + age + " · " + year;
+      countEl.textContent = comps.length + " competition" + (comps.length === 1 ? "" : "s");
+      if (!comps.length) {
+        tiles.innerHTML = `<div class="empty" style="padding:16px 0">No competitions recorded for this age.</div>`;
+        host.hidden = false;
+        return;
+      }
+      tiles.innerHTML = comps.map((c) => {
+        const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[c.name]) || {};
+        const overall = d.overall != null ? d.overall : "—";
+        const heat = fmtPctBehind(d.heatBehindPct);
+        const adv = fmtPctBehind(d.advanceBehindPct);
+        const advLbl = advancePctLabel(d);
+        const overallMuted = d.overall == null ? " muted" : "";
+        const heatMuted = d.heatBehindPct == null ? " muted" : "";
+        const advMuted = d.advanceBehindPct == null ? " muted" : "";
+        return (
+          `<div class="comp-tile">` +
+            `<div class="comp-name">${esc(c.name)}</div>` +
+            `<div class="comp-row"><span class="comp-lbl">Overall Rank</span><span class="comp-val${overallMuted}">${esc(overall)}</span></div>` +
+            `<div class="comp-row"><span class="comp-lbl">% of Heat winner</span><span class="comp-val${heatMuted}">${esc(heat)}</span></div>` +
+            `<div class="comp-row"><span class="comp-lbl">${esc(advLbl)}</span><span class="comp-val${advMuted}">${esc(adv)}</span></div>` +
+          `</div>`
+        );
+      }).join("");
+      host.hidden = false;
+    }
+
+    function drawCumulativeChart(name) {
+      const milestonesEl = document.getElementById("milestones");
+      if (milestonesEl) { milestonesEl.hidden = true; milestonesEl.innerHTML = ""; }
+      const host = document.getElementById("race-chart");
+      const byClass = RACES[name] || {};
+      const classList = CLASS_ORDER.filter((c) => (byClass[c] || []).length);
+      const all = classList.flatMap((c) => byClass[c]);
+      renderCumulativeTiles(name);
+      host.innerHTML = "";
+      const series = classList.map((cls) => {
+        const aged = (byClass[cls] || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a);
+        let running = 0;
+        const points = aged.map((g) => {
+          running += g.r.length;
+          return { cls, a: g.a, y: g.y, r: g.r, cum: running, added: g.r.length };
+        });
+        return { cls, color: CLASS_LINE[cls] || "#5a9ce6", points };
+      }).filter((s) => s.points.length);
+      const legend = document.getElementById("cum-legend");
+      if (legend) {
+        legend.innerHTML = series.map((s) =>
+          `<span><span class="dot" style="width:11px;height:11px;background:${s.color};opacity:0.75;vertical-align:middle"></span> ${esc(s.cls)}</span>`
+        ).join("") +
+          `<span><span class="dot" style="width:11px;height:3px;border-radius:1px;background:${RANK_OVERLAY_COL};vertical-align:middle"></span> World Ranking</span>`;
+      }
+      if (!all.length) {
+        host.innerHTML = `<div class="empty">No unique ranking races are available for this athlete.</div>`;
+        return;
+      }
+      if (!series.length) {
+        host.innerHTML = `<div class="empty">No athlete age is available for this series. A year of birth is needed to plot races by age.</div>`;
+        return;
+      }
+      const rankGroups = rankingGroups();
+      const ages = [...new Set(series.flatMap((s) => s.points.map((p) => p.a)).concat(rankGroups.map((g) => g.a)))].sort((a, b) => a - b);
+      const maxCum = Math.max(...series.map((s) => s.points[s.points.length - 1].cum));
+      const countMax = niceMax(Math.max(maxCum, 4));
+      const countStep = countMax <= 20 ? 5 : countMax <= 50 ? 10 : countMax <= 100 ? 20 : 25;
+      const countTicks = [];
+      for (let v = 0; v <= countMax; v += countStep) countTicks.push(v);
+      const { ticks: rankTicks, yRank } = rankAxisScale(rankGroups);
+      const padL = RACE_PAD_L;
+      const padR = RACE_PAD_R;
+      const chartW = RACE_VW;
+      const plotW = chartW - padL - padR;
+      const plotH = VH - PAD.t - PAD.b;
+      const xOf = raceXOf(ages, padL, plotW);
+      const yCount = (v) => PAD.t + plotH * (1 - v / countMax);
+      const yMid = PAD.t + plotH / 2;
+
+      let svg = `<svg viewBox="0 0 ${chartW} ${VH}" role="img" aria-label="World Ranking and Cumulative Races by athlete age">`;
+      svg += `<text x="16" y="${yMid}" fill="#b8b8b8" font-size="11" text-anchor="middle" transform="rotate(-90, 16, ${yMid})">World Rank</text>`;
+      rankTicks.forEach((tick) => {
+        const y = yRank(tick);
+        svg += `<line x1="${padL}" x2="${chartW - padR}" y1="${y}" y2="${y}" stroke="#2e2e2e" stroke-width="1"/>`;
+        svg += `<text x="${padL - 10}" y="${y + 4}" text-anchor="end" fill="#8a8a8a" font-size="11">${tick}</text>`;
+      });
+      svg += `<line x1="${padL}" x2="${padL}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#444" stroke-width="1"/>`;
+      svg += `<line x1="${chartW - padR}" x2="${chartW - padR}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#444" stroke-width="1"/>`;
+      countTicks.forEach((tick) => {
+        const y = yCount(tick);
+        svg += `<line x1="${chartW - padR}" x2="${chartW - padR + 5}" y1="${y}" y2="${y}" stroke="#666" stroke-width="1"/>`;
+        svg += `<text x="${chartW - padR + 12}" y="${y + 4}" fill="#8a8a8a" font-size="11">${tick}</text>`;
+      });
+      const rightLabelX = chartW - 22;
+      svg += `<text x="${rightLabelX}" y="${yMid}" fill="#b8b8b8" font-size="11" text-anchor="middle" transform="rotate(90, ${rightLabelX}, ${yMid})">Cumulative Races</text>`;
+      series.forEach((s) => {
+        const path = s.points.map((p, i) => `${i === 0 ? "M" : "L"} ${xOf(p.a)} ${yCount(p.cum)}`).join(" ");
+        svg += `<path d="${path}" fill="none" stroke="${s.color}" stroke-width="2" opacity="0.75"/>`;
+        s.points.forEach((p) => {
+          const x = xOf(p.a);
+          svg += `<g class="cum-pt" data-age="${p.a}" data-class="${p.cls}" style="cursor:pointer">`;
+          svg += `<circle cx="${x}" cy="${yCount(p.cum)}" r="14" fill="transparent"/>`;
+          svg += `<circle cx="${x}" cy="${yCount(p.cum)}" r="5" fill="${s.color}" stroke="#e8e8e8" stroke-width="1.5" opacity="0.9"/>`;
+          svg += `</g>`;
+        });
+      });
+      ages.forEach((a) => {
+        const sel = selectedCumAge === a ? " selected" : "";
+        const x = xOf(a);
+        const slotW = plotW / Math.max(ages.length, 1);
+        svg += `<rect class="cum-age-hit" data-age="${a}" x="${x - slotW * 0.45}" y="${VH - PAD.b - 4}" width="${slotW * 0.9}" height="40" fill="transparent" style="cursor:pointer"/>`;
+        svg += `<text class="cum-age${sel}" data-age="${a}" x="${x}" y="${VH - PAD.b + 18}" text-anchor="middle" font-size="11" style="pointer-events:none">${a}</text>`;
+      });
+      svg += rankLineSvg(xOf, yRank, rankGroups);
+      svg += `<text x="${padL + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#8a8a8a" font-size="11">Athlete Age · click an age for race details</text>`;
+      svg += `</svg><div class="tip" id="race-tip" style="display:none"></div>`;
+      host.innerHTML = svg;
+      const tip = host.querySelector("#race-tip");
+      const lookup = {};
+      series.forEach((s) => s.points.forEach((p) => { lookup[p.cls + ":" + p.a] = p; }));
+      function selectAge(age) {
+        selectedCumAge = age;
+        host.querySelectorAll(".cum-age").forEach((el) => {
+          el.classList.toggle("selected", Number(el.dataset.age) === age);
+        });
+        renderAgeCompetitionTiles(name, age);
+        const detail = document.getElementById("age-detail");
+        if (detail && !detail.hidden) {
+          // Keep chart in view; tiles sit just below
+        }
+      }
+      function showTip(cls, age, evt) {
+        const p = lookup[cls + ":" + age];
+        if (!p) return;
+        let body = `<div class="tip-head"><span>${esc(p.cls)} · Age ${p.a} · ${p.y}</span><span>${p.cum} career</span></div>`;
+        body += `<div class="bar-tip-list"><div>${p.added} race${p.added === 1 ? "" : "s"} this season</div></div>`;
+        body += `<div class="bar-tip-list">`;
+        p.r.forEach((item) => { body += `<div>${esc(item[0])}</div>`; });
+        body += `</div>`;
+        tip.innerHTML = body;
+        tip.style.display = "block";
+        const rect = host.getBoundingClientRect();
+        const tipW = Math.min(360, rect.width - 16);
+        tip.style.width = tipW + "px";
+        let left = evt.clientX - rect.left + 12;
+        let top = evt.clientY - rect.top - 12;
+        const tipH = tip.offsetHeight || 80;
+        if (left + tipW > rect.width - 8) left = Math.max(8, rect.width - tipW - 8);
+        if (left < 8) left = 8;
+        if (top + tipH > rect.height - 8) top = Math.max(8, rect.height - tipH - 8);
+        if (top < 8) top = 8;
+        tip.style.left = left + "px";
+        tip.style.top = top + "px";
+      }
+      function hideTip() {
+        tip.style.display = "none";
+        tip.innerHTML = "";
+      }
+      host.querySelectorAll(".cum-pt").forEach((el) => {
+        el.addEventListener("mouseenter", (evt) => showTip(el.dataset.class, Number(el.dataset.age), evt));
+        el.addEventListener("mousemove", (evt) => showTip(el.dataset.class, Number(el.dataset.age), evt));
+        el.addEventListener("click", (evt) => {
+          evt.stopPropagation();
+          selectAge(Number(el.dataset.age));
+        });
+      });
+      host.querySelectorAll(".cum-age-hit, .cum-age").forEach((el) => {
+        el.addEventListener("click", (evt) => {
+          evt.stopPropagation();
+          selectAge(Number(el.dataset.age));
+        });
+      });
+      host.onmouseleave = hideTip;
+      const defaultAge = selectedCumAge != null
+        ? selectedCumAge
+        : (series[0] && series[0].points.length
+            ? series[0].points[series[0].points.length - 1].a
+            : ages[ages.length - 1]);
+      if (defaultAge != null) selectAge(defaultAge);
+      else {
+        const ageDetail = document.getElementById("age-detail");
+        if (ageDetail) ageDetail.hidden = true;
+      }
+    }
+
+    function drawChart(groups) {
+      const host = document.getElementById("chart");
+      host.innerHTML = "";
+      if (!groups.length) {
+        host.innerHTML = `<div class="empty">No athlete age is available for this series in the ranking file.</div>`;
+        return;
+      }
+      const xVals = groups.map((g) => g.a);
+      const xMin = Math.min(...xVals);
+      const xMax = Math.max(...xVals);
+      const allRanks = groups.flatMap((g) => g.rel.map((r) => r[1]));
+      const yMax = rankScaleMax(allRanks);
+      const ticks = yTicksFor(yMax);
+      const plotW = VW - PAD.l - PAD.r;
+      const plotH = VH - PAD.t - PAD.b;
+      const xOf = (v) => xMax === xMin ? PAD.l + plotW / 2 : PAD.l + ((v - xMin) / (xMax - xMin)) * plotW;
+      const yOf = (rank) => {
+        const clamped = Math.min(rank, yMax);
+        return PAD.t + plotH * (1 - clamped / yMax);
+      };
+      function xJitter(group, relIndex) {
+        const rank = group.rel[relIndex][1];
+        const same = group.rel.map((r, i) => r[1] === rank ? i : -1).filter((i) => i >= 0);
+        if (same.length <= 1) return 0;
+        const idx = same.indexOf(relIndex);
+        return (idx - (same.length - 1) / 2) * 6;
+      }
+      const bestPath = groups.map((g, i) => `${i === 0 ? "M" : "L"} ${xOf(g.a)} ${yOf(g.best)}`).join(" ");
+      const born = birthYear(groups);
+
+      let svg = `<svg viewBox="0 0 ${VW} ${VH}" role="img" aria-label="World Ranking by athlete age">`;
+      svg += `<text x="16" y="${PAD.t + plotH / 2}" fill="#b8b8b8" font-size="11" text-anchor="middle" transform="rotate(-90, 16, ${PAD.t + plotH / 2})">World Rank</text>`;
+      ticks.forEach((tick) => {
+        const y = yOf(tick);
+        svg += `<line x1="${PAD.l}" x2="${VW - PAD.r}" y1="${y}" y2="${y}" stroke="#2e2e2e" stroke-width="1"/>`;
+        svg += `<text x="${PAD.l - 8}" y="${y + 4}" text-anchor="end" fill="#8a8a8a" font-size="11">${tick}</text>`;
+      });
+      xVals.forEach((v) => {
+        svg += `<line class="age-guide" data-age="${v}" x1="${xOf(v)}" x2="${xOf(v)}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#2e2e2e" stroke-width="1" opacity="0.45"/>`;
+      });
+      svg += `<line x1="${PAD.l}" x2="${VW - PAD.r}" y1="${VH - PAD.b}" y2="${VH - PAD.b}" stroke="#444" stroke-width="1"/>`;
+      svg += `<line x1="${PAD.l}" x2="${PAD.l}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#444" stroke-width="1"/>`;
+      svg += `<path d="${bestPath}" fill="none" stroke="#5a9ce6" stroke-width="1.5" opacity="0.35"/>`;
+
+      groups.forEach((group) => {
+        group.rel.forEach((rel, i) => {
+          if (rel[1] === group.best) return;
+          const cx = xOf(group.a) + xJitter(group, i);
+          const cy = yOf(rel[1]);
+          const offScale = rel[1] > yMax;
+          svg += `<circle cx="${cx}" cy="${cy}" r="4" fill="${offScale ? "#3a3a3a" : "#4a4a4a"}" stroke="${offScale ? "#666" : "#777"}" stroke-width="1" opacity="${offScale ? 0.45 : 0.7}"${offScale ? ' stroke-dasharray="2 1"' : ""}/>`;
+        });
+      });
+      groups.forEach((group) => {
+        group.rel.forEach((rel, i) => {
+          if (rel[1] !== group.best) return;
+          const cx = xOf(group.a) + xJitter(group, i);
+          const cy = yOf(rel[1]);
+          svg += `<g class="best-pt" data-age="${group.a}" style="cursor:pointer">
+            <circle cx="${cx}" cy="${cy}" r="14" fill="transparent"/>
+            <circle cx="${cx}" cy="${cy}" r="6.5" fill="#5a9ce6" stroke="#e8e8e8" stroke-width="2"/>
+          </g>`;
+        });
+      });
+      groups.forEach((group) => {
+        svg += `<text class="xlab" data-age="${group.a}" x="${xOf(group.a)}" y="${VH - PAD.b + 18}" text-anchor="middle" fill="#b8b8b8" font-size="11">${group.a}</text>`;
+      });
+      svg += `<text x="${PAD.l + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#b8b8b8" font-size="11">Athlete Age</text>`;
+      svg += `</svg><div class="tip" id="tip" style="display:none"></div>`;
+      host.innerHTML = svg;
+
+      const tip = host.querySelector("#tip");
+      function showTip(age) {
+        const hovered = groups.find((g) => g.a === age);
+        if (!hovered) return;
+        const tipW = 360;
+        const raceCount = hovered.s.length;
+        const tipH = 52 + hovered.rel.length * 20 + (raceCount > 0 ? 18 + raceCount * 16 : 0);
+        let tipLeft = xOf(hovered.a) + 16;
+        let tipTop = yOf(hovered.best) - tipH / 2;
+        if (tipLeft + tipW > VW - 8) tipLeft = xOf(hovered.a) - 16 - tipW;
+        if (tipTop < 8) tipTop = 8;
+        if (tipTop + tipH > VH - 8) tipTop = VH - tipH - 8;
+        const firstBest = hovered.rel.findIndex((r) => r[1] === hovered.best);
+        let body = `<div class="tip-head"><span>Age ${hovered.a} · ${hovered.y}</span><span>Best ${hovered.best}</span></div>`;
+        hovered.rel.forEach((rel, i) => {
+          const isBest = rel[1] === hovered.best;
+          body += `<div class="rel${isBest ? " best" : ""}"><span>R${i + 1}</span><span>${esc(rel[0])}</span><span style="text-align:right">${rel[1]}</span></div>`;
+          if (isBest && i === firstBest && hovered.s.length) {
+            body += `<div class="races"><div class="race-h"><span>Year</span><span>Competition</span><span style="text-align:right">QP</span></div>`;
+            hovered.s.forEach((race) => {
+              const flag = isU23(race, born);
+              body += `<div class="race"><span>${race[0]}</span><span class="${flag ? "flag" : ""}">${esc(competitionLabel(race, born))}</span><span style="text-align:right">${race[2]}</span></div>`;
+            });
+            body += `</div>`;
+          }
+        });
+        tip.innerHTML = body;
+        tip.style.display = "block";
+        tip.style.left = (tipLeft / VW * 100) + "%";
+        tip.style.top = (tipTop / VH * 100) + "%";
+        host.querySelectorAll(".age-guide").forEach((el) => {
+          const on = el.dataset.age == age;
+          el.setAttribute("opacity", on ? "1" : "0.45");
+          el.setAttribute("stroke-width", on ? "1.5" : "1");
+        });
+        host.querySelectorAll(".xlab").forEach((el) => {
+          el.setAttribute("font-weight", el.dataset.age == age ? "650" : "400");
+        });
+      }
+      function hideTip() {
+        tip.style.display = "none";
+        host.querySelectorAll(".age-guide").forEach((el) => {
+          el.setAttribute("opacity", "0.45");
+          el.setAttribute("stroke-width", "1");
+        });
+        host.querySelectorAll(".xlab").forEach((el) => el.setAttribute("font-weight", "400"));
+      }
+      host.querySelectorAll(".best-pt").forEach((g) => {
+        g.addEventListener("mouseenter", () => showTip(Number(g.dataset.age)));
+      });
+      host.addEventListener("mouseleave", hideTip);
+    }
+
+    try {
+      render();
+    } catch (err) {
+      const el = document.getElementById("load-error");
+      if (el) el.classList.add("show");
+      throw err;
+    }
+  
+  </script>
+</body>
+</html>
