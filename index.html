@@ -2246,8 +2246,10 @@
         const rankVal = d.overall != null ? d.overall : "—";
         const rankMuted = d.overall == null ? " muted" : "";
         const rankLbl = phaseRankLabel(d);
+        const kind = RACE_COL[c.kind] ? c.kind : (c.kind === "m" ? "sg" : "ot");
+        const nameCol = RACE_COL[kind] || RACE_COL.ot;
         let rows =
-          `<div class="comp-name">${esc(c.name)}</div>` +
+          `<div class="comp-name" style="color:${nameCol}">${esc(c.name)}</div>` +
           `<div class="comp-row"><span class="comp-lbl">${esc(rankLbl)}</span><span class="comp-val${rankMuted}">${esc(rankVal)}</span></div>`;
         // Heat only when we have heat times
         if (d.heatBehindPct != null) {
