@@ -26,7 +26,7 @@
       color: var(--text);
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
     }
-    .wrap { max-width: 1280px; margin: 0 auto; padding: 24px 20px 40px; }
+    .wrap { max-width: 1480px; margin: 0 auto; padding: 24px 20px 40px; }
     h1 { font-size: 24px; line-height: 30px; font-weight: 600; margin: 0 0 6px; }
     .sub { font-weight: 600; margin: 0 0 6px; }
     .lead { color: var(--text-2); font-size: 14px; line-height: 20px; margin: 0 0 20px; }
@@ -481,6 +481,10 @@
             "uj"
           ],
           [
+            "Australian Open Penrith 2014",
+            "ot"
+          ],
+          [
             "Oceania Championships Penrith 2014",
             "ot"
           ]
@@ -617,10 +621,6 @@
           [
             "Australian Open Penrith 2019",
             "ot"
-          ],
-          [
-            "ICF World Ranking Penrith 2019",
-            "wr"
           ],
           [
             "Oceania Championships Penrith 2019",
@@ -1002,7 +1002,7 @@
         "s": [
           [
             2014,
-            "ICF World Ranking Penrith",
+            "World Championships Penrith",
             12.21
           ],
           [
@@ -1012,7 +1012,7 @@
           ],
           [
             2014,
-            "ICF World Ranking Penrith",
+            "Australian Open Penrith",
             11.02
           ],
           [
@@ -1047,7 +1047,7 @@
         "s": [
           [
             2014,
-            "ICF World Ranking Penrith",
+            "World Championships Penrith",
             12.21
           ],
           [
@@ -1267,7 +1267,7 @@
           ],
           [
             2019,
-            "ICF World Ranking Penrith",
+            "Australian Open Penrith",
             2.1
           ]
         ],
@@ -1305,7 +1305,7 @@
           ],
           [
             2019,
-            "ICF World Ranking Penrith",
+            "Australian Open Penrith",
             2.1
           ]
         ],
@@ -1342,7 +1342,7 @@
           ],
           [
             2019,
-            "ICF World Ranking Penrith",
+            "Australian Open Penrith",
             2.1
           ],
           [
@@ -1433,7 +1433,7 @@
           ],
           [
             2023,
-            "ICF World Ranking Penrith",
+            "Australian Open Penrith",
             11.96
           ],
           [
@@ -1632,10 +1632,10 @@
     function el(id) { return document.getElementById(id); }
     const CLASS_ORDER = ["MK1", "MC1", "MX1", "WK1", "WC1", "WX1"];
     const ATHLETES = ["Timothy ANDERSON"];
-    const VW = 880, VH = 460, PAD = { l: 56, r: 20, t: 18, b: 52 };
-    const RACE_VW = 1200;
-    const RACE_PAD_L = 88;
-    const RACE_PAD_R = 130;
+    const VW = 1100, VH = 560, PAD = { l: 64, r: 28, t: 24, b: 56 };
+    const RACE_VW = 1400;
+    const RACE_PAD_L = 96;
+    const RACE_PAD_R = 148;
     /* Center each age in its own slot so first/last bars stay inside the plot
        (edge-mapped min/max ages sit on the axes and overlap tick labels). */
     function raceXOf(ages, padL, plotW) {
@@ -1766,6 +1766,19 @@
       return raw;
     }
 
+    /* Show JNR / U23 in the competition title for junior worlds (kind uj). */
+    function raceExperienceLabel(name, kind, age) {
+      const raw = String(name || "").trim();
+      if (!raw) return raw;
+      if (/jnr|junior|u23/i.test(raw)) return raw;
+      if (kind !== "uj") return raw;
+      const tag = (age != null && age <= 18) ? "JNR" : "U23";
+      if (/world championships/i.test(raw)) {
+        return raw.replace(/World Championships/i, tag + " World Championships");
+      }
+      return tag + " " + raw;
+    }
+
     function dedupeRaceGroup(g) {
       const seen = Object.create(null);
       const r = [];
@@ -1884,12 +1897,35 @@
       return null;
     }
 
+    /* First U23 Worlds Semi or Final from RACE_RESULT_DETAILS (age 19–23, kind uj). */
+    function firstU23PhaseMilestone(series, phase) {
+      const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
+      for (const g of aged) {
+        if (g.a == null || g.a <= 18 || g.a > 23) continue;
+        for (const item of g.r || []) {
+          const name = item[0] || "";
+          const kind = item[1] || "";
+          if (!(kind === "uj" || /u23/i.test(name))) continue;
+          const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
+          const ph = d.advancePhase || "";
+          let hit = false;
+          if (phase === "Semi") {
+            hit = ph === "Semi" || ph === "Final" || ph === "FinalB" || d.semiBehindPct != null;
+          } else if (phase === "Final") {
+            hit = ph === "Final" || ph === "FinalB" || d.finalBehindPct != null;
+          }
+          if (hit) return { a: g.a, y: g.y, name: name, kind: kind };
+        }
+      }
+      return null;
+    }
+
     function buildCareerMilestones(series) {
       const rankGroups = ((DATA[athlete] || {})[boatClass] || []).filter((g) => g.a != null);
       const items = [];
       const add = (hit, label) => {
         if (!hit) return;
-        items.push({ a: hit.a, y: hit.y, label });
+        items.push({ a: hit.a, y: hit.y, label, race: hit.name || hit.race || null });
       };
 
       add(
@@ -1904,6 +1940,9 @@
         ),
         "First U23 World Championships"
       );
+      /* U23 Semi / Final from RACE_RESULT_DETAILS (only when phase data exists). */
+      add(firstU23PhaseMilestone(series, "Semi"), "First U23 Semi Final");
+      add(firstU23PhaseMilestone(series, "Final"), "First U23 Final");
       add(
         firstRaceMatching(series, (name, kind) => kind === "wr" || /icf world ranking/i.test(name)),
         "First ICF World Ranking Race"
@@ -2097,7 +2136,9 @@
         if (!g) return;
         const list = g.r;
         let body = `<div class="tip-head"><span>Age ${g.a} · ${g.y}</span><span>${list.length} race${list.length === 1 ? "" : "s"}</span></div><div class="bar-tip-list">`;
-        list.forEach((item) => { body += `<div>${esc(item[0])}</div>`; });
+        list.forEach((item) => {
+          body += `<div>${esc(raceExperienceLabel(item[0], item[1], g.a))}</div>`;
+        });
         body += `</div>`;
         tip.innerHTML = body;
         tip.style.display = "block";
@@ -2200,7 +2241,12 @@
             const key = nm.toLowerCase();
             if (seen[key]) return;
             seen[key] = true;
-            comps.push({ name: nm, year: g.y, kind: item[1] });
+            comps.push({
+              name: nm,
+              displayName: raceExperienceLabel(nm, item[1], g.a),
+              year: g.y,
+              kind: item[1]
+            });
           });
         });
       });
@@ -2236,9 +2282,11 @@
         const overallMuted = d.overall == null ? " muted" : "";
         const heatMuted = d.heatBehindPct == null ? " muted" : "";
         const advMuted = d.advanceBehindPct == null ? " muted" : "";
+        const kind = RACE_COL[c.kind] ? c.kind : (c.kind === "m" ? "sg" : "ot");
+        const nameCol = RACE_COL[kind] || RACE_COL.ot;
         return (
           `<div class="comp-tile">` +
-            `<div class="comp-name">${esc(c.name)}</div>` +
+            `<div class="comp-name" style="color:${nameCol}">${esc(c.displayName || c.name)}</div>` +
             `<div class="comp-row"><span class="comp-lbl">Overall Rank</span><span class="comp-val${overallMuted}">${esc(overall)}</span></div>` +
             `<div class="comp-row"><span class="comp-lbl">% of Heat winner</span><span class="comp-val${heatMuted}">${esc(heat)}</span></div>` +
             `<div class="comp-row"><span class="comp-lbl">${esc(advLbl)}</span><span class="comp-val${advMuted}">${esc(adv)}</span></div>` +
@@ -2356,7 +2404,9 @@
         let body = `<div class="tip-head"><span>${esc(p.cls)} · Age ${p.a} · ${p.y}</span><span>${p.cum} career</span></div>`;
         body += `<div class="bar-tip-list"><div>${p.added} race${p.added === 1 ? "" : "s"} this season</div></div>`;
         body += `<div class="bar-tip-list">`;
-        p.r.forEach((item) => { body += `<div>${esc(item[0])}</div>`; });
+        p.r.forEach((item) => {
+          body += `<div>${esc(raceExperienceLabel(item[0], item[1], p.a))}</div>`;
+        });
         body += `</div>`;
         tip.innerHTML = body;
         tip.style.display = "block";
@@ -2412,14 +2462,13 @@
         return;
       }
       const xVals = groups.map((g) => g.a);
-      const xMin = Math.min(...xVals);
-      const xMax = Math.max(...xVals);
+      const ages = [...new Set(xVals)].sort((a, b) => a - b);
       const allRanks = groups.flatMap((g) => g.rel.map((r) => r[1]));
       const yMax = rankScaleMax(allRanks);
       const ticks = yTicksFor(yMax);
       const plotW = VW - PAD.l - PAD.r;
       const plotH = VH - PAD.t - PAD.b;
-      const xOf = (v) => xMax === xMin ? PAD.l + plotW / 2 : PAD.l + ((v - xMin) / (xMax - xMin)) * plotW;
+      const xOf = raceXOf(ages, PAD.l, plotW);
       const yOf = (rank) => {
         const clamped = Math.min(rank, yMax);
         return PAD.t + plotH * (1 - clamped / yMax);
