@@ -132,31 +132,32 @@
       flex-wrap: wrap;
       align-items: center;
       justify-content: flex-start;
-      gap: 12px 16px;
+      gap: 14px 18px;
       margin: 0;
-      padding: 12px 14px;
+      padding: 16px 18px;
       border: 1px solid var(--stroke-soft);
       border-radius: 10px;
       background: rgba(255,255,255,0.03);
       box-sizing: border-box;
       align-self: start;
+      grid-area: pie;
     }
     .pie-wrap[hidden] { display: none; }
-    .pie-svg { width: 132px; height: auto; flex: 0 0 auto; }
+    .pie-svg { width: 200px; height: auto; flex: 0 0 auto; }
     .pie-legend {
       display: flex;
       flex-direction: column;
-      gap: 5px;
-      font-size: 12px;
+      gap: 7px;
+      font-size: 13px;
       color: var(--text-2);
       min-width: 0;
-      flex: 1 1 150px;
+      flex: 1 1 170px;
     }
     .pie-legend .row {
       display: flex;
       align-items: center;
       gap: 8px;
-      line-height: 16px;
+      line-height: 18px;
     }
     .pie-legend .pct {
       margin-left: auto;
@@ -168,7 +169,7 @@
     .pie-title {
       width: 100%;
       text-align: left;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--text-2);
       margin: 0;
@@ -176,21 +177,30 @@
     }
     .cum-detail-row {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
-      gap: 16px;
+      grid-template-columns: minmax(0, 1fr) minmax(400px, 520px);
+      grid-template-areas:
+        "head head"
+        "tiles pie";
+      gap: 12px 20px;
       align-items: start;
       margin-top: 16px;
     }
     .cum-detail-row[hidden] { display: none; }
     .cum-detail-row.pie-only {
-      grid-template-columns: minmax(300px, 420px);
+      grid-template-columns: minmax(400px, 520px);
+      grid-template-areas: "pie";
       justify-content: start;
     }
-    #panel-races.mode-cum .comp-tiles {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-    #panel-races.mode-cum .age-detail {
+    #panel-races.mode-cum .age-detail:not([hidden]) {
+      display: contents;
       margin-top: 0;
+    }
+    #panel-races.mode-cum .age-detail-head {
+      grid-area: head;
+    }
+    #panel-races.mode-cum .comp-tiles {
+      grid-area: tiles;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
     .field[hidden] { display: none; }
