@@ -26,7 +26,7 @@
       color: var(--text);
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
     }
-    .wrap { max-width: 1480px; margin: 0 auto; padding: 24px 20px 40px; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 24px 20px 40px; }
     h1 { font-size: 24px; line-height: 30px; font-weight: 600; margin: 0 0 6px; }
     .sub { font-weight: 600; margin: 0 0 6px; }
     .lead { color: var(--text-2); font-size: 14px; line-height: 20px; margin: 0 0 20px; }
@@ -414,6 +414,7 @@
       <div class="chart-wrap" id="chart"></div>
       <div class="legend">
         <span><span class="dot" style="width:11px;height:11px;background:var(--accent);border:2px solid var(--text);vertical-align:middle"></span> Best rank for age</span>
+        <span><span class="dot" style="width:13px;height:13px;background:var(--purple);border:2px solid var(--text);vertical-align:middle"></span> Career best World Ranking</span>
         <span><span class="dot" style="width:8px;height:8px;background:#4a4a4a;border:1px solid var(--stroke);vertical-align:middle"></span> Other releases at that age</span>
       </div>
     </div>
@@ -1651,9 +1652,9 @@
     const CLASS_ORDER = ["MK1", "MC1", "MX1", "WK1", "WC1", "WX1"];
     const ATHLETES = ["Timothy ANDERSON"];
     const VW = 1100, VH = 560, PAD = { l: 64, r: 28, t: 24, b: 56 };
-    const RACE_VW = 1400;
-    const RACE_PAD_L = 96;
-    const RACE_PAD_R = 148;
+    const RACE_VW = VW;
+    const RACE_PAD_L = PAD.l;
+    const RACE_PAD_R = 100;
 
     const RACE_START_DATES = {
       "Australian Open Penrith 2009": "2009-02-21",
@@ -2051,12 +2052,11 @@
       return null;
     }
 
-    /* Senior/open races only — excludes JNR/U23 Worlds and school events. */
+    /* SNR Semi/Final milestones: World Cup, senior World Championships, Olympics only. */
     function isSnrEligibleRace(name, kind) {
       const n = String(name || "");
-      if (kind === "uj" || /\bjnr\b|junior|u23|schools championships/i.test(n)) return false;
-      if (kind === "sg" || kind === "wr" || kind === "ol") return true;
-      if (/oceania|australian open|penrith open/i.test(n)) return true;
+      if (kind === "ol" || /olympic/i.test(n)) return true;
+      if (kind === "sg" && /world cup|world championships/i.test(n)) return true;
       return false;
     }
 
@@ -2721,14 +2721,21 @@
           svg += `<circle cx="${cx}" cy="${cy}" r="4" fill="${offScale ? "#3a3a3a" : "#4a4a4a"}" stroke="${offScale ? "#666" : "#777"}" stroke-width="1" opacity="${offScale ? 0.45 : 0.7}"${offScale ? ' stroke-dasharray="2 1"' : ""}/>`;
         });
       });
+      const careerBestRank = groups.length ? Math.min(...groups.map((g) => g.best)) : null;
+      const careerBestAge = careerBestRank == null ? null : (
+        groups.filter((g) => g.best === careerBestRank).slice().sort((a, b) => a.a - b.a || a.y - b.y)[0] || {}
+      ).a;
       groups.forEach((group) => {
         group.rel.forEach((rel, i) => {
           if (rel[1] !== group.best) return;
           const cx = xOf(group.a) + xJitter(group, i);
           const cy = yOf(rel[1]);
+          const isCareerBest = careerBestAge != null && group.a === careerBestAge && rel[1] === careerBestRank;
+          const fill = isCareerBest ? "#9386f2" : "#5a9ce6";
+          const r = isCareerBest ? 8 : 6.5;
           svg += `<g class="best-pt" data-age="${group.a}" style="cursor:pointer">
             <circle cx="${cx}" cy="${cy}" r="14" fill="transparent"/>
-            <circle cx="${cx}" cy="${cy}" r="6.5" fill="#5a9ce6" stroke="#e8e8e8" stroke-width="2"/>
+            <circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}" stroke="#e8e8e8" stroke-width="2"/>
           </g>`;
         });
       });
