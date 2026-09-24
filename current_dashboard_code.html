@@ -134,10 +134,27 @@
       align-items: center;
       justify-content: center;
       gap: 28px;
-      margin: 4px 0 20px;
+      margin: 20px 0 16px;
       padding: 12px 8px 4px;
     }
     .pie-wrap[hidden] { display: none; }
+
+    #panel-races {
+      display: flex;
+      flex-direction: column;
+    }
+    #panel-races > * { order: 10; }
+    /* Races by Age: tiles → chart → race legend → milestones */
+    #panel-races.mode-year #race-tiles { order: 1; }
+    #panel-races.mode-year #race-chart { order: 2; }
+    #panel-races.mode-year #race-legend { order: 3; }
+    #panel-races.mode-year #milestones { order: 4; }
+    /* Cumulative: chart → cum legend → pie → summary tiles → age detail */
+    #panel-races.mode-cum #race-chart { order: 1; }
+    #panel-races.mode-cum #cum-legend { order: 2; }
+    #panel-races.mode-cum #race-pie { order: 3; }
+    #panel-races.mode-cum #race-tiles { order: 4; }
+    #panel-races.mode-cum #age-detail { order: 5; }
     .pie-svg { width: min(280px, 100%); height: auto; flex: 0 0 auto; }
     .pie-legend {
       display: flex;
@@ -435,10 +452,27 @@
       align-items: center;
       justify-content: center;
       gap: 28px;
-      margin: 4px 0 20px;
+      margin: 20px 0 16px;
       padding: 12px 8px 4px;
     }
     .pie-wrap[hidden] { display: none; }
+
+    #panel-races {
+      display: flex;
+      flex-direction: column;
+    }
+    #panel-races > * { order: 10; }
+    /* Races by Age: tiles → chart → race legend → milestones */
+    #panel-races.mode-year #race-tiles { order: 1; }
+    #panel-races.mode-year #race-chart { order: 2; }
+    #panel-races.mode-year #race-legend { order: 3; }
+    #panel-races.mode-year #milestones { order: 4; }
+    /* Cumulative: chart → cum legend → pie → summary tiles → age detail */
+    #panel-races.mode-cum #race-chart { order: 1; }
+    #panel-races.mode-cum #cum-legend { order: 2; }
+    #panel-races.mode-cum #race-pie { order: 3; }
+    #panel-races.mode-cum #race-tiles { order: 4; }
+    #panel-races.mode-cum #age-detail { order: 5; }
     .pie-svg { width: min(280px, 100%); height: auto; flex: 0 0 auto; }
     .pie-legend {
       display: flex;
@@ -500,7 +534,6 @@
     </div>
     <div class="panel" id="panel-races" hidden>
       <div class="tiles tiles-2" id="race-tiles"></div>
-      <div class="pie-wrap" id="race-pie" hidden></div>
       <div class="chart-wrap" id="race-chart"></div>
       <div class="legend" id="race-legend">
         <span><span class="dot" style="width:11px;height:11px;background:#d4a017;opacity:0.55;vertical-align:middle"></span> Olympic Games</span>
@@ -511,6 +544,7 @@
         <span><span class="dot" style="width:11px;height:3px;border-radius:1px;background:#e8e8e8;vertical-align:middle"></span> World Ranking</span>
       </div>
       <div class="legend" id="cum-legend" hidden></div>
+      <div class="pie-wrap" id="race-pie" hidden></div>
       <div id="milestones" class="milestones" hidden></div>
       <div id="age-detail" class="age-detail" hidden>
         <div class="age-detail-head">
@@ -2050,6 +2084,11 @@
           racePie.innerHTML = "";
         }
       }
+      const racesPanel = document.getElementById("panel-races");
+      if (racesPanel) {
+        racesPanel.classList.toggle("mode-year", tab === "races" && raceMode === "year");
+        racesPanel.classList.toggle("mode-cum", tab === "races" && raceMode === "cum");
+      }
       const ageDetail = document.getElementById("age-detail");
       if (ageDetail) {
         if (tab !== "races" || raceMode !== "cum") {
@@ -2373,11 +2412,11 @@
       svg += `<line x1="${chartW - padR}" x2="${chartW - padR}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#444" stroke-width="1"/>`;
       countTicks.forEach((tick) => {
         const y = yCount(tick);
-        svg += `<line x1="${chartW - padR}" x2="${chartW - padR + 5}" y1="${y}" y2="${y}" stroke="#666" stroke-width="1"/>`;
-        svg += `<text x="${chartW - padR + 12}" y="${y + 4}" fill="#8a8a8a" font-size="14">${tick}</text>`;
+        svg += `<line x1="${chartW - padR}" x2="${chartW - padR + 5}" y1="${y}" y2="${y}" stroke="#e6c84a" stroke-width="1"/>`;
+        svg += `<text x="${chartW - padR + 12}" y="${y + 4}" fill="#e6c84a" font-size="14">${tick}</text>`;
       });
       const rightLabelX = chartW - 22;
-      svg += `<text x="${rightLabelX}" y="${yMid}" fill="#b8b8b8" font-size="14" font-weight="700" text-anchor="middle" transform="rotate(90, ${rightLabelX}, ${yMid})">COUNT OF RACES</text>`;
+      svg += `<text x="${rightLabelX}" y="${yMid}" fill="#e6c84a" font-size="14" font-weight="700" text-anchor="middle" transform="rotate(90, ${rightLabelX}, ${yMid})">COUNT OF RACES</text>`;
       aged.forEach((g) => {
         const x = xOf(g.a);
         const parts = { ol: 0, sg: 0, uj: 0, wr: 0, ot: 0 };
@@ -2745,7 +2784,8 @@
         svg += `<text class="cum-age${sel}" data-age="${a}" x="${x}" y="${VH - PAD.b + 18}" text-anchor="middle" font-size="14" style="pointer-events:none">${a}</text>`;
       });
       svg += rankLineSvg(xOf, yRank, rankGroups);
-      svg += `<text x="${padL + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#8a8a8a" font-size="14" font-weight="700">ATHLETE AGE · CLICK AN AGE FOR RACE DETAILS</text>`;
+      svg += `<text x="${padL + plotW / 2}" y="${VH - 22}" text-anchor="middle" fill="#8a8a8a" font-size="14" font-weight="700">ATHLETE AGE</text>`;
+      svg += `<text x="${padL + plotW / 2}" y="${VH - 6}" text-anchor="middle" fill="#8a8a8a" font-size="11">Click an age for race details</text>`;
       svg += `</svg><div class="tip" id="race-tip" style="display:none"></div>`;
       host.innerHTML = svg;
       const tip = host.querySelector("#race-tip");
