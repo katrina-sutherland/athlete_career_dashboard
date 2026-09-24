@@ -585,6 +585,61 @@
       font-size: 11px;
       color: var(--text-3);
     }
+    .cmp-cell-main {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .cmp-pct {
+      font-variant-numeric: tabular-nums;
+    }
+    .cmp-tim-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1;
+      flex: 0 0 auto;
+    }
+    .cmp-tim-mark.yes {
+      color: #1f8f45;
+      background: rgba(63, 162, 102, 0.25);
+    }
+    .cmp-tim-mark.no {
+      color: #d04545;
+      background: rgba(208, 69, 69, 0.2);
+    }
+    .cmp-cell.zero {
+      opacity: 1;
+    }
+    .cmp-cell.zero .cmp-pct {
+      opacity: 0.55;
+    }
+    .cmp-tip .tip-tim {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 11px;
+      font-weight: 650;
+      padding: 2px 0 7px;
+      margin-bottom: 4px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+    }
+    .cmp-tip .tip-tim .tip-tim-status.yes { color: #3fa266; }
+    .cmp-tip .tip-tim .tip-tim-status.no { color: #d04545; }
+    .cmp-legend {
+      font-size: 11px;
+      color: var(--text-3);
+      margin: 10px 0 0;
+      line-height: 16px;
+    }
 
     .panel[hidden] { display: none; }
     .toggle-row { display: flex; align-items: center; gap: 8px; height: 36px; }
@@ -2560,6 +2615,80 @@
       { key: "bmeMedal", label: "BME Medal", color: "#d4a017" }
     ];
 
+
+    function firstJnrPhaseMilestone(series, phase) {
+      const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
+      for (const g of aged) {
+        if (g.a == null || g.a > 18) continue;
+        for (const item of g.r || []) {
+          const name = item[0] || "";
+          const kind = item[1] || "";
+          if (!(kind === "uj" || /\bjnr\b|junior/i.test(name))) continue;
+          const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
+          if (reachedPhase(d, phase)) return { a: g.a, y: g.y, name: name, kind: kind };
+        }
+      }
+      return null;
+    }
+
+    function firstWcTop30Milestone(series) {
+      const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
+      for (const g of aged) {
+        for (const item of g.r || []) {
+          const name = item[0] || "";
+          const kind = item[1] || "";
+          if (!(kind === "sg" && /world cup/i.test(name))) continue;
+          const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
+          const overall = d.overall;
+          if (overall != null && overall <= 30) return { a: g.a, y: g.y, name: name, overall: overall };
+        }
+      }
+      return null;
+    }
+
+    function firstBmeMedalMilestone(series) {
+      const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
+      for (const g of aged) {
+        for (const item of g.r || []) {
+          const name = item[0] || "";
+          const kind = item[1] || "";
+          const n = String(name);
+          const isBme = kind === "ol" || /olympic/i.test(n) ||
+            (kind === "sg" && /world championships/i.test(n) && !/world cup/i.test(n));
+          if (!isBme) continue;
+          const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
+          if (d.overall != null && d.overall >= 1 && d.overall <= 3) {
+            const medal = d.overall === 1 ? "gold" : d.overall === 2 ? "silver" : "bronze";
+            return { a: g.a, y: g.y, name: name, medal: medal };
+          }
+        }
+      }
+      return null;
+    }
+
+    function buildTimComparisonProfile(series) {
+      const rankGroups = ((DATA[athlete] || {})[boatClass] || []).filter((g) => g.a != null);
+      const jnr = firstJnrPhaseMilestone(series, "Final");
+      const u23 = firstU23PhaseMilestone(series, "Final");
+      const wc30 = firstWcTop30Milestone(series);
+      const snr = firstSnrPhaseMilestone(series, "Final");
+      const bme = firstBmeMedalMilestone(series);
+      const top100 = firstRankMilestone(rankGroups, (g) => g.best <= 100);
+      const top50 = firstRankMilestone(rankGroups, (g) => g.best <= 50);
+      const top20 = firstRankMilestone(rankGroups, (g) => g.best <= 20);
+      return {
+        name: athlete || "Timothy ANDERSON",
+        jnrFinal: jnr ? jnr.a : null,
+        u23Final: u23 ? u23.a : null,
+        wcTop30: wc30 ? wc30.a : null,
+        top100Wr: top100 ? top100.a : null,
+        top50Wr: top50 ? top50.a : null,
+        top20Wr: top20 ? top20.a : null,
+        snrFinal: snr ? snr.a : null,
+        bmeMedal: bme ? { age: bme.a, medal: bme.medal } : null
+      };
+    }
+
     let milestonesCollapsed = false;
     let comparisonCollapsed = false;
 
@@ -2604,6 +2733,37 @@
       return { hits, pct, count: hits.length, total: athletes.length };
     }
 
+
+    function timMilestoneStatus(tim, band, key) {
+      const raw = tim ? tim[key] : null;
+      const age = comparisonMilestoneAge(raw);
+      const yes = comparisonAchievedBy(raw, band);
+      return {
+        yes: yes,
+        age: age,
+        medal: key === "bmeMedal" ? comparisonMilestoneMedal(raw) : null
+      };
+    }
+
+    function comparisonTimTip(timHit, ageLabel) {
+      const mark = timHit.yes ? "✓" : "✗";
+      const cls = timHit.yes ? "yes" : "no";
+      let detail;
+      if (timHit.yes) {
+        detail = timHit.age != null ? ("Age " + timHit.age) : "Achieved";
+      } else if (timHit.age != null) {
+        detail = "Age " + timHit.age + " (later)";
+      } else {
+        detail = "Not achieved";
+      }
+      return (
+        `<div class="tip-tim">` +
+          `<span class="tip-tim-status ${cls}">${mark} Tim</span>` +
+          `<span>${esc(detail)}</span>` +
+        `</div>`
+      );
+    }
+
     function comparisonTipRow(h) {
       const medal = h.medal
         ? `<span class="cmp-medal ${esc(h.medal)}" title="${esc(h.medal)}" aria-label="${esc(h.medal)} medal"></span>`
@@ -2628,16 +2788,19 @@
       const athletes = CAREER_COMPARISON_ATHLETES || [];
       const cols = CAREER_COMPARISON_COLS;
       const ages = CAREER_COMPARISON_AGES;
+      const tim = buildTimComparisonProfile(raceSeries(athlete, boatClass));
       let body = ages.map((band) => {
         const ageLabel = band === "28+" ? "28+" : String(band);
         const cells = cols.map((col) => {
           const cell = comparisonCell(athletes, band, col.key);
+          const timHit = timMilestoneStatus(tim, band, col.key);
           const tipRows = cell.hits.length
             ? cell.hits.map((h) => comparisonTipRow(h)).join("")
             : `<div class="tip-empty">No athletes hit this by age ${esc(ageLabel)}</div>`;
           const tip =
             `<div class="cmp-tip" role="tooltip">` +
               `<div class="tip-title">${esc(col.label)} by ${esc(ageLabel)} · ${cell.count}/${cell.total}</div>` +
+              comparisonTimTip(timHit, ageLabel) +
               tipRows +
             `</div>`;
           const cls = "cmp-cell" + (cell.count ? " has-hits" : " zero");
@@ -2645,7 +2808,20 @@
           const tint = cell.count
             ? `background: ${col.color}22; color: ${col.color};`
             : `color: ${col.color}99;`;
-          return `<td class="${cls}" tabindex="0" style="${tint}">${pctLabel}${tip}</td>`;
+          const markCls = timHit.yes ? "yes" : "no";
+          const markSym = timHit.yes ? "✓" : "✗";
+          const markTitle = timHit.yes
+            ? (timHit.age != null ? `Tim achieved at age ${timHit.age}` : "Tim achieved this")
+            : (timHit.age != null ? `Tim first at age ${timHit.age} (not by ${ageLabel})` : "Tim has not achieved this");
+          return (
+            `<td class="${cls}" tabindex="0" style="${tint}">` +
+              `<span class="cmp-cell-main">` +
+                `<span class="cmp-pct">${pctLabel}</span>` +
+                `<span class="cmp-tim-mark ${markCls}" title="${esc(markTitle)}" aria-label="${esc(markTitle)}">${markSym}</span>` +
+              `</span>` +
+              tip +
+            `</td>`
+          );
         }).join("");
         return `<tr><th scope="row">Age ${esc(ageLabel)}</th>${cells}</tr>`;
       }).join("");
@@ -2658,7 +2834,7 @@
       host.innerHTML =
         `<button type="button" class="collapse-head" aria-expanded="${comparisonCollapsed ? "false" : "true"}">` +
           `<h3>Career Comparison</h3>` +
-          `<span class="milestones-count">${athletes.length} athletes</span>` +
+          `<span class="milestones-count">${athletes.length} athletes · Tim ✓/✗</span>` +
           `<span class="collapse-chevron" aria-hidden="true"></span>` +
         `</button>` +
         `<div class="collapse-body">` +
@@ -2669,6 +2845,7 @@
             `<thead><tr><th scope="col">Age Milestone Achieved</th>${headCols}</tr></thead>` +
             `<tbody>${body}</tbody>` +
           `</table></div>` +
+          `<p class="cmp-legend"><span class="cmp-tim-mark yes" style="display:inline-flex;vertical-align:middle;margin-right:4px">✓</span> Tim had achieved by this age &nbsp;·&nbsp; <span class="cmp-tim-mark no" style="display:inline-flex;vertical-align:middle;margin:0 4px">✗</span> Tim had not (yet)</p>` +
         `</div>`;
 
       const btn = host.querySelector(".collapse-head");
