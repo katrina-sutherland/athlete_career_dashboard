@@ -444,6 +444,20 @@
   "Timothy ANDERSON": {
     "MK1": [
              {
+               "y": 2009,
+               "r": [
+                 [
+                   "Australian Open Penrith 2009",
+                   "ot"
+                 ],
+                 [
+                   "Australian Schools Championships Eildon 2009",
+                   "ot"
+                 ]
+               ],
+               "a": 15
+             },
+             {
                "y": 2010,
                "r": [
                  [
@@ -456,6 +470,10 @@
              {
                "y": 2012,
                "r": [
+                 [
+                   "Oceania Championships Penrith 2012",
+                   "ot"
+                 ],
                  [
                    "ICF World Ranking Wausau 2012",
                    "wr"
@@ -1638,7 +1656,10 @@
     const RACE_PAD_R = 148;
 
     const RACE_START_DATES = {
+      "Australian Open Penrith 2009": "2009-02-21",
+      "Australian Schools Championships Eildon 2009": "2009-04-15",
       "World Championships Foix 2010": "2010-07-08",
+      "Oceania Championships Penrith 2012": "2012-02-15",
       "ICF World Ranking Wausau 2012": "2012-06-15",
       "World Championships Liptovsky Mikulas 2013": "2013-07-17",
       "Australian Open Penrith 2014": "2014-02-15",
@@ -1818,12 +1839,12 @@
     function rankLineSvg(xOf, yRank, groups) {
       if (!(groups || []).length) return "";
       const path = groups.map((g, i) => `${i === 0 ? "M" : "L"} ${xOf(g.a)} ${yRank(g.best)}`).join(" ");
-      let s = `<path d="${path}" fill="none" stroke="${RANK_OVERLAY_COL}" stroke-width="2" opacity="0.75"/>`;
+      let s = `<path class="rank-line" d="${path}" fill="none" stroke="${RANK_OVERLAY_COL}" stroke-width="2" opacity="0.75"/>`;
       groups.forEach((g) => {
         const x = xOf(g.a);
         const y = yRank(g.best);
         s += `<circle cx="${x}" cy="${y}" r="14" fill="transparent"/>`;
-        s += `<circle cx="${x}" cy="${y}" r="5" fill="${RANK_OVERLAY_COL}" stroke="#e8e8e8" stroke-width="1.5" opacity="0.9"/>`;
+        s += `<circle class="rank-pt" data-age="${g.a}" cx="${x}" cy="${y}" r="5" fill="${RANK_OVERLAY_COL}" stroke="#e8e8e8" stroke-width="1.5" opacity="0.9"/>`;
       });
       return s;
     }
@@ -1908,18 +1929,17 @@
       const series = (RACES[athlete] && RACES[athlete][boatClass]) || [];
       return series.map(dedupeRaceGroup);
     }
-    /* SNR result milestones. Eligible medal events: ICF World Ranking, World Cup,
-       SNR World Championships, Olympic Games, Oceania Championships, Australian Open. */
+    /* SNR medal milestone only (semi/final derived from RACE_RESULT_DETAILS).
+       Eligible: ICF World Ranking, World Cup, SNR World Championships, Olympic Games,
+       Oceania Championships, Australian Open, Penrith Open. */
     const RESULT_MILESTONES = [
-      {"a": 23, "y": 2017, "label": "First SNR Semi Final", "race": "World Cup Augsburg 2017"},
-      {"a": 29, "y": 2023, "label": "First SNR Final", "race": "World Cup Tacen 2023"},
       {"a": 32, "y": 2026, "label": "First SNR Medal", "race": "Oceania Championships Auckland 2026", "qp": 25.27}
     ];
     /* Per-competition race results for Cumulative age drill-down.
        overall = deepest phase rank; heatBehindPct / advanceBehindPct =
        heat/advance values = athlete total time as % of phase winner
        (100 = equal; 108.81 = 8.81% slower), using TOTAL_TIME else RAW+pen. */
-    const RACE_RESULT_DETAILS = {"World Cup Augsburg 2017":{"overall":27,"heatBehindPct":104.2,"advanceBehindPct":111.88,"advancePhase":"Semi"},"World Cup Prague 2017":{"overall":26,"heatBehindPct":105.92},"World Championships Deodoro, Rio 2018":{"overall":28,"heatBehindPct":108.4},"World Cup Augsburg 2018":{"overall":16,"heatBehindPct":104.52,"advanceBehindPct":103.79,"advancePhase":"Semi"},"World Cup Krakow 2018":{"overall":29,"heatBehindPct":107.15},"World Cup La Seu 2018":{"overall":26,"heatBehindPct":104.42},"World Cup Liptovsky Mikulas 2018":{"overall":25,"heatBehindPct":105.87,"advanceBehindPct":108.59,"advancePhase":"Semi"},"World Championships La Seu 2019":{"overall":17,"heatBehindPct":105.57,"advanceBehindPct":104.78,"advancePhase":"Semi"},"World Cup Bratislava 2019":{"overall":24,"heatBehindPct":106.73,"advanceBehindPct":110.61,"advancePhase":"Semi"},"World Cup Lee Valley 2019":{"overall":26,"heatBehindPct":108.23,"advanceBehindPct":110.53,"advancePhase":"Semi"},"World Cup Prague 2019":{"overall":25,"heatBehindPct":105.96},"World Cup Tacen 2019":{"overall":40,"heatBehindPct":116.69},"Australian Open Penrith 2020":{"overall":38,"heatBehindPct":100.84,"advanceBehindPct":164.17,"advancePhase":"Semi"},"Oceania Championships Auckland 2020":{"heatBehindPct":163.14},"Australian Open Penrith 2022":{"overall":2,"advanceBehindPct":101.53,"advancePhase":"Final"},"ICF World Ranking Augsburg 2022":{"overall":20,"heatBehindPct":100.17,"advanceBehindPct":108.18,"advancePhase":"Semi"},"World Championships Augsburg 2022":{"overall":33,"heatBehindPct":102.84,"advanceBehindPct":154.61,"advancePhase":"Semi"},"World Cup Krakow 2022":{"overall":27,"heatBehindPct":101.27,"advanceBehindPct":108.1,"advancePhase":"Semi"},"World Cup La Seu 2022":{"overall":22,"heatBehindPct":105.4,"advanceBehindPct":111.61,"advancePhase":"Semi"},"World Cup Pau 2022":{"overall":15,"heatBehindPct":101.13,"advanceBehindPct":104.71,"advancePhase":"Semi"},"World Cup Prague 2022":{"overall":21,"heatBehindPct":101.21,"advanceBehindPct":105.54,"advancePhase":"Semi"},"World Cup Tacen 2022":{"overall":12,"heatBehindPct":106.57,"advanceBehindPct":105.71,"advancePhase":"Semi"},"Australian Open Penrith 2023":{"overall":1,"heatBehindPct":106.63,"advanceBehindPct":100.0,"advancePhase":"Final"},"Penrith Open Penrith 2023":{"overall":2,"semiBehindPct":104.49,"advanceBehindPct":102.6,"advancePhase":"Final"},"Pyrenees Cup La Seu 2023":{"overall":2,"heatBehindPct":102.5,"advanceBehindPct":101.43,"advancePhase":"Final"},"World Championships Lee Valley 2023":{"overall":5,"heatBehindPct":100.92,"advanceBehindPct":103.48,"advancePhase":"Final"},"World Cup Augsburg 2023":{"overall":21,"heatBehindPct":101.79,"advanceBehindPct":107.84,"advancePhase":"Semi"},"World Cup La Seu 2023":{"overall":8,"heatBehindPct":103.02,"advanceBehindPct":107.4,"advancePhase":"Final"},"World Cup Prague 2023":{"overall":22,"heatBehindPct":104.26,"advanceBehindPct":108.31,"advancePhase":"Semi"},"World Cup Tacen 2023":{"overall":7,"heatBehindPct":108.81,"advanceBehindPct":108.43,"advancePhase":"Final"},"World Cup Vaires sur Marne 2023":{"overall":20,"heatBehindPct":100.25,"advanceBehindPct":111.23,"advancePhase":"Semi"},"Australian Open Penrith 2024":{"overall":5,"heatBehindPct":100.71,"advanceBehindPct":103.9,"advancePhase":"Final"},"Oceania Championships Penrith 2024":{"overall":4,"heatBehindPct":100.61,"advanceBehindPct":104.94,"advancePhase":"Final"},"Olympic Games Paris 2024":{"overall":7,"heatBehindPct":105.57,"advanceBehindPct":103.04,"advancePhase":"Final"},"World Cup Augsburg 2024":{"overall":5,"heatBehindPct":109.44,"advanceBehindPct":103.45,"advancePhase":"Final"},"World Cup Ivrea 2024":{"overall":32,"heatBehindPct":103.35,"advanceBehindPct":167.8,"advancePhase":"Semi"},"World Cup Krakow 2024":{"overall":31,"heatBehindPct":102.82,"advanceBehindPct":112.25,"advancePhase":"Semi"},"World Cup La Seu 2024":{"overall":32,"heatBehindPct":103.53,"advanceBehindPct":111.84,"advancePhase":"Semi"},"World Cup Prague 2024":{"overall":56,"heatBehindPct":162.28},"Australian Open Penrith 2025":{"overall":8,"heatBehindPct":102.04,"advanceBehindPct":108.42,"advancePhase":"Final"},"Oceania Championships Penrith 2025":{"overall":5,"heatBehindPct":103.08,"advanceBehindPct":105.19,"advancePhase":"Final"},"World Championships Penrith 2025":{"overall":10,"heatBehindPct":101.71,"advanceBehindPct":104.02,"advancePhase":"Final"},"World Cup La Seu 2025":{"overall":74,"heatBehindPct":165.3},"World Cup Pau 2025":{"overall":21,"heatBehindPct":108.61},"World Cup Prague 2025":{"overall":47,"heatBehindPct":163.7},"Australian Open Penrith 2026":{"overall":4,"heatBehindPct":100.0,"advanceBehindPct":104.13,"advancePhase":"Final"},"ICF World Ranking Oklahoma 2026":{"overall":13,"heatBehindPct":66.64,"advanceBehindPct":107.8,"advancePhase":"FinalB"},"Oceania Championships Auckland 2026":{"overall":1,"heatBehindPct":106.83,"advanceBehindPct":100.0,"advancePhase":"Final"},"Penrith Open Penrith 2026":{"overall":4,"heatBehindPct":103.98,"advanceBehindPct":102.55,"advancePhase":"Final"},"World Cup La Seu 2026":{"overall":8,"heatBehindPct":103.21,"advanceBehindPct":108.25,"advancePhase":"Final"},"World Cup Prague 2026":{"overall":12,"heatBehindPct":104.28,"advanceBehindPct":168.71,"advancePhase":"Final"},"World Cup Vaires sur Marne 2026":{"overall":74,"heatBehindPct":269.01},"World Championships Oklahoma 2026":{"overall":12,"heatBehindPct":101.86,"semiBehindPct":104.81,"advanceBehindPct":163.02,"advancePhase":"Final"},"Oceania Championships Penrith 2019":{"overall":7,"advancePhase":"Final"},"Australian Open Penrith 2019":{"overall":17,"advancePhase":"Semi"},"World Championships Bratislava 2017":{"overall":48},"World Championships Foz do Iguassu 2015":{"overall":16,"heatBehindPct":110.5,"advanceBehindPct":106.19,"advancePhase":"Semi"},"World Championships Krakow 2016":{"overall":40,"heatBehindPct":108.07,"advancePhase":"Semi"},"World Cup Prague 2016":{"overall":32,"heatBehindPct":107.11,"advanceBehindPct":117.34,"advancePhase":"Semi"},"World Cup Tacen 2016":{"overall":31,"heatBehindPct":104.78,"advanceBehindPct":112.1,"advancePhase":"Semi"},"World Championships Foix 2010":{"overall":48,"heatBehindPct":112.38},"World Championships Liptovsky Mikulas 2013":{"overall":41,"heatBehindPct":112.06},"World Championships Penrith 2014":{"overall":30,"heatBehindPct":111.78,"advanceBehindPct":161.31,"advancePhase":"Semi"}};
+    const RACE_RESULT_DETAILS = {"World Cup Augsburg 2017":{"overall":27,"heatBehindPct":104.2,"advanceBehindPct":111.88,"advancePhase":"Semi"},"World Cup Prague 2017":{"overall":26,"heatBehindPct":105.92},"World Championships Deodoro, Rio 2018":{"overall":28,"heatBehindPct":108.4},"World Cup Augsburg 2018":{"overall":16,"heatBehindPct":104.52,"advanceBehindPct":103.79,"advancePhase":"Semi"},"World Cup Krakow 2018":{"overall":29,"heatBehindPct":107.15},"World Cup La Seu 2018":{"overall":26,"heatBehindPct":104.42},"World Cup Liptovsky Mikulas 2018":{"overall":25,"heatBehindPct":105.87,"advanceBehindPct":108.59,"advancePhase":"Semi"},"World Championships La Seu 2019":{"overall":17,"heatBehindPct":105.57,"advanceBehindPct":104.78,"advancePhase":"Semi"},"World Cup Bratislava 2019":{"overall":24,"heatBehindPct":106.73,"advanceBehindPct":110.61,"advancePhase":"Semi"},"World Cup Lee Valley 2019":{"overall":26,"heatBehindPct":108.23,"advanceBehindPct":110.53,"advancePhase":"Semi"},"World Cup Prague 2019":{"overall":25,"heatBehindPct":105.96},"World Cup Tacen 2019":{"overall":40,"heatBehindPct":116.69},"Australian Open Penrith 2020":{"overall":38,"heatBehindPct":100.84,"advanceBehindPct":164.17,"advancePhase":"Semi"},"Oceania Championships Auckland 2020":{"heatBehindPct":163.14},"Australian Open Penrith 2022":{"overall":2,"advanceBehindPct":101.53,"advancePhase":"Final"},"ICF World Ranking Augsburg 2022":{"overall":20,"heatBehindPct":100.17,"advanceBehindPct":108.18,"advancePhase":"Semi"},"World Championships Augsburg 2022":{"overall":33,"heatBehindPct":102.84,"advanceBehindPct":154.61,"advancePhase":"Semi"},"World Cup Krakow 2022":{"overall":27,"heatBehindPct":101.27,"advanceBehindPct":108.1,"advancePhase":"Semi"},"World Cup La Seu 2022":{"overall":22,"heatBehindPct":105.4,"advanceBehindPct":111.61,"advancePhase":"Semi"},"World Cup Pau 2022":{"overall":15,"heatBehindPct":101.13,"advanceBehindPct":104.71,"advancePhase":"Semi"},"World Cup Prague 2022":{"overall":21,"heatBehindPct":101.21,"advanceBehindPct":105.54,"advancePhase":"Semi"},"World Cup Tacen 2022":{"overall":12,"heatBehindPct":106.57,"advanceBehindPct":105.71,"advancePhase":"Semi"},"Australian Open Penrith 2023":{"overall":1,"heatBehindPct":106.63,"advanceBehindPct":100.0,"advancePhase":"Final"},"Penrith Open Penrith 2023":{"overall":2,"semiBehindPct":104.49,"advanceBehindPct":102.6,"advancePhase":"Final"},"Pyrenees Cup La Seu 2023":{"overall":2,"heatBehindPct":102.5,"advanceBehindPct":101.43,"advancePhase":"Final"},"World Championships Lee Valley 2023":{"overall":5,"heatBehindPct":100.92,"advanceBehindPct":103.48,"advancePhase":"Final"},"World Cup Augsburg 2023":{"overall":21,"heatBehindPct":101.79,"advanceBehindPct":107.84,"advancePhase":"Semi"},"World Cup La Seu 2023":{"overall":8,"heatBehindPct":103.02,"advanceBehindPct":107.4,"advancePhase":"Final"},"World Cup Prague 2023":{"overall":22,"heatBehindPct":104.26,"advanceBehindPct":108.31,"advancePhase":"Semi"},"World Cup Tacen 2023":{"overall":7,"heatBehindPct":108.81,"advanceBehindPct":108.43,"advancePhase":"Final"},"World Cup Vaires sur Marne 2023":{"overall":20,"heatBehindPct":100.25,"advanceBehindPct":111.23,"advancePhase":"Semi"},"Australian Open Penrith 2024":{"overall":5,"heatBehindPct":100.71,"advanceBehindPct":103.9,"advancePhase":"Final"},"Oceania Championships Penrith 2024":{"overall":4,"heatBehindPct":100.61,"advanceBehindPct":104.94,"advancePhase":"Final"},"Olympic Games Paris 2024":{"overall":7,"heatBehindPct":105.57,"advanceBehindPct":103.04,"advancePhase":"Final"},"World Cup Augsburg 2024":{"overall":5,"heatBehindPct":109.44,"advanceBehindPct":103.45,"advancePhase":"Final"},"World Cup Ivrea 2024":{"overall":32,"heatBehindPct":103.35,"advanceBehindPct":167.8,"advancePhase":"Semi"},"World Cup Krakow 2024":{"overall":31,"heatBehindPct":102.82,"advanceBehindPct":112.25,"advancePhase":"Semi"},"World Cup La Seu 2024":{"overall":32,"heatBehindPct":103.53,"advanceBehindPct":111.84,"advancePhase":"Semi"},"World Cup Prague 2024":{"overall":56,"heatBehindPct":162.28},"Australian Open Penrith 2025":{"overall":8,"heatBehindPct":102.04,"advanceBehindPct":108.42,"advancePhase":"Final"},"Oceania Championships Penrith 2025":{"overall":5,"heatBehindPct":103.08,"advanceBehindPct":105.19,"advancePhase":"Final"},"World Championships Penrith 2025":{"overall":10,"heatBehindPct":101.71,"advanceBehindPct":104.02,"advancePhase":"Final"},"World Cup La Seu 2025":{"overall":74,"heatBehindPct":165.3},"World Cup Pau 2025":{"overall":21,"heatBehindPct":108.61},"World Cup Prague 2025":{"overall":47,"heatBehindPct":163.7},"Australian Open Penrith 2026":{"overall":4,"heatBehindPct":100.0,"advanceBehindPct":104.13,"advancePhase":"Final"},"ICF World Ranking Oklahoma 2026":{"overall":13,"heatBehindPct":107.8,"advanceBehindPct":107.8,"advancePhase":"FinalB"},"Oceania Championships Auckland 2026":{"overall":1,"heatBehindPct":106.83,"advanceBehindPct":100.0,"advancePhase":"Final"},"Penrith Open Penrith 2026":{"overall":4,"heatBehindPct":103.98,"advanceBehindPct":102.55,"advancePhase":"Final"},"World Cup La Seu 2026":{"overall":8,"heatBehindPct":103.21,"advanceBehindPct":108.25,"advancePhase":"Final"},"World Cup Prague 2026":{"overall":12,"heatBehindPct":104.28,"advanceBehindPct":168.71,"advancePhase":"Final"},"World Cup Vaires sur Marne 2026":{"overall":74,"heatBehindPct":269.01},"World Championships Oklahoma 2026":{"overall":12,"heatBehindPct":101.86,"semiBehindPct":104.81,"advanceBehindPct":163.02,"advancePhase":"Final"},"Oceania Championships Penrith 2019":{"overall":7,"advancePhase":"Final"},"Australian Open Penrith 2019":{"overall":17,"advancePhase":"Semi"},"World Championships Bratislava 2017":{"overall":48},"World Championships Foz do Iguassu 2015":{"overall":16,"heatBehindPct":110.5,"advanceBehindPct":106.19,"advancePhase":"Semi"},"World Championships Krakow 2016":{"overall":40,"heatBehindPct":108.07,"advancePhase":"Semi"},"World Cup Prague 2016":{"overall":32,"heatBehindPct":107.11,"advanceBehindPct":117.34,"advancePhase":"Semi"},"World Cup Tacen 2016":{"overall":31,"heatBehindPct":104.78,"advanceBehindPct":112.1,"advancePhase":"Semi"},"World Championships Foix 2010":{"overall":48,"heatBehindPct":112.38},"World Championships Liptovsky Mikulas 2013":{"overall":41,"heatBehindPct":112.06},"World Championships Penrith 2014":{"overall":30,"heatBehindPct":111.78,"advanceBehindPct":161.31,"advancePhase":"Semi"},"Oceania Championships Penrith 2012":{"overall":14,"heatBehindPct":108.83,"advanceBehindPct":110.45,"advancePhase":"Semi","categoryPlace":2,"categoryLabel":"JNR"},"Australian Open Penrith 2009":{"overall":57,"heatBehindPct":126.83,"categoryPlace":11,"categoryLabel":"JNR"},"Australian Schools Championships Eildon 2009":{"overall":16,"advanceBehindPct":108.89,"advancePhase":"Final","categoryPlace":4,"categoryLabel":"U15"}};
     const RACE_COL = { ol: "#d4a017", sg: "#3fa266", uj: "#e67e22", wr: "#9386f2", ot: "#5a9ce6", o: "#5a9ce6", m: "#3fa266" };
     const RACE_OPACITY = 0.55;
 
@@ -2032,6 +2052,55 @@
       return null;
     }
 
+    /* Senior/open races only — excludes JNR/U23 Worlds and school events. */
+    function isSnrEligibleRace(name, kind) {
+      const n = String(name || "");
+      if (kind === "uj" || /\bjnr\b|junior|u23|schools championships/i.test(n)) return false;
+      if (kind === "sg" || kind === "wr" || kind === "ol") return true;
+      if (/oceania|australian open|penrith open/i.test(n)) return true;
+      return false;
+    }
+
+    function reachedPhase(detail, phase) {
+      const d = detail || {};
+      const ph = d.advancePhase || "";
+      if (phase === "Semi") {
+        return ph === "Semi" || ph === "Final" || ph === "FinalB" || d.semiBehindPct != null;
+      }
+      if (phase === "Final") {
+        return ph === "Final" || ph === "FinalB" || d.finalBehindPct != null;
+      }
+      return false;
+    }
+
+    function firstSnrPhaseMilestone(series, phase) {
+      const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
+      for (const g of aged) {
+        for (const item of g.r || []) {
+          const name = item[0] || "";
+          const kind = item[1] || "";
+          if (!isSnrEligibleRace(name, kind)) continue;
+          const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
+          if (reachedPhase(d, phase)) return { a: g.a, y: g.y, name: name, kind: kind };
+        }
+      }
+      return null;
+    }
+
+    function firstWorldCupPhaseMilestone(series, phase) {
+      const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
+      for (const g of aged) {
+        for (const item of g.r || []) {
+          const name = item[0] || "";
+          const kind = item[1] || "";
+          if (!(kind === "sg" && /world cup/i.test(name))) continue;
+          const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
+          if (reachedPhase(d, phase)) return { a: g.a, y: g.y, name: name, kind: kind };
+        }
+      }
+      return null;
+    }
+
     function buildCareerMilestones(series) {
       const rankGroups = ((DATA[athlete] || {})[boatClass] || []).filter((g) => g.a != null);
       const items = [];
@@ -2067,6 +2136,9 @@
         firstRaceMatching(series, (name, kind) => kind === "sg" && /world championships/i.test(name)),
         "First SNR World Championships"
       );
+      add(firstSnrPhaseMilestone(series, "Semi"), "First SNR Semi Final");
+      add(firstWorldCupPhaseMilestone(series, "Semi"), "First World Cup Semi Final");
+      add(firstSnrPhaseMilestone(series, "Final"), "First SNR Final");
       add(
         firstRankMilestone(rankGroups, (g) => g.best <= 100),
         "First time in Top 100"
@@ -2210,21 +2282,21 @@
       }
 
       let svg = `<svg viewBox="0 0 ${chartW} ${VH}" role="img" aria-label="World Ranking and count of races by athlete age">`;
-      svg += `<text x="16" y="${yMid}" fill="#b8b8b8" font-size="11" text-anchor="middle" transform="rotate(-90, 16, ${yMid})">World Rank</text>`;
+      svg += `<text x="16" y="${yMid}" fill="#b8b8b8" font-size="13" text-anchor="middle" transform="rotate(-90, 16, ${yMid})">World Rank</text>`;
       rankTicks.forEach((tick) => {
         const y = yRank(tick);
         svg += `<line x1="${padL}" x2="${chartW - padR}" y1="${y}" y2="${y}" stroke="#2e2e2e" stroke-width="1"/>`;
-        svg += `<text x="${padL - 10}" y="${y + 4}" text-anchor="end" fill="#8a8a8a" font-size="11">${tick}</text>`;
+        svg += `<text x="${padL - 10}" y="${y + 4}" text-anchor="end" fill="#8a8a8a" font-size="13">${tick}</text>`;
       });
       svg += `<line x1="${padL}" x2="${padL}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#444" stroke-width="1"/>`;
       svg += `<line x1="${chartW - padR}" x2="${chartW - padR}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#444" stroke-width="1"/>`;
       countTicks.forEach((tick) => {
         const y = yCount(tick);
         svg += `<line x1="${chartW - padR}" x2="${chartW - padR + 5}" y1="${y}" y2="${y}" stroke="#666" stroke-width="1"/>`;
-        svg += `<text x="${chartW - padR + 12}" y="${y + 4}" fill="#8a8a8a" font-size="11">${tick}</text>`;
+        svg += `<text x="${chartW - padR + 12}" y="${y + 4}" fill="#8a8a8a" font-size="13">${tick}</text>`;
       });
       const rightLabelX = chartW - 22;
-      svg += `<text x="${rightLabelX}" y="${yMid}" fill="#b8b8b8" font-size="11" text-anchor="middle" transform="rotate(90, ${rightLabelX}, ${yMid})">Count of Races</text>`;
+      svg += `<text x="${rightLabelX}" y="${yMid}" fill="#b8b8b8" font-size="13" text-anchor="middle" transform="rotate(90, ${rightLabelX}, ${yMid})">Count of Races</text>`;
       aged.forEach((g) => {
         const x = xOf(g.a);
         const parts = { ol: 0, sg: 0, uj: 0, wr: 0, ot: 0 };
@@ -2240,10 +2312,10 @@
         });
       });
       ages.forEach((a) => {
-        svg += `<text class="xlab" data-age="${a}" x="${xOf(a)}" y="${VH - PAD.b + 18}" text-anchor="middle" fill="#8a8a8a" font-size="11">${a}</text>`;
+        svg += `<text class="xlab" data-age="${a}" x="${xOf(a)}" y="${VH - PAD.b + 18}" text-anchor="middle" fill="#8a8a8a" font-size="13">${a}</text>`;
       });
       svg += rankLineSvg(xOf, yRank, rankGroups);
-      svg += `<text x="${padL + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#8a8a8a" font-size="11">Athlete Age</text>`;
+      svg += `<text x="${padL + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#8a8a8a" font-size="13">Athlete Age</text>`;
       svg += `</svg><div class="tip" id="race-tip" style="display:none"></div>`;
       host.innerHTML = svg;
       const tip = host.querySelector("#race-tip");
@@ -2372,6 +2444,8 @@
     }
 
     function phaseRankLabel(detail) {
+      // Open races with a junior/U23 category place: show overall field rank
+      if (detail && detail.categoryPlace != null) return "Overall Rank";
       const ph = detail && detail.advancePhase;
       // CSV RANK is phase place; only Final RANK is the overall/final placing
       if (ph === "Final" || ph === "FinalB") return "Overall Rank";
@@ -2409,6 +2483,10 @@
         let rows =
           `<div class="comp-name" style="color:${nameCol}">${esc(c.displayName || c.name)}</div>` +
           `<div class="comp-row"><span class="comp-lbl">${esc(rankLbl)}</span><span class="comp-val${rankMuted}">${esc(rankVal)}</span></div>`;
+        if (d.categoryPlace != null) {
+          const catLbl = (d.categoryLabel ? d.categoryLabel + " Rank" : "Category Rank");
+          rows += `<div class="comp-row"><span class="comp-lbl">${esc(catLbl)}</span><span class="comp-val">${esc(d.categoryPlace)}</span></div>`;
+        }
         // Heat only when we have heat times
         if (d.heatBehindPct != null) {
           rows += `<div class="comp-row"><span class="comp-lbl">% of Heat winner</span><span class="comp-val">${esc(fmtPctBehind(d.heatBehindPct))}</span></div>`;
@@ -2484,56 +2562,85 @@
       const yMid = PAD.t + plotH / 2;
 
       let svg = `<svg viewBox="0 0 ${chartW} ${VH}" role="img" aria-label="World Ranking and Cumulative Races by athlete age">`;
-      svg += `<text x="16" y="${yMid}" fill="#b8b8b8" font-size="11" text-anchor="middle" transform="rotate(-90, 16, ${yMid})">World Rank</text>`;
+      svg += `<text x="16" y="${yMid}" fill="#b8b8b8" font-size="13" text-anchor="middle" transform="rotate(-90, 16, ${yMid})">World Rank</text>`;
       rankTicks.forEach((tick) => {
         const y = yRank(tick);
         svg += `<line x1="${padL}" x2="${chartW - padR}" y1="${y}" y2="${y}" stroke="#2e2e2e" stroke-width="1"/>`;
-        svg += `<text x="${padL - 10}" y="${y + 4}" text-anchor="end" fill="#8a8a8a" font-size="11">${tick}</text>`;
+        svg += `<text x="${padL - 10}" y="${y + 4}" text-anchor="end" fill="#8a8a8a" font-size="13">${tick}</text>`;
       });
       svg += `<line x1="${padL}" x2="${padL}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#444" stroke-width="1"/>`;
       svg += `<line x1="${chartW - padR}" x2="${chartW - padR}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#444" stroke-width="1"/>`;
       countTicks.forEach((tick) => {
         const y = yCount(tick);
-        svg += `<line x1="${chartW - padR}" x2="${chartW - padR + 5}" y1="${y}" y2="${y}" stroke="#666" stroke-width="1"/>`;
-        svg += `<text x="${chartW - padR + 12}" y="${y + 4}" fill="#8a8a8a" font-size="11">${tick}</text>`;
+        svg += `<line x1="${chartW - padR}" x2="${chartW - padR + 5}" y1="${y}" y2="${y}" stroke="#5a9ce6" stroke-width="1"/>`;
+        svg += `<text x="${chartW - padR + 12}" y="${y + 4}" fill="#5a9ce6" font-size="13">${tick}</text>`;
       });
       const rightLabelX = chartW - 22;
-      svg += `<text x="${rightLabelX}" y="${yMid}" fill="#b8b8b8" font-size="11" text-anchor="middle" transform="rotate(90, ${rightLabelX}, ${yMid})">Cumulative Races</text>`;
+      svg += `<text x="${rightLabelX}" y="${yMid}" fill="#5a9ce6" font-size="13" text-anchor="middle" transform="rotate(90, ${rightLabelX}, ${yMid})">Cumulative Races</text>`;
+      const slotW = plotW / Math.max(ages.length, 1);
+      ages.forEach((a) => {
+        const x = xOf(a);
+        // Full-plot highlight band for selected age (mirrors races-by-age hover emphasis)
+        svg += `<rect class="cum-age-band" data-age="${a}" x="${x - slotW * 0.45}" y="${PAD.t}" width="${slotW * 0.9}" height="${plotH}" fill="#5a9ce6" opacity="0" style="pointer-events:none"/>`;
+        svg += `<line class="cum-age-guide" data-age="${a}" x1="${x}" x2="${x}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#5a9ce6" stroke-width="1.5" opacity="0" style="pointer-events:none"/>`;
+        // Hit target under points so column clicks work, but point hover still receives events
+        svg += `<rect class="cum-age-hit" data-age="${a}" x="${x - slotW * 0.45}" y="${PAD.t}" width="${slotW * 0.9}" height="${VH - PAD.t - PAD.b + 36}" fill="transparent" style="cursor:pointer"/>`;
+      });
       series.forEach((s) => {
         const path = s.points.map((p, i) => `${i === 0 ? "M" : "L"} ${xOf(p.a)} ${yCount(p.cum)}`).join(" ");
-        svg += `<path d="${path}" fill="none" stroke="${s.color}" stroke-width="2" opacity="0.75"/>`;
+        svg += `<path class="cum-line" data-class="${s.cls}" d="${path}" fill="none" stroke="${s.color}" stroke-width="2" opacity="0.75"/>`;
         s.points.forEach((p) => {
           const x = xOf(p.a);
           svg += `<g class="cum-pt" data-age="${p.a}" data-class="${p.cls}" style="cursor:pointer">`;
           svg += `<circle cx="${x}" cy="${yCount(p.cum)}" r="14" fill="transparent"/>`;
-          svg += `<circle cx="${x}" cy="${yCount(p.cum)}" r="5" fill="${s.color}" stroke="#e8e8e8" stroke-width="1.5" opacity="0.9"/>`;
+          svg += `<circle class="cum-dot" data-age="${p.a}" cx="${x}" cy="${yCount(p.cum)}" r="5" fill="${s.color}" stroke="#e8e8e8" stroke-width="1.5" opacity="0.9"/>`;
           svg += `</g>`;
         });
       });
       ages.forEach((a) => {
         const sel = selectedCumAge === a ? " selected" : "";
         const x = xOf(a);
-        const slotW = plotW / Math.max(ages.length, 1);
-        svg += `<rect class="cum-age-hit" data-age="${a}" x="${x - slotW * 0.45}" y="${VH - PAD.b - 4}" width="${slotW * 0.9}" height="40" fill="transparent" style="cursor:pointer"/>`;
-        svg += `<text class="cum-age${sel}" data-age="${a}" x="${x}" y="${VH - PAD.b + 18}" text-anchor="middle" font-size="11" style="pointer-events:none">${a}</text>`;
+        svg += `<text class="cum-age${sel}" data-age="${a}" x="${x}" y="${VH - PAD.b + 18}" text-anchor="middle" font-size="13" style="pointer-events:none">${a}</text>`;
       });
       svg += rankLineSvg(xOf, yRank, rankGroups);
-      svg += `<text x="${padL + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#8a8a8a" font-size="11">Athlete Age · click an age for race details</text>`;
+      svg += `<text x="${padL + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#8a8a8a" font-size="13">Athlete Age · click an age for race details</text>`;
       svg += `</svg><div class="tip" id="race-tip" style="display:none"></div>`;
       host.innerHTML = svg;
       const tip = host.querySelector("#race-tip");
       const lookup = {};
       series.forEach((s) => s.points.forEach((p) => { lookup[p.cls + ":" + p.a] = p; }));
+      function highlightCumAge(age) {
+        host.querySelectorAll(".cum-age-band").forEach((el) => {
+          el.setAttribute("opacity", Number(el.dataset.age) === age ? "0.16" : "0");
+        });
+        host.querySelectorAll(".cum-age-guide").forEach((el) => {
+          const on = Number(el.dataset.age) === age;
+          el.setAttribute("opacity", on ? "0.85" : "0");
+          el.setAttribute("stroke-width", on ? "2" : "1.5");
+        });
+        host.querySelectorAll(".cum-dot").forEach((el) => {
+          const on = Number(el.dataset.age) === age;
+          el.setAttribute("opacity", on ? "1" : "0.3");
+          el.setAttribute("r", on ? "7.5" : "5");
+          el.setAttribute("stroke-width", on ? "2.5" : "1.5");
+        });
+        host.querySelectorAll(".rank-pt").forEach((el) => {
+          const on = Number(el.dataset.age) === age;
+          el.setAttribute("opacity", on ? "1" : "0.3");
+          el.setAttribute("r", on ? "7.5" : "5");
+          el.setAttribute("stroke-width", on ? "2.5" : "1.5");
+        });
+        host.querySelectorAll(".cum-line, .rank-line").forEach((el) => {
+          el.setAttribute("opacity", age == null ? "0.75" : "0.45");
+        });
+      }
       function selectAge(age) {
         selectedCumAge = age;
         host.querySelectorAll(".cum-age").forEach((el) => {
           el.classList.toggle("selected", Number(el.dataset.age) === age);
         });
+        highlightCumAge(age);
         renderAgeCompetitionTiles(name, age);
-        const detail = document.getElementById("age-detail");
-        if (detail && !detail.hidden) {
-          // Keep chart in view; tiles sit just below
-        }
       }
       function showTip(cls, age, evt) {
         const p = lookup[cls + ":" + age];
@@ -2621,11 +2728,11 @@
       const born = birthYear(groups);
 
       let svg = `<svg viewBox="0 0 ${VW} ${VH}" role="img" aria-label="World Ranking by athlete age">`;
-      svg += `<text x="16" y="${PAD.t + plotH / 2}" fill="#b8b8b8" font-size="11" text-anchor="middle" transform="rotate(-90, 16, ${PAD.t + plotH / 2})">World Rank</text>`;
+      svg += `<text x="16" y="${PAD.t + plotH / 2}" fill="#b8b8b8" font-size="13" text-anchor="middle" transform="rotate(-90, 16, ${PAD.t + plotH / 2})">World Rank</text>`;
       ticks.forEach((tick) => {
         const y = yOf(tick);
         svg += `<line x1="${PAD.l}" x2="${VW - PAD.r}" y1="${y}" y2="${y}" stroke="#2e2e2e" stroke-width="1"/>`;
-        svg += `<text x="${PAD.l - 8}" y="${y + 4}" text-anchor="end" fill="#8a8a8a" font-size="11">${tick}</text>`;
+        svg += `<text x="${PAD.l - 8}" y="${y + 4}" text-anchor="end" fill="#8a8a8a" font-size="13">${tick}</text>`;
       });
       xVals.forEach((v) => {
         svg += `<line class="age-guide" data-age="${v}" x1="${xOf(v)}" x2="${xOf(v)}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#2e2e2e" stroke-width="1" opacity="0.45"/>`;
@@ -2655,9 +2762,9 @@
         });
       });
       groups.forEach((group) => {
-        svg += `<text class="xlab" data-age="${group.a}" x="${xOf(group.a)}" y="${VH - PAD.b + 18}" text-anchor="middle" fill="#b8b8b8" font-size="11">${group.a}</text>`;
+        svg += `<text class="xlab" data-age="${group.a}" x="${xOf(group.a)}" y="${VH - PAD.b + 18}" text-anchor="middle" fill="#b8b8b8" font-size="13">${group.a}</text>`;
       });
-      svg += `<text x="${PAD.l + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#b8b8b8" font-size="11">Athlete Age</text>`;
+      svg += `<text x="${PAD.l + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#b8b8b8" font-size="13">Athlete Age</text>`;
       svg += `</svg><div class="tip" id="tip" style="display:none"></div>`;
       host.innerHTML = svg;
 
