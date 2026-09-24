@@ -2275,21 +2275,21 @@
       }
 
       let svg = `<svg viewBox="0 0 ${chartW} ${VH}" role="img" aria-label="World Ranking and count of races by athlete age">`;
-      svg += `<text x="16" y="${yMid}" fill="#b8b8b8" font-size="13" text-anchor="middle" transform="rotate(-90, 16, ${yMid})">World Rank</text>`;
+      svg += `<text x="16" y="${yMid}" fill="#b8b8b8" font-size="14" font-weight="700" text-anchor="middle" transform="rotate(-90, 16, ${yMid})">WORLD RANK</text>`;
       rankTicks.forEach((tick) => {
         const y = yRank(tick);
         svg += `<line x1="${padL}" x2="${chartW - padR}" y1="${y}" y2="${y}" stroke="#2e2e2e" stroke-width="1"/>`;
-        svg += `<text x="${padL - 10}" y="${y + 4}" text-anchor="end" fill="#8a8a8a" font-size="13">${tick}</text>`;
+        svg += `<text x="${padL - 10}" y="${y + 4}" text-anchor="end" fill="#8a8a8a" font-size="14">${tick}</text>`;
       });
       svg += `<line x1="${padL}" x2="${padL}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#444" stroke-width="1"/>`;
       svg += `<line x1="${chartW - padR}" x2="${chartW - padR}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#444" stroke-width="1"/>`;
       countTicks.forEach((tick) => {
         const y = yCount(tick);
         svg += `<line x1="${chartW - padR}" x2="${chartW - padR + 5}" y1="${y}" y2="${y}" stroke="#666" stroke-width="1"/>`;
-        svg += `<text x="${chartW - padR + 12}" y="${y + 4}" fill="#8a8a8a" font-size="13">${tick}</text>`;
+        svg += `<text x="${chartW - padR + 12}" y="${y + 4}" fill="#8a8a8a" font-size="14">${tick}</text>`;
       });
       const rightLabelX = chartW - 22;
-      svg += `<text x="${rightLabelX}" y="${yMid}" fill="#b8b8b8" font-size="13" text-anchor="middle" transform="rotate(90, ${rightLabelX}, ${yMid})">Count of Races</text>`;
+      svg += `<text x="${rightLabelX}" y="${yMid}" fill="#b8b8b8" font-size="14" font-weight="700" text-anchor="middle" transform="rotate(90, ${rightLabelX}, ${yMid})">COUNT OF RACES</text>`;
       aged.forEach((g) => {
         const x = xOf(g.a);
         const parts = { ol: 0, sg: 0, uj: 0, wr: 0, ot: 0 };
@@ -2305,10 +2305,10 @@
         });
       });
       ages.forEach((a) => {
-        svg += `<text class="xlab" data-age="${a}" x="${xOf(a)}" y="${VH - PAD.b + 18}" text-anchor="middle" fill="#8a8a8a" font-size="13">${a}</text>`;
+        svg += `<text class="xlab" data-age="${a}" x="${xOf(a)}" y="${VH - PAD.b + 18}" text-anchor="middle" fill="#8a8a8a" font-size="14">${a}</text>`;
       });
       svg += rankLineSvg(xOf, yRank, rankGroups);
-      svg += `<text x="${padL + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#8a8a8a" font-size="13">Athlete Age</text>`;
+      svg += `<text x="${padL + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#8a8a8a" font-size="14" font-weight="700">ATHLETE AGE</text>`;
       svg += `</svg><div class="tip" id="race-tip" style="display:none"></div>`;
       host.innerHTML = svg;
       const tip = host.querySelector("#race-tip");
@@ -2533,21 +2533,21 @@
       const yMid = PAD.t + plotH / 2;
 
       let svg = `<svg viewBox="0 0 ${chartW} ${VH}" role="img" aria-label="World Ranking and Cumulative Races by athlete age">`;
-      svg += `<text x="16" y="${yMid}" fill="#b8b8b8" font-size="13" text-anchor="middle" transform="rotate(-90, 16, ${yMid})">World Rank</text>`;
+      svg += `<text x="16" y="${yMid}" fill="#b8b8b8" font-size="14" font-weight="700" text-anchor="middle" transform="rotate(-90, 16, ${yMid})">WORLD RANK</text>`;
       rankTicks.forEach((tick) => {
         const y = yRank(tick);
         svg += `<line x1="${padL}" x2="${chartW - padR}" y1="${y}" y2="${y}" stroke="#2e2e2e" stroke-width="1"/>`;
-        svg += `<text x="${padL - 10}" y="${y + 4}" text-anchor="end" fill="#8a8a8a" font-size="13">${tick}</text>`;
+        svg += `<text x="${padL - 10}" y="${y + 4}" text-anchor="end" fill="#8a8a8a" font-size="14">${tick}</text>`;
       });
       svg += `<line x1="${padL}" x2="${padL}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#444" stroke-width="1"/>`;
       svg += `<line x1="${chartW - padR}" x2="${chartW - padR}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#444" stroke-width="1"/>`;
       countTicks.forEach((tick) => {
         const y = yCount(tick);
         svg += `<line x1="${chartW - padR}" x2="${chartW - padR + 5}" y1="${y}" y2="${y}" stroke="#5a9ce6" stroke-width="1"/>`;
-        svg += `<text x="${chartW - padR + 12}" y="${y + 4}" fill="#5a9ce6" font-size="13">${tick}</text>`;
+        svg += `<text x="${chartW - padR + 12}" y="${y + 4}" fill="#5a9ce6" font-size="14">${tick}</text>`;
       });
       const rightLabelX = chartW - 22;
-      svg += `<text x="${rightLabelX}" y="${yMid}" fill="#5a9ce6" font-size="13" text-anchor="middle" transform="rotate(90, ${rightLabelX}, ${yMid})">Cumulative Races</text>`;
+      svg += `<text x="${rightLabelX}" y="${yMid}" fill="#5a9ce6" font-size="14" font-weight="700" text-anchor="middle" transform="rotate(90, ${rightLabelX}, ${yMid})">CUMULATIVE RACES</text>`;
       const slotW = plotW / Math.max(ages.length, 1);
       ages.forEach((a) => {
         const x = xOf(a);
@@ -2571,10 +2571,10 @@
       ages.forEach((a) => {
         const sel = selectedCumAge === a ? " selected" : "";
         const x = xOf(a);
-        svg += `<text class="cum-age${sel}" data-age="${a}" x="${x}" y="${VH - PAD.b + 18}" text-anchor="middle" font-size="13" style="pointer-events:none">${a}</text>`;
+        svg += `<text class="cum-age${sel}" data-age="${a}" x="${x}" y="${VH - PAD.b + 18}" text-anchor="middle" font-size="14" style="pointer-events:none">${a}</text>`;
       });
       svg += rankLineSvg(xOf, yRank, rankGroups);
-      svg += `<text x="${padL + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#8a8a8a" font-size="13">Athlete Age · click an age for race details</text>`;
+      svg += `<text x="${padL + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#8a8a8a" font-size="14" font-weight="700">ATHLETE AGE · CLICK AN AGE FOR RACE DETAILS</text>`;
       svg += `</svg><div class="tip" id="race-tip" style="display:none"></div>`;
       host.innerHTML = svg;
       const tip = host.querySelector("#race-tip");
@@ -2699,11 +2699,11 @@
       const born = birthYear(groups);
 
       let svg = `<svg viewBox="0 0 ${VW} ${VH}" role="img" aria-label="World Ranking by athlete age">`;
-      svg += `<text x="16" y="${PAD.t + plotH / 2}" fill="#b8b8b8" font-size="13" text-anchor="middle" transform="rotate(-90, 16, ${PAD.t + plotH / 2})">World Rank</text>`;
+      svg += `<text x="16" y="${PAD.t + plotH / 2}" fill="#b8b8b8" font-size="14" font-weight="700" text-anchor="middle" transform="rotate(-90, 16, ${PAD.t + plotH / 2})">WORLD RANK</text>`;
       ticks.forEach((tick) => {
         const y = yOf(tick);
         svg += `<line x1="${PAD.l}" x2="${VW - PAD.r}" y1="${y}" y2="${y}" stroke="#2e2e2e" stroke-width="1"/>`;
-        svg += `<text x="${PAD.l - 8}" y="${y + 4}" text-anchor="end" fill="#8a8a8a" font-size="13">${tick}</text>`;
+        svg += `<text x="${PAD.l - 8}" y="${y + 4}" text-anchor="end" fill="#8a8a8a" font-size="14">${tick}</text>`;
       });
       xVals.forEach((v) => {
         svg += `<line class="age-guide" data-age="${v}" x1="${xOf(v)}" x2="${xOf(v)}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#2e2e2e" stroke-width="1" opacity="0.45"/>`;
@@ -2733,9 +2733,9 @@
         });
       });
       groups.forEach((group) => {
-        svg += `<text class="xlab" data-age="${group.a}" x="${xOf(group.a)}" y="${VH - PAD.b + 18}" text-anchor="middle" fill="#b8b8b8" font-size="13">${group.a}</text>`;
+        svg += `<text class="xlab" data-age="${group.a}" x="${xOf(group.a)}" y="${VH - PAD.b + 18}" text-anchor="middle" fill="#b8b8b8" font-size="14">${group.a}</text>`;
       });
-      svg += `<text x="${PAD.l + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#b8b8b8" font-size="13">Athlete Age</text>`;
+      svg += `<text x="${PAD.l + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#b8b8b8" font-size="14" font-weight="700">ATHLETE AGE</text>`;
       svg += `</svg><div class="tip" id="tip" style="display:none"></div>`;
       host.innerHTML = svg;
 
