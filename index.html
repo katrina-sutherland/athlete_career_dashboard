@@ -482,8 +482,8 @@
   <div class="wrap">
     <h1>Timothy ANDERSON</h1>
     <div class="tabs" id="tabs">
-      <button class="tab active" data-tab="rank">World Ranking</button>
-      <button class="tab" data-tab="races">Race Experience</button>
+      <button class="tab" data-tab="rank">World Ranking</button>
+      <button class="tab active" data-tab="races">Race Experience</button>
     </div>
     <p class="sub" id="who"></p>
     <p class="error" id="load-error">The athlete data did not load in this preview. Download this HTML file to your computer, then double-click it to open in Chrome or Safari.</p>
@@ -492,11 +492,11 @@
         <div class="label">Class</div>
         <div class="pills" id="classes"></div>
       </div>
-      <div class="field" style="flex:0" id="race-mode-field" hidden>
+      <div class="field" style="flex:0" id="race-mode-field">
         <div class="pills" id="race-modes"></div>
       </div>
     </div>
-    <div class="panel" id="panel-rank">
+    <div class="panel" id="panel-rank" hidden>
       <div class="tiles" id="tiles"></div>
       <div class="chart-wrap" id="chart"></div>
       <div class="legend">
@@ -505,7 +505,7 @@
         <span><span class="dot" style="width:8px;height:8px;background:#4a4a4a;border:1px solid var(--stroke);vertical-align:middle"></span> Other releases at that age</span>
       </div>
     </div>
-    <div class="panel" id="panel-races" hidden>
+    <div class="panel" id="panel-races">
       <div class="tiles tiles-2" id="race-tiles"></div>
       <div class="chart-wrap" id="race-chart"></div>
       <div class="legend" id="race-legend">
@@ -1959,7 +1959,7 @@
 
     let athlete = "Timothy ANDERSON";
     let boatClass = "MK1";
-    let tab = "rank";
+    let tab = "races";
     let raceMode = "year";
     let selectedCumAge = null;
 
@@ -2020,12 +2020,10 @@
       const series = (RACES[athlete] && RACES[athlete][boatClass]) || [];
       return series.map(dedupeRaceGroup);
     }
-    /* SNR medal milestone only (semi/final derived from RACE_RESULT_DETAILS).
-       Eligible: ICF World Ranking, World Cup, SNR World Championships, Olympic Games,
-       Oceania Championships. Australian Open, Penrith Open, and Pyrenees Cup count as ICF World Ranking races. */
-    const RESULT_MILESTONES = [
-      {"a": 32, "y": 2026, "label": "First SNR Medal", "race": "Oceania Championships Auckland 2026", "qp": 25.27}
-    ];
+    /* Medal milestones are derived in buildCareerMilestones:
+       First SNR Medal = WC / senior WCh / Olympics (overall 1–3);
+       First WRR Medal = any other competition medal (overall 1–3). */
+    const RESULT_MILESTONES = [];
     /* Per-competition race results for Cumulative age drill-down.
        overall = deepest phase rank; heatBehindPct / advanceBehindPct =
        heat/advance values = athlete total time as % of phase winner
@@ -2190,7 +2188,29 @@
       return null;
     }
 
-    function firstWorldCupPhaseMilestone(series, phase) {
+    function isWrrMedalRace(name, kind) {
+      if (isSnrEligibleRace(name, kind)) return false;
+      if (kind === "uj" || /\bjnr\b|junior|u23|schools championships/i.test(String(name || ""))) return false;
+      return true;
+    }
+
+    function firstMedalMilestone(series, pred) {
+      const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
+      for (const g of aged) {
+        for (const item of g.r || []) {
+          const name = item[0] || "";
+          const kind = item[1] || "";
+          if (!pred(name, kind)) continue;
+          const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
+          if (d.overall != null && d.overall >= 1 && d.overall <= 3) {
+            return { a: g.a, y: g.y, name: name, kind: kind };
+          }
+        }
+      }
+      return null;
+    }
+
+        function firstWorldCupPhaseMilestone(series, phase) {
       const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
       for (const g of aged) {
         for (const item of g.r || []) {
