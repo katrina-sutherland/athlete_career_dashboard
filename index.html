@@ -127,48 +127,22 @@
     .tiles-3 { grid-template-columns: 1fr 1fr 1fr; max-width: 840px; }
     .legend[hidden] { display: none; }
 
-    .race-summary-row {
-      display: grid;
-      gap: 16px;
-      margin-bottom: 16px;
-      align-items: stretch;
-    }
-    #panel-races.mode-year .race-summary-row {
-      grid-template-columns: 1fr;
-    }
-    #panel-races.mode-cum .race-summary-row {
-      grid-template-columns: minmax(0, 3fr) minmax(300px, 1.15fr);
-      align-items: center;
-    }
-    #panel-races.mode-cum #race-tiles {
-      max-width: none !important;
-      width: 100%;
-      grid-template-columns: repeat(3, 1fr);
-      margin-bottom: 0;
-    }
     .pie-wrap {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       gap: 12px 16px;
       margin: 0;
-      padding: 8px 4px;
-    }
-    .pie-wrap[hidden] { display: none; }
-    #panel-races.mode-cum .pie-wrap {
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: flex-start;
-      align-items: center;
+      padding: 12px 14px;
       border: 1px solid var(--stroke-soft);
       border-radius: 10px;
       background: rgba(255,255,255,0.03);
-      padding: 12px 14px;
       box-sizing: border-box;
+      align-self: start;
     }
-    .pie-svg { width: min(160px, 100%); height: auto; flex: 0 0 auto; }
-    #panel-races.mode-cum .pie-svg { width: 132px; }
+    .pie-wrap[hidden] { display: none; }
+    .pie-svg { width: 132px; height: auto; flex: 0 0 auto; }
     .pie-legend {
       display: flex;
       flex-direction: column;
@@ -176,7 +150,7 @@
       font-size: 12px;
       color: var(--text-2);
       min-width: 0;
-      flex: 1 1 160px;
+      flex: 1 1 150px;
     }
     .pie-legend .row {
       display: flex;
@@ -200,6 +174,25 @@
       margin: 0;
       flex: 0 0 100%;
     }
+    .cum-detail-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+      gap: 16px;
+      align-items: start;
+      margin-top: 16px;
+    }
+    .cum-detail-row[hidden] { display: none; }
+    .cum-detail-row.pie-only {
+      grid-template-columns: minmax(300px, 420px);
+      justify-content: start;
+    }
+    #panel-races.mode-cum .comp-tiles {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    #panel-races.mode-cum .age-detail {
+      margin-top: 0;
+    }
+
     .field[hidden] { display: none; }
 
 
@@ -495,10 +488,7 @@
       </div>
     </div>
     <div class="panel" id="panel-races" hidden>
-      <div class="race-summary-row" id="race-summary-row">
-        <div class="tiles tiles-2" id="race-tiles"></div>
-        <div class="pie-wrap" id="race-pie" hidden></div>
-      </div>
+      <div class="tiles tiles-2" id="race-tiles"></div>
       <div class="chart-wrap" id="race-chart"></div>
       <div class="legend" id="race-legend">
         <span><span class="dot" style="width:11px;height:11px;background:#d4a017;opacity:0.55;vertical-align:middle"></span> Olympic Games</span>
@@ -510,12 +500,15 @@
       </div>
       <div class="legend" id="cum-legend" hidden></div>
       <div id="milestones" class="milestones" hidden></div>
-      <div id="age-detail" class="age-detail" hidden>
-        <div class="age-detail-head">
-          <h3 id="age-detail-title">Age</h3>
-          <span class="count" id="age-detail-count"></span>
+      <div class="cum-detail-row" id="cum-detail-row" hidden>
+        <div id="age-detail" class="age-detail" hidden>
+          <div class="age-detail-head">
+            <h3 id="age-detail-title">Age</h3>
+            <span class="count" id="age-detail-count"></span>
+          </div>
+          <div class="comp-tiles" id="comp-tiles"></div>
         </div>
-        <div class="comp-tiles" id="comp-tiles"></div>
+        <div class="pie-wrap" id="race-pie" hidden></div>
       </div>
     </div>
   </div>
@@ -1730,7 +1723,7 @@
     function el(id) { return document.getElementById(id); }
     const CLASS_ORDER = ["MK1", "MC1", "MX1", "WK1", "WC1", "WX1"];
     const ATHLETES = ["Timothy ANDERSON"];
-    const VW = 1400, VH = 560, PAD = { l: 96, r: 48, t: 24, b: 56 };
+    const VW = 1400, VH = 600, PAD = { l: 96, r: 48, t: 24, b: 84 };
     const RACE_VW = 1400;
     const RACE_PAD_L = 96;
     const RACE_PAD_R = 148;
@@ -2043,16 +2036,17 @@
         if (raceMode !== "cum") cumLegend.innerHTML = "";
       }
       const racePie = document.getElementById("race-pie");
-      if (racePie) {
-        if (tab !== "races" || raceMode !== "cum") {
-          racePie.hidden = true;
-          racePie.innerHTML = "";
-        }
+      const cumDetailRow = document.getElementById("cum-detail-row");
+      const onCum = tab === "races" && raceMode === "cum";
+      if (cumDetailRow) cumDetailRow.hidden = !onCum;
+      if (racePie && !onCum) {
+        racePie.hidden = true;
+        racePie.innerHTML = "";
       }
       const racesPanel = document.getElementById("panel-races");
       if (racesPanel) {
         racesPanel.classList.toggle("mode-year", tab === "races" && raceMode === "year");
-        racesPanel.classList.toggle("mode-cum", tab === "races" && raceMode === "cum");
+        racesPanel.classList.toggle("mode-cum", onCum);
       }
       const ageDetail = document.getElementById("age-detail");
       if (ageDetail) {
@@ -2403,10 +2397,10 @@
         });
       });
       ages.forEach((a) => {
-        svg += `<text class="xlab" data-age="${a}" x="${xOf(a)}" y="${VH - PAD.b + 18}" text-anchor="middle" fill="#8a8a8a" font-size="14">${a}</text>`;
+        svg += `<text class="xlab" data-age="${a}" x="${xOf(a)}" y="${VH - PAD.b + 22}" text-anchor="middle" fill="#8a8a8a" font-size="14">${a}</text>`;
       });
       svg += rankLineSvg(xOf, yRank, rankGroups);
-      svg += `<text x="${padL + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#8a8a8a" font-size="14" font-weight="700">ATHLETE AGE</text>`;
+      svg += `<text x="${padL + plotW / 2}" y="${VH - 18}" text-anchor="middle" fill="#8a8a8a" font-size="14" font-weight="700">ATHLETE AGE</text>`;
       svg += `</svg><div class="tip" id="race-tip" style="display:none"></div>`;
       host.innerHTML = svg;
       const tip = host.querySelector("#race-tip");
@@ -2489,7 +2483,7 @@
           parts.push({ val: yearsActive, lbl: "Years Active", color: "var(--purple)" });
         }
       }
-      tiles.className = (typeof raceMode !== "undefined" && raceMode === "cum") ? "tiles tiles-3" : (parts.length === 3 ? "tiles tiles-3" : "tiles tiles-2");
+      tiles.className = parts.length === 3 ? "tiles tiles-3" : "tiles tiles-2";
       tiles.innerHTML = parts.map((p) =>
         `<div class="tile"><div class="val" style="color:${p.color}">${p.val}</div><div class="lbl">${p.lbl}</div></div>`
       ).join("");
@@ -2553,6 +2547,8 @@
       if (age == null) {
         host.hidden = true;
         tiles.innerHTML = "";
+        const row = document.getElementById("cum-detail-row");
+        if (row) row.classList.add("pie-only");
         return;
       }
       const comps = racesForAge(name, age);
@@ -2600,6 +2596,8 @@
         return `<div class="comp-tile">${rows}</div>`;
       }).join("");
       host.hidden = false;
+      const row = document.getElementById("cum-detail-row");
+      if (row) row.classList.remove("pie-only");
     }
 
 
@@ -2682,6 +2680,11 @@
         <div class="pie-legend">${legend}</div>
       `;
       host.hidden = false;
+      const row = document.getElementById("cum-detail-row");
+      if (row) {
+        const ageEl = document.getElementById("age-detail");
+        row.classList.toggle("pie-only", !ageEl || ageEl.hidden);
+      }
     }
 
     function drawCumulativeChart(name) {
@@ -2758,7 +2761,7 @@
         svg += `<rect class="cum-age-band" data-age="${a}" x="${x - slotW * 0.45}" y="${PAD.t}" width="${slotW * 0.9}" height="${plotH}" fill="#5a9ce6" opacity="0" style="pointer-events:none"/>`;
         svg += `<line class="cum-age-guide" data-age="${a}" x1="${x}" x2="${x}" y1="${PAD.t}" y2="${VH - PAD.b}" stroke="#5a9ce6" stroke-width="1.5" opacity="0" style="pointer-events:none"/>`;
         // Hit target under points so column clicks work, but point hover still receives events
-        svg += `<rect class="cum-age-hit" data-age="${a}" x="${x - slotW * 0.45}" y="${PAD.t}" width="${slotW * 0.9}" height="${VH - PAD.t - PAD.b + 36}" fill="transparent" style="cursor:pointer"/>`;
+        svg += `<rect class="cum-age-hit" data-age="${a}" x="${x - slotW * 0.45}" y="${PAD.t}" width="${slotW * 0.9}" height="${VH - PAD.t - PAD.b + 52}" fill="transparent" style="cursor:pointer"/>`;
       });
       series.forEach((s) => {
         const path = s.points.map((p, i) => `${i === 0 ? "M" : "L"} ${xOf(p.a)} ${yCount(p.cum)}`).join(" ");
@@ -2774,11 +2777,11 @@
       ages.forEach((a) => {
         const sel = selectedCumAge === a ? " selected" : "";
         const x = xOf(a);
-        svg += `<text class="cum-age${sel}" data-age="${a}" x="${x}" y="${VH - PAD.b + 18}" text-anchor="middle" font-size="14" style="pointer-events:none">${a}</text>`;
+        svg += `<text class="cum-age${sel}" data-age="${a}" x="${x}" y="${VH - PAD.b + 22}" text-anchor="middle" font-size="14" style="pointer-events:none">${a}</text>`;
       });
       svg += rankLineSvg(xOf, yRank, rankGroups);
-      svg += `<text x="${padL + plotW / 2}" y="${VH - 22}" text-anchor="middle" fill="#8a8a8a" font-size="14" font-weight="700">ATHLETE AGE</text>`;
-      svg += `<text x="${padL + plotW / 2}" y="${VH - 6}" text-anchor="middle" fill="#8a8a8a" font-size="11">Click an age for race details</text>`;
+      svg += `<text x="${padL + plotW / 2}" y="${VH - 36}" text-anchor="middle" fill="#8a8a8a" font-size="14" font-weight="700">ATHLETE AGE</text>`;
+      svg += `<text x="${padL + plotW / 2}" y="${VH - 14}" text-anchor="middle" fill="#8a8a8a" font-size="11">Click an age for race details</text>`;
       svg += `</svg><div class="tip" id="race-tip" style="display:none"></div>`;
       host.innerHTML = svg;
       const tip = host.querySelector("#race-tip");
@@ -2944,9 +2947,9 @@
         });
       });
       groups.forEach((group) => {
-        svg += `<text class="xlab" data-age="${group.a}" x="${xOf(group.a)}" y="${VH - PAD.b + 18}" text-anchor="middle" fill="#b8b8b8" font-size="14">${group.a}</text>`;
+        svg += `<text class="xlab" data-age="${group.a}" x="${xOf(group.a)}" y="${VH - PAD.b + 22}" text-anchor="middle" fill="#b8b8b8" font-size="14">${group.a}</text>`;
       });
-      svg += `<text x="${PAD.l + plotW / 2}" y="${VH - 8}" text-anchor="middle" fill="#b8b8b8" font-size="14" font-weight="700">ATHLETE AGE</text>`;
+      svg += `<text x="${PAD.l + plotW / 2}" y="${VH - 18}" text-anchor="middle" fill="#b8b8b8" font-size="14" font-weight="700">ATHLETE AGE</text>`;
       svg += `</svg><div class="tip" id="tip" style="display:none"></div>`;
       host.innerHTML = svg;
 
