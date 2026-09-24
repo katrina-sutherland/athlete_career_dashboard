@@ -126,64 +126,82 @@
     .tiles-2 { grid-template-columns: 1fr 1fr; max-width: 560px; }
     .tiles-3 { grid-template-columns: 1fr 1fr 1fr; max-width: 840px; }
     .legend[hidden] { display: none; }
-    .field[hidden] { display: none; }
 
+    .race-summary-row {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 16px;
+      align-items: stretch;
+    }
+    #panel-races.mode-year .race-summary-row {
+      grid-template-columns: 1fr;
+    }
+    #panel-races.mode-cum .race-summary-row {
+      grid-template-columns: minmax(0, 3fr) minmax(300px, 1.15fr);
+      align-items: center;
+    }
+    #panel-races.mode-cum #race-tiles {
+      max-width: none !important;
+      width: 100%;
+      grid-template-columns: repeat(3, 1fr);
+      margin-bottom: 0;
+    }
     .pie-wrap {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      gap: 28px;
-      margin: 20px 0 16px;
-      padding: 12px 8px 4px;
+      gap: 12px 16px;
+      margin: 0;
+      padding: 8px 4px;
     }
     .pie-wrap[hidden] { display: none; }
-
-    #panel-races {
-      display: flex;
-      flex-direction: column;
+    #panel-races.mode-cum .pie-wrap {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: center;
+      border: 1px solid var(--stroke-soft);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.03);
+      padding: 12px 14px;
+      box-sizing: border-box;
     }
-    #panel-races > * { order: 10; }
-    /* Races by Age: tiles → chart → race legend → milestones */
-    #panel-races.mode-year #race-tiles { order: 1; }
-    #panel-races.mode-year #race-chart { order: 2; }
-    #panel-races.mode-year #race-legend { order: 3; }
-    #panel-races.mode-year #milestones { order: 4; }
-    /* Cumulative: chart → cum legend → pie → summary tiles → age detail */
-    #panel-races.mode-cum #race-chart { order: 1; }
-    #panel-races.mode-cum #cum-legend { order: 2; }
-    #panel-races.mode-cum #race-pie { order: 3; }
-    #panel-races.mode-cum #race-tiles { order: 4; }
-    #panel-races.mode-cum #age-detail { order: 5; }
-    .pie-svg { width: min(280px, 100%); height: auto; flex: 0 0 auto; }
+    .pie-svg { width: min(160px, 100%); height: auto; flex: 0 0 auto; }
+    #panel-races.mode-cum .pie-svg { width: 132px; }
     .pie-legend {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      font-size: 13px;
+      gap: 5px;
+      font-size: 12px;
       color: var(--text-2);
-      min-width: 220px;
+      min-width: 0;
+      flex: 1 1 160px;
     }
     .pie-legend .row {
       display: flex;
       align-items: center;
-      gap: 10px;
-      line-height: 18px;
+      gap: 8px;
+      line-height: 16px;
     }
     .pie-legend .pct {
       margin-left: auto;
       color: var(--text);
       font-weight: 600;
       font-variant-numeric: tabular-nums;
+      padding-left: 8px;
     }
     .pie-title {
       width: 100%;
-      text-align: center;
-      font-size: 13px;
+      text-align: left;
+      font-size: 12px;
       font-weight: 600;
       color: var(--text-2);
-      margin: 0 0 4px;
+      margin: 0;
+      flex: 0 0 100%;
     }
+    .field[hidden] { display: none; }
+
 
     .milestones {
       margin: 20px 0 8px;
@@ -446,62 +464,6 @@
 
     .field[hidden] { display: none; }
 
-    .pie-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 28px;
-      margin: 20px 0 16px;
-      padding: 12px 8px 4px;
-    }
-    .pie-wrap[hidden] { display: none; }
-
-    #panel-races {
-      display: flex;
-      flex-direction: column;
-    }
-    #panel-races > * { order: 10; }
-    /* Races by Age: tiles → chart → race legend → milestones */
-    #panel-races.mode-year #race-tiles { order: 1; }
-    #panel-races.mode-year #race-chart { order: 2; }
-    #panel-races.mode-year #race-legend { order: 3; }
-    #panel-races.mode-year #milestones { order: 4; }
-    /* Cumulative: chart → cum legend → pie → summary tiles → age detail */
-    #panel-races.mode-cum #race-chart { order: 1; }
-    #panel-races.mode-cum #cum-legend { order: 2; }
-    #panel-races.mode-cum #race-pie { order: 3; }
-    #panel-races.mode-cum #race-tiles { order: 4; }
-    #panel-races.mode-cum #age-detail { order: 5; }
-    .pie-svg { width: min(280px, 100%); height: auto; flex: 0 0 auto; }
-    .pie-legend {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      font-size: 13px;
-      color: var(--text-2);
-      min-width: 220px;
-    }
-    .pie-legend .row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      line-height: 18px;
-    }
-    .pie-legend .pct {
-      margin-left: auto;
-      color: var(--text);
-      font-weight: 600;
-      font-variant-numeric: tabular-nums;
-    }
-    .pie-title {
-      width: 100%;
-      text-align: center;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-2);
-      margin: 0 0 4px;
-    }
 
   </style>
 </head>
@@ -533,7 +495,10 @@
       </div>
     </div>
     <div class="panel" id="panel-races" hidden>
-      <div class="tiles tiles-2" id="race-tiles"></div>
+      <div class="race-summary-row" id="race-summary-row">
+        <div class="tiles tiles-2" id="race-tiles"></div>
+        <div class="pie-wrap" id="race-pie" hidden></div>
+      </div>
       <div class="chart-wrap" id="race-chart"></div>
       <div class="legend" id="race-legend">
         <span><span class="dot" style="width:11px;height:11px;background:#d4a017;opacity:0.55;vertical-align:middle"></span> Olympic Games</span>
@@ -544,7 +509,6 @@
         <span><span class="dot" style="width:11px;height:3px;border-radius:1px;background:#e8e8e8;vertical-align:middle"></span> World Ranking</span>
       </div>
       <div class="legend" id="cum-legend" hidden></div>
-      <div class="pie-wrap" id="race-pie" hidden></div>
       <div id="milestones" class="milestones" hidden></div>
       <div id="age-detail" class="age-detail" hidden>
         <div class="age-detail-head">
@@ -2525,7 +2489,7 @@
           parts.push({ val: yearsActive, lbl: "Years Active", color: "var(--purple)" });
         }
       }
-      tiles.className = parts.length === 3 ? "tiles tiles-3" : "tiles tiles-2";
+      tiles.className = (typeof raceMode !== "undefined" && raceMode === "cum") ? "tiles tiles-3" : (parts.length === 3 ? "tiles tiles-3" : "tiles tiles-2");
       tiles.innerHTML = parts.map((p) =>
         `<div class="tile"><div class="val" style="color:${p.color}">${p.val}</div><div class="lbl">${p.lbl}</div></div>`
       ).join("");
