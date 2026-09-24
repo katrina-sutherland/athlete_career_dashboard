@@ -640,6 +640,17 @@
       margin: 10px 0 0;
       line-height: 16px;
     }
+    .cmp-cell.na {
+      background: rgba(0, 0, 0, 0.35) !important;
+      color: transparent !important;
+      cursor: default;
+      opacity: 1;
+      pointer-events: none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+    }
+    .cmp-cell.na .cmp-cell-main {
+      visibility: hidden;
+    }
 
     .panel[hidden] { display: none; }
     .toggle-row { display: flex; align-items: center; gap: 8px; height: 36px; }
@@ -2588,6 +2599,7 @@
     /* Career Comparison: age when each athlete FIRST hit the benchmark (null = never / not in source).
        Rules:
        - JNR Final / U23 Final: first Final at Junior or U23 Worlds/Euros (MK1)
+         Display: JNR column only on age ≤18 rows; U23 column only on age ≤23 rows (later ages blacked out)
        - WC Top 30: first World Cup overall ≤30 = Final rank, else Semi rank if DNQ final
        - Top 100 / 50 / 20 WR: first age reaching that ICF world ranking (awaiting WR source data)
        - SNR Final: first Final at World Cup / senior Worlds / Olympics
@@ -2715,6 +2727,13 @@
       return a <= Number(band);
     }
 
+    /* JNR Final only at junior ages (≤18). U23 Final only through U23 ages (≤23). */
+    function comparisonBandRelevant(key, band) {
+      if (key === "jnrFinal") return band !== "28+" && Number(band) <= 18;
+      if (key === "u23Final") return band !== "28+" && Number(band) <= 23;
+      return true;
+    }
+
     function comparisonCell(athletes, band, key) {
       const hits = [];
       athletes.forEach((ath) => {
@@ -2793,6 +2812,10 @@
       let body = ages.map((band) => {
         const ageLabel = band === "28+" ? "28+" : String(band);
         const cells = cols.map((col) => {
+          if (!comparisonBandRelevant(col.key, band)) {
+            const why = col.key === "jnrFinal" ? "Junior age only (≤18)" : "U23 age only (≤23)";
+            return `<td class="cmp-cell na" title="${esc(why)}" aria-label="${esc(col.label)} not applicable at age ${esc(ageLabel)}"><span class="cmp-cell-main">—</span></td>`;
+          }
           const cell = comparisonCell(athletes, band, col.key);
           const timHit = timMilestoneStatus(tim, band, col.key);
           const tipRows = cell.hits.length
