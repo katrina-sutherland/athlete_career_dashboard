@@ -323,35 +323,27 @@
       height: 14px;
       border-radius: 50%;
       background: var(--bg);
-      border: 2px solid var(--accent);
-      box-shadow: 0 0 0 4px rgba(90, 156, 230, 0.12);
-    }
-    .milestone:nth-child(odd) .milestone-mark .dot-ring {
-      border-color: #e67e22;
-      box-shadow: 0 0 0 4px rgba(230, 126, 34, 0.12);
-    }
-    .milestone:nth-child(3n) .milestone-mark .dot-ring {
-      border-color: var(--green);
-      box-shadow: 0 0 0 4px rgba(63, 162, 102, 0.12);
+      border: 2px solid var(--ms-color, var(--accent));
+      box-shadow: 0 0 0 4px var(--ms-glow, rgba(90, 156, 230, 0.12));
     }
     .milestone-body {
       min-width: 0;
       padding: 8px 14px 10px;
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid color-mix(in srgb, var(--ms-color, #fff) 22%, transparent);
       border-radius: 10px;
-      background: rgba(255,255,255,0.03);
+      background: color-mix(in srgb, var(--ms-color, #fff) 8%, transparent);
       transition: background 0.15s ease, border-color 0.15s ease;
     }
     .milestone:hover .milestone-body {
-      background: rgba(255,255,255,0.06);
-      border-color: rgba(255,255,255,0.12);
+      background: color-mix(in srgb, var(--ms-color, #fff) 14%, transparent);
+      border-color: color-mix(in srgb, var(--ms-color, #fff) 36%, transparent);
     }
     .milestone-body .label {
       display: block;
       font-size: 14px;
       font-weight: 600;
       line-height: 20px;
-      color: var(--text);
+      color: var(--ms-color, var(--text));
     }
     .milestone-body .race {
       display: block;
@@ -2900,6 +2892,31 @@
       }
     }
 
+
+    function milestoneTone(label) {
+      const L = String(label || "");
+      // Match comparison / race chart colours: JNR·U23 orange, WC·WCh green, WR purple, Olympic/medal gold
+      if (/\bJNR\b|U23|Junior/i.test(L)) {
+        return { key: "jnr", color: "#e67e22", glow: "rgba(230,126,34,0.16)" };
+      }
+      if (/Olympic|SNR Medal|BME/i.test(L)) {
+        return { key: "oly", color: "#d4a017", glow: "rgba(212,160,23,0.16)" };
+      }
+      if (/World Cup|\bSNR\b|World Championships/i.test(L)) {
+        return { key: "snr", color: "#3fa266", glow: "rgba(63,162,102,0.16)" };
+      }
+      if (/Top 20/i.test(L)) {
+        return { key: "wr20", color: "#5f52c7", glow: "rgba(95,82,199,0.16)" };
+      }
+      if (/Top 50/i.test(L)) {
+        return { key: "wr50", color: "#7b6ce0", glow: "rgba(123,108,224,0.16)" };
+      }
+      if (/Top 100|World Ranking|WRR|ICF World Ranking|Career Best/i.test(L)) {
+        return { key: "wr", color: "#9386f2", glow: "rgba(147,134,242,0.16)" };
+      }
+      return { key: "ot", color: "#5a9ce6", glow: "rgba(90,156,230,0.16)" };
+    }
+
     function renderMilestones(series) {
       const host = document.getElementById("milestones");
       if (!host) return;
@@ -2921,12 +2938,13 @@
         `<div class="collapse-body">` +
           `<div class="milestones-list">` +
         milestones.map((m) => {
+          const tone = milestoneTone(m.label);
           const meta = [];
           if (m.y != null) meta.push("<span>" + m.y + "</span>");
           meta.push("<span>WR <strong>" + (m.wr != null ? m.wr : "—") + "</strong></span>");
           meta.push("<span>Races <strong>" + (m.races != null ? m.races : "—") + "</strong></span>");
           return (
-            "<div class=\"milestone\">" +
+            "<div class=\"milestone tone-" + tone.key + "\" style=\"--ms-color:" + tone.color + ";--ms-glow:" + tone.glow + "\">" +
               "<div class=\"milestone-age\">" +
                 "<span class=\"age-lbl\">Age</span>" +
                 "<span class=\"age-num\">" + m.a + "</span>" +
