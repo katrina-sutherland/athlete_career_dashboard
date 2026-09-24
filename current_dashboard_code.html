@@ -386,6 +386,154 @@
       font-weight: 650;
     }
 
+
+    .collapse-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      margin: 0 0 0;
+      padding: 0 0 14px;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      text-align: left;
+      font: inherit;
+    }
+    .collapse-head h3 { flex: 1 1 auto; margin: 0; }
+    .collapse-head .milestones-count { margin-left: auto; }
+    .collapse-chevron {
+      flex: 0 0 auto;
+      width: 10px;
+      height: 10px;
+      border-right: 2px solid var(--text-3);
+      border-bottom: 2px solid var(--text-3);
+      transform: rotate(45deg);
+      transition: transform 0.18s ease;
+      margin: 0 4px 4px 8px;
+    }
+    .collapsible-panel.is-collapsed .collapse-chevron {
+      transform: rotate(-135deg);
+      margin-bottom: 0;
+    }
+    .collapsible-panel.is-collapsed .collapse-body { display: none; }
+    .collapsible-panel.is-collapsed .collapse-head { margin-bottom: 0; padding-bottom: 0; }
+
+    .career-comparison {
+      margin-top: 12px;
+    }
+    .career-comparison .sample-note {
+      font-size: 11px;
+      color: var(--text-3);
+      margin: 0 0 12px;
+      line-height: 16px;
+    }
+    .cmp-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .cmp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-variant-numeric: tabular-nums;
+      min-width: 720px;
+    }
+    .cmp-table th,
+    .cmp-table td {
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 16px;
+    }
+    .cmp-table thead th {
+      background: rgba(255,255,255,0.04);
+      color: var(--text-2);
+      font-weight: 650;
+      font-size: 11px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .cmp-table tbody th {
+      text-align: left;
+      color: var(--text);
+      font-weight: 650;
+      background: rgba(255,255,255,0.03);
+      white-space: nowrap;
+      padding-left: 12px;
+    }
+    .cmp-cell {
+      position: relative;
+      color: var(--text);
+      font-weight: 600;
+      cursor: default;
+      transition: background 0.12s ease;
+    }
+    .cmp-cell.has-hits {
+      cursor: help;
+      font-weight: 700;
+    }
+    .cmp-cell.has-hits:hover,
+    .cmp-cell.has-hits:focus-within {
+      filter: brightness(1.25);
+      outline: none;
+    }
+    .cmp-cell.zero {
+      font-weight: 500;
+      opacity: 0.55;
+    }
+    .cmp-table thead th.cmp-col-head {
+      background: rgba(255,255,255,0.03);
+      text-transform: uppercase;
+    }
+    .cmp-tip {
+      display: none;
+      position: absolute;
+      z-index: 20;
+      left: 50%;
+      bottom: calc(100% + 8px);
+      transform: translateX(-50%);
+      min-width: 200px;
+      max-width: 280px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--stroke);
+      background: #1c1c1c;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+      text-align: left;
+      pointer-events: none;
+    }
+    .cmp-cell:hover .cmp-tip,
+    .cmp-cell:focus-within .cmp-tip {
+      display: block;
+    }
+    .cmp-tip .tip-title {
+      font-size: 11px;
+      font-weight: 650;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .cmp-tip .tip-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 11px;
+      line-height: 16px;
+      color: var(--text-2);
+      padding: 1px 0;
+    }
+    .cmp-tip .tip-row span:last-child {
+      color: var(--text);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .cmp-tip .tip-empty {
+      font-size: 11px;
+      color: var(--text-3);
+    }
+
     .panel[hidden] { display: none; }
     .toggle-row { display: flex; align-items: center; gap: 8px; height: 36px; }
     .check {
@@ -517,7 +665,8 @@
         <span><span class="dot" style="width:11px;height:3px;border-radius:1px;background:#e8e8e8;vertical-align:middle"></span> World Ranking</span>
       </div>
       <div class="legend" id="cum-legend" hidden></div>
-      <div id="milestones" class="milestones" hidden></div>
+      <div id="milestones" class="milestones collapsible-panel" hidden></div>
+      <div id="career-comparison" class="milestones collapsible-panel career-comparison" hidden></div>
       <div class="cum-detail-row" id="cum-detail-row" hidden>
         <div id="age-detail" class="age-detail" hidden>
           <div class="age-detail-head">
@@ -2028,7 +2177,7 @@
        overall = deepest phase rank; heatBehindPct / advanceBehindPct =
        heat/advance values = athlete total time as % of phase winner
        (100 = equal; 108.81 = 8.81% slower), using TOTAL_TIME else RAW+pen. */
-    const RACE_RESULT_DETAILS = {"World Cup Augsburg 2017":{"overall":27,"advanceBehindPct":111.88,"advancePhase":"Semi"},"World Cup Prague 2017":{"overall":26,"heatBehindPct":105.92},"World Championships Deodoro, Rio 2018":{"overall":28,"heatBehindPct":108.4},"World Cup Augsburg 2018":{"overall":16,"advanceBehindPct":103.79,"advancePhase":"Semi"},"World Cup Krakow 2018":{"overall":29,"heatBehindPct":107.15},"World Cup La Seu 2018":{"overall":26,"heatBehindPct":104.42},"World Cup Liptovsky Mikulas 2018":{"overall":25,"advanceBehindPct":108.59,"advancePhase":"Semi"},"World Championships La Seu 2019":{"overall":17,"heatBehindPct":105.57,"advanceBehindPct":104.78,"advancePhase":"Semi"},"World Cup Bratislava 2019":{"overall":24,"heatBehindPct":106.73,"advanceBehindPct":110.61,"advancePhase":"Semi"},"World Cup Lee Valley 2019":{"overall":26,"heatBehindPct":108.23,"advanceBehindPct":110.53,"advancePhase":"Semi"},"World Cup Prague 2019":{"overall":25,"heatBehindPct":105.96},"World Cup Tacen 2019":{"overall":40,"heatBehindPct":116.69},"Australian Open Penrith 2020":{"overall":38,"heatBehindPct":100.84,"advanceBehindPct":164.17,"advancePhase":"Semi"},"Oceania Championships Auckland 2020":{"heatBehindPct":163.14},"Australian Open Penrith 2022":{"overall":2,"advanceBehindPct":101.53,"advancePhase":"Final"},"ICF World Ranking Augsburg 2022":{"overall":20,"heatBehindPct":100.17,"advanceBehindPct":108.18,"advancePhase":"Semi"},"World Championships Augsburg 2022":{"overall":33,"heatBehindPct":102.84,"advanceBehindPct":154.61,"advancePhase":"Semi"},"World Cup Krakow 2022":{"overall":27,"heatBehindPct":101.27,"advanceBehindPct":108.1,"advancePhase":"Semi"},"World Cup La Seu 2022":{"overall":22,"heatBehindPct":105.4,"advanceBehindPct":111.61,"advancePhase":"Semi"},"World Cup Pau 2022":{"overall":15,"heatBehindPct":101.13,"advanceBehindPct":104.71,"advancePhase":"Semi"},"World Cup Prague 2022":{"overall":21,"heatBehindPct":101.21,"advanceBehindPct":105.54,"advancePhase":"Semi"},"World Cup Tacen 2022":{"overall":12,"heatBehindPct":106.57,"advanceBehindPct":105.71,"advancePhase":"Semi"},"Australian Open Penrith 2023":{"overall":1,"heatBehindPct":106.63,"advanceBehindPct":100.0,"advancePhase":"Final"},"Penrith Open Penrith 2023":{"overall":2,"advanceBehindPct":102.6,"advancePhase":"Final"},"Pyrenees Cup La Seu 2023":{"overall":2,"heatBehindPct":102.5,"advanceBehindPct":101.43,"advancePhase":"Final"},"World Championships Lee Valley 2023":{"overall":5,"heatBehindPct":100.92,"advanceBehindPct":103.48,"advancePhase":"Final"},"World Cup Augsburg 2023":{"overall":21,"heatBehindPct":101.79,"advanceBehindPct":107.84,"advancePhase":"Semi"},"World Cup La Seu 2023":{"overall":8,"heatBehindPct":103.02,"advanceBehindPct":107.4,"advancePhase":"Final"},"World Cup Prague 2023":{"overall":22,"heatBehindPct":104.26,"advanceBehindPct":108.31,"advancePhase":"Semi"},"World Cup Tacen 2023":{"overall":7,"heatBehindPct":108.81,"advanceBehindPct":108.43,"advancePhase":"Final"},"World Cup Vaires sur Marne 2023":{"overall":20,"heatBehindPct":100.25,"advanceBehindPct":111.23,"advancePhase":"Semi"},"Australian Open Penrith 2024":{"overall":5,"heatBehindPct":100.71,"advanceBehindPct":103.9,"advancePhase":"Final"},"Oceania Championships Penrith 2024":{"overall":4,"heatBehindPct":100.61,"advanceBehindPct":104.94,"advancePhase":"Final"},"Olympic Games Paris 2024":{"overall":7,"heatBehindPct":105.57,"advanceBehindPct":103.04,"advancePhase":"Final"},"World Cup Augsburg 2024":{"overall":5,"heatBehindPct":109.44,"advanceBehindPct":103.45,"advancePhase":"Final"},"World Cup Ivrea 2024":{"overall":32,"heatBehindPct":103.35,"advanceBehindPct":167.8,"advancePhase":"Semi"},"World Cup Krakow 2024":{"overall":31,"heatBehindPct":102.82,"advanceBehindPct":112.25,"advancePhase":"Semi"},"World Cup La Seu 2024":{"overall":32,"heatBehindPct":103.53,"advanceBehindPct":111.84,"advancePhase":"Semi"},"World Cup Prague 2024":{"overall":56,"heatBehindPct":162.28},"Australian Open Penrith 2025":{"overall":8,"heatBehindPct":102.04,"advanceBehindPct":108.42,"advancePhase":"Final"},"Oceania Championships Penrith 2025":{"overall":5,"heatBehindPct":103.08,"advanceBehindPct":105.19,"advancePhase":"Final"},"World Championships Penrith 2025":{"overall":10,"heatBehindPct":101.71,"advanceBehindPct":104.02,"advancePhase":"Final"},"World Cup La Seu 2025":{"overall":74,"heatBehindPct":165.3},"World Cup Pau 2025":{"overall":21,"heatBehindPct":108.61},"World Cup Prague 2025":{"overall":47,"heatBehindPct":163.7},"Australian Open Penrith 2026":{"overall":4,"heatBehindPct":100.0,"advanceBehindPct":104.13,"advancePhase":"Final"},"ICF World Ranking Oklahoma 2026":{"overall":13,"heatBehindPct":107.8,"advanceBehindPct":107.8,"advancePhase":"FinalB"},"Oceania Championships Auckland 2026":{"overall":1,"heatBehindPct":106.83,"advanceBehindPct":100.0,"advancePhase":"Final"},"Penrith Open Penrith 2026":{"overall":4,"heatBehindPct":103.98,"advanceBehindPct":102.55,"advancePhase":"Final"},"World Cup La Seu 2026":{"overall":8,"heatBehindPct":103.21,"advanceBehindPct":108.25,"advancePhase":"Final"},"World Cup Prague 2026":{"overall":12,"heatBehindPct":104.28,"advanceBehindPct":168.71,"advancePhase":"Final"},"World Cup Vaires sur Marne 2026":{"overall":74,"heatBehindPct":269.01},"World Championships Oklahoma 2026":{"overall":12,"heatBehindPct":101.86,"semiBehindPct":104.81,"advanceBehindPct":163.02,"advancePhase":"Final"},"Oceania Championships Penrith 2019":{"overall":7,"advancePhase":"Final"},"Australian Open Penrith 2019":{"overall":17,"advancePhase":"Semi"},"World Championships Bratislava 2017":{"overall":48},"World Championships Foz do Iguassu 2015":{"overall":16,"heatBehindPct":110.5,"advanceBehindPct":106.19,"advancePhase":"Semi"},"World Championships Krakow 2016":{"overall":40,"heatBehindPct":108.07,"advancePhase":"Semi"},"World Cup Prague 2016":{"overall":32,"heatBehindPct":107.11,"advanceBehindPct":117.34,"advancePhase":"Semi"},"World Cup Tacen 2016":{"overall":31,"heatBehindPct":104.78,"advanceBehindPct":112.1,"advancePhase":"Semi"},"World Championships Foix 2010":{"overall":48,"heatBehindPct":112.38},"World Championships Liptovsky Mikulas 2013":{"overall":41,"heatBehindPct":112.06},"World Championships Penrith 2014":{"overall":30,"heatBehindPct":111.78,"advanceBehindPct":161.31,"advancePhase":"Semi"},"Oceania Championships Penrith 2012":{"overall":14,"heatBehindPct":108.83,"advanceBehindPct":110.45,"advancePhase":"Semi","categoryPlace":2,"categoryLabel":"JNR"},"Australian Open Penrith 2009":{"overall":57,"heatBehindPct":126.83,"categoryPlace":11,"categoryLabel":"JNR"},"Australian Schools Championships Eildon 2009":{"overall":16,"advanceBehindPct":108.89,"advancePhase":"Final","categoryPlace":4,"categoryLabel":"U15"},"World Championships Wausau 2012":{"overall":16}};
+    const RACE_RESULT_DETAILS = {"World Cup Augsburg 2017":{"overall":27,"advanceBehindPct":111.88,"advancePhase":"Semi"},"World Cup Prague 2017":{"overall":26,"heatBehindPct":105.92},"World Championships Deodoro, Rio 2018":{"overall":28,"heatBehindPct":108.4},"World Cup Augsburg 2018":{"overall":16,"advanceBehindPct":103.79,"advancePhase":"Semi"},"World Cup Krakow 2018":{"overall":29,"heatBehindPct":107.15},"World Cup La Seu 2018":{"overall":26,"heatBehindPct":104.42},"World Cup Liptovsky Mikulas 2018":{"overall":25,"advanceBehindPct":108.59,"advancePhase":"Semi"},"World Championships La Seu 2019":{"overall":17,"heatBehindPct":105.57,"advanceBehindPct":104.78,"advancePhase":"Semi"},"World Cup Bratislava 2019":{"overall":24,"heatBehindPct":106.73,"advanceBehindPct":110.61,"advancePhase":"Semi"},"World Cup Lee Valley 2019":{"overall":26,"heatBehindPct":108.23,"advanceBehindPct":110.53,"advancePhase":"Semi"},"World Cup Prague 2019":{"overall":25,"heatBehindPct":105.96},"World Cup Tacen 2019":{"overall":40,"heatBehindPct":116.69},"Australian Open Penrith 2020":{"overall":38,"heatBehindPct":100.84,"advanceBehindPct":164.17,"advancePhase":"Semi"},"Oceania Championships Auckland 2020":{"heatBehindPct":163.14},"Australian Open Penrith 2022":{"overall":2,"advanceBehindPct":101.53,"advancePhase":"Final"},"ICF World Ranking Augsburg 2022":{"overall":20,"heatBehindPct":100.17,"advanceBehindPct":108.18,"advancePhase":"Semi"},"World Championships Augsburg 2022":{"overall":33,"heatBehindPct":102.84,"advanceBehindPct":154.61,"advancePhase":"Semi"},"World Cup Krakow 2022":{"overall":27,"heatBehindPct":101.27,"advanceBehindPct":108.1,"advancePhase":"Semi"},"World Cup La Seu 2022":{"overall":22,"heatBehindPct":105.4,"advanceBehindPct":111.61,"advancePhase":"Semi"},"World Cup Pau 2022":{"overall":15,"heatBehindPct":101.13,"advanceBehindPct":104.71,"advancePhase":"Semi"},"World Cup Prague 2022":{"overall":21,"heatBehindPct":101.21,"advanceBehindPct":105.54,"advancePhase":"Semi"},"World Cup Tacen 2022":{"overall":12,"heatBehindPct":106.57,"advanceBehindPct":105.71,"advancePhase":"Semi"},"Australian Open Penrith 2023":{"overall":1,"heatBehindPct":106.63,"advanceBehindPct":100.0,"advancePhase":"Final"},"Penrith Open Penrith 2023":{"overall":2,"advanceBehindPct":102.6,"advancePhase":"Final"},"Pyrenees Cup La Seu 2023":{"overall":2,"heatBehindPct":102.5,"advanceBehindPct":101.43,"advancePhase":"Final"},"World Championships Lee Valley 2023":{"overall":5,"heatBehindPct":100.92,"advanceBehindPct":103.48,"advancePhase":"Final"},"World Cup Augsburg 2023":{"overall":21,"heatBehindPct":101.79,"advanceBehindPct":107.84,"advancePhase":"Semi"},"World Cup La Seu 2023":{"overall":8,"heatBehindPct":103.02,"advanceBehindPct":107.4,"advancePhase":"Final"},"World Cup Prague 2023":{"overall":22,"heatBehindPct":104.26,"advanceBehindPct":108.31,"advancePhase":"Semi"},"World Cup Tacen 2023":{"overall":7,"heatBehindPct":108.81,"advanceBehindPct":108.43,"advancePhase":"Final"},"World Cup Vaires sur Marne 2023":{"overall":20,"heatBehindPct":100.25,"advanceBehindPct":111.23,"advancePhase":"Semi"},"Australian Open Penrith 2024":{"overall":5,"heatBehindPct":100.71,"advanceBehindPct":103.9,"advancePhase":"Final"},"Oceania Championships Penrith 2024":{"overall":4,"heatBehindPct":100.61,"advanceBehindPct":104.94,"advancePhase":"Final"},"Olympic Games Paris 2024":{"overall":7,"heatBehindPct":105.57,"advanceBehindPct":103.04,"advancePhase":"Final"},"World Cup Augsburg 2024":{"overall":5,"heatBehindPct":109.44,"advanceBehindPct":103.45,"advancePhase":"Final"},"World Cup Ivrea 2024":{"overall":32,"heatBehindPct":103.35,"advanceBehindPct":167.8,"advancePhase":"Semi"},"World Cup Krakow 2024":{"overall":31,"heatBehindPct":102.82,"advanceBehindPct":112.25,"advancePhase":"Semi"},"World Cup La Seu 2024":{"overall":32,"heatBehindPct":103.53,"advanceBehindPct":111.84,"advancePhase":"Semi"},"World Cup Prague 2024":{"overall":56,"heatBehindPct":162.28},"Australian Open Penrith 2025":{"overall":8,"heatBehindPct":102.04,"advanceBehindPct":108.42,"advancePhase":"Final"},"Oceania Championships Penrith 2025":{"overall":5,"heatBehindPct":103.08,"advanceBehindPct":105.19,"advancePhase":"Final"},"World Championships Penrith 2025":{"overall":10,"heatBehindPct":101.71,"advanceBehindPct":104.02,"advancePhase":"Final"},"World Cup La Seu 2025":{"overall":74,"heatBehindPct":165.3},"World Cup Pau 2025":{"overall":21,"heatBehindPct":108.61},"World Cup Prague 2025":{"overall":47,"heatBehindPct":163.7},"Australian Open Penrith 2026":{"overall":4,"heatBehindPct":100.0,"advanceBehindPct":104.13,"advancePhase":"Final"},"ICF World Ranking Oklahoma 2026":{"overall":13,"heatBehindPct":110.14,"advanceBehindPct":107.8,"advancePhase":"FinalB"},"Oceania Championships Auckland 2026":{"overall":1,"heatBehindPct":106.83,"advanceBehindPct":100.0,"advancePhase":"Final"},"Penrith Open Penrith 2026":{"overall":4,"heatBehindPct":103.98,"advanceBehindPct":102.55,"advancePhase":"Final"},"World Cup La Seu 2026":{"overall":8,"heatBehindPct":103.21,"advanceBehindPct":108.25,"advancePhase":"Final"},"World Cup Prague 2026":{"overall":12,"heatBehindPct":104.28,"advanceBehindPct":168.71,"advancePhase":"Final"},"World Cup Vaires sur Marne 2026":{"overall":74,"heatBehindPct":269.01},"World Championships Oklahoma 2026":{"overall":12,"heatBehindPct":101.86,"semiBehindPct":104.81,"advanceBehindPct":163.02,"advancePhase":"Final"},"Oceania Championships Penrith 2019":{"overall":7,"advancePhase":"Final"},"Australian Open Penrith 2019":{"overall":17,"advancePhase":"Semi"},"World Championships Bratislava 2017":{"overall":48},"World Championships Foz do Iguassu 2015":{"overall":16,"heatBehindPct":110.5,"advanceBehindPct":106.19,"advancePhase":"Semi"},"World Championships Krakow 2016":{"overall":40,"heatBehindPct":108.07,"advancePhase":"Semi"},"World Cup Prague 2016":{"overall":32,"heatBehindPct":107.11,"advanceBehindPct":117.34,"advancePhase":"Semi"},"World Cup Tacen 2016":{"overall":31,"heatBehindPct":104.78,"advanceBehindPct":112.1,"advancePhase":"Semi"},"World Championships Foix 2010":{"overall":48,"heatBehindPct":112.38},"World Championships Liptovsky Mikulas 2013":{"overall":41,"heatBehindPct":112.06},"World Championships Penrith 2014":{"overall":30,"heatBehindPct":111.78,"advanceBehindPct":161.31,"advancePhase":"Semi"},"Oceania Championships Penrith 2012":{"overall":14,"heatBehindPct":108.83,"advanceBehindPct":110.45,"advancePhase":"Semi","categoryPlace":2,"categoryLabel":"JNR"},"Australian Open Penrith 2009":{"overall":57,"heatBehindPct":126.83,"categoryPlace":11,"categoryLabel":"JNR"},"Australian Schools Championships Eildon 2009":{"overall":16,"advanceBehindPct":108.89,"advancePhase":"Final","categoryPlace":4,"categoryLabel":"U15"},"World Championships Wausau 2012":{"overall":16}};
     const RACE_COL = { ol: "#d4a017", sg: "#3fa266", uj: "#e67e22", wr: "#9386f2", ot: "#5a9ce6", o: "#5a9ce6", m: "#3fa266" };
     const RACE_OPACITY = 0.55;
 
@@ -2046,6 +2195,11 @@
       if (raceLegend) raceLegend.hidden = tab !== "races" || raceMode !== "year";
       const milestonesEl = document.getElementById("milestones");
       if (milestonesEl) milestonesEl.hidden = tab !== "races" || raceMode !== "year";
+      const cmpEl = document.getElementById("career-comparison");
+      if (cmpEl && (tab !== "races" || raceMode !== "year")) {
+        cmpEl.hidden = true;
+        cmpEl.innerHTML = "";
+      }
       const cumLegend = document.getElementById("cum-legend");
       if (cumLegend) {
         cumLegend.hidden = tab !== "races" || raceMode !== "cum";
@@ -2278,6 +2432,14 @@
         firstRaceMatching(series, (name, kind) => kind === "ol" || /olympic/i.test(name)),
         "First Olympic Games"
       );
+      add(
+        firstMedalMilestone(series, (name, kind) => isSnrEligibleRace(name, kind)),
+        "First SNR Medal"
+      );
+      add(
+        firstMedalMilestone(series, (name, kind) => isWrrMedalRace(name, kind)),
+        "First WRR Medal"
+      );
       const careerBest = rankGroups.length ? Math.min(...rankGroups.map((g) => g.best)) : null;
       if (careerBest != null) {
         add(
@@ -2315,6 +2477,120 @@
       return out;
     }
 
+
+    /* Career Comparison: age when each athlete FIRST hit the benchmark (null = never).
+       SAMPLE preview data — replace with your 7 international athletes. */
+    const CAREER_COMPARISON_IS_SAMPLE = true;
+    const CAREER_COMPARISON_ATHLETES = [
+      { name: "Athlete A", jnrFinal: 17, u23Final: 19, wcTop30: 21, top20: 23, snrFinal: 24, bmeMedal: 26 },
+      { name: "Athlete B", jnrFinal: 18, u23Final: 20, wcTop30: 22, top20: 24, snrFinal: 25, bmeMedal: 28 },
+      { name: "Athlete C", jnrFinal: 16, u23Final: 21, wcTop30: 20, top20: 22, snrFinal: 23, bmeMedal: 27 },
+      { name: "Athlete D", jnrFinal: null, u23Final: 22, wcTop30: 23, top20: 25, snrFinal: 27, bmeMedal: null },
+      { name: "Athlete E", jnrFinal: 18, u23Final: 18, wcTop30: 24, top20: 26, snrFinal: 28, bmeMedal: 29 },
+      { name: "Athlete F", jnrFinal: 17, u23Final: 20, wcTop30: 21, top20: 21, snrFinal: 22, bmeMedal: 25 },
+      { name: "Athlete G", jnrFinal: 19, u23Final: 23, wcTop30: 25, top20: 27, snrFinal: 29, bmeMedal: 30 }
+    ];
+    const CAREER_COMPARISON_AGES = [18, 21, 23, 25, 28, "28+"];
+    const CAREER_COMPARISON_COLS = [
+      { key: "jnrFinal", label: "JNR Final", color: "#e67e22" },
+      { key: "u23Final", label: "U23 Final", color: "#e67e22" },
+      { key: "wcTop30", label: "WC Top 30", color: "#3fa266" },
+      { key: "top20", label: "Top 20", color: "#9386f2" },
+      { key: "snrFinal", label: "SNR Final", color: "#3fa266" },
+      { key: "bmeMedal", label: "BME Medal", color: "#d4a017" }
+    ];
+
+    let milestonesCollapsed = false;
+    let comparisonCollapsed = false;
+
+    function comparisonAchievedBy(ageHit, band) {
+      if (ageHit == null || ageHit === "") return false;
+      const a = Number(ageHit);
+      if (!Number.isFinite(a)) return false;
+      if (band === "28+") return true; // ever achieved
+      return a <= Number(band);
+    }
+
+    function comparisonCell(athletes, band, key) {
+      const hits = [];
+      athletes.forEach((ath) => {
+        const ageHit = ath[key];
+        if (comparisonAchievedBy(ageHit, band)) {
+          hits.push({ name: ath.name, age: ageHit });
+        }
+      });
+      hits.sort((a, b) => a.age - b.age || String(a.name).localeCompare(String(b.name)));
+      const n = athletes.length || 1;
+      const pct = Math.round((hits.length / n) * 1000) / 10; // one decimal
+      return { hits, pct, count: hits.length, total: athletes.length };
+    }
+
+    function renderCareerComparison() {
+      const host = document.getElementById("career-comparison");
+      if (!host) return;
+      const show = tab === "races" && raceMode === "year";
+      if (!show) {
+        host.hidden = true;
+        host.innerHTML = "";
+        return;
+      }
+      const athletes = CAREER_COMPARISON_ATHLETES || [];
+      const cols = CAREER_COMPARISON_COLS;
+      const ages = CAREER_COMPARISON_AGES;
+      let body = ages.map((band) => {
+        const ageLabel = band === "28+" ? "28+" : String(band);
+        const cells = cols.map((col) => {
+          const cell = comparisonCell(athletes, band, col.key);
+          const tipRows = cell.hits.length
+            ? cell.hits.map((h) =>
+                `<div class="tip-row"><span>${esc(h.name)}</span><span>Age ${h.age}</span></div>`
+              ).join("")
+            : `<div class="tip-empty">No athletes in sample hit this by age ${esc(ageLabel)}</div>`;
+          const tip =
+            `<div class="cmp-tip" role="tooltip">` +
+              `<div class="tip-title">${esc(col.label)} by ${esc(ageLabel)} · ${cell.count}/${cell.total}</div>` +
+              tipRows +
+            `</div>`;
+          const cls = "cmp-cell" + (cell.count ? " has-hits" : " zero");
+          const pctLabel = cell.total ? (Number.isInteger(cell.pct) ? cell.pct + "%" : cell.pct.toFixed(1) + "%") : "—";
+          const tint = cell.count
+            ? `background: ${col.color}22; color: ${col.color};`
+            : `color: ${col.color}99;`;
+          return `<td class="${cls}" tabindex="0" style="${tint}">${pctLabel}${tip}</td>`;
+        }).join("");
+        return `<tr><th scope="row">Age ${esc(ageLabel)}</th>${cells}</tr>`;
+      }).join("");
+
+      const headCols = cols.map((c) =>
+        `<th scope="col" class="cmp-col-head" style="color:${c.color};border-bottom:2px solid ${c.color}">${esc(c.label)}</th>`
+      ).join("");
+      host.hidden = false;
+      host.className = "milestones collapsible-panel career-comparison" + (comparisonCollapsed ? " is-collapsed" : "");
+      host.innerHTML =
+        `<button type="button" class="collapse-head" aria-expanded="${comparisonCollapsed ? "false" : "true"}">` +
+          `<h3>Career Comparison</h3>` +
+          `<span class="milestones-count">${athletes.length} athletes</span>` +
+          `<span class="collapse-chevron" aria-hidden="true"></span>` +
+        `</button>` +
+        `<div class="collapse-body">` +
+          (CAREER_COMPARISON_IS_SAMPLE
+            ? `<p class="sample-note">Preview with sample athlete data — percentages update when you provide the 7 international athletes.</p>`
+            : "") +
+          `<div class="cmp-table-wrap"><table class="cmp-table">` +
+            `<thead><tr><th scope="col">Age Milestone Achieved</th>${headCols}</tr></thead>` +
+            `<tbody>${body}</tbody>` +
+          `</table></div>` +
+        `</div>`;
+
+      const btn = host.querySelector(".collapse-head");
+      if (btn) {
+        btn.addEventListener("click", () => {
+          comparisonCollapsed = !comparisonCollapsed;
+          renderCareerComparison();
+        });
+      }
+    }
+
     function renderMilestones(series) {
       const host = document.getElementById("milestones");
       if (!host) return;
@@ -2322,13 +2598,19 @@
       if (!milestones.length) {
         host.innerHTML = "";
         host.hidden = true;
+        renderCareerComparison();
         return;
       }
       host.hidden = tab !== "races" || raceMode !== "year";
+      host.className = "milestones collapsible-panel" + (milestonesCollapsed ? " is-collapsed" : "");
       host.innerHTML =
-        "<div class=\"milestones-head\"><h3>Career Milestones</h3>" +
-        "<span class=\"milestones-count\">" + milestones.length + " reached</span></div>" +
-        "<div class=\"milestones-list\">" +
+        `<button type="button" class="collapse-head" aria-expanded="${milestonesCollapsed ? "false" : "true"}">` +
+          `<h3>Career Milestones</h3>` +
+          `<span class="milestones-count">` + milestones.length + ` reached</span>` +
+          `<span class="collapse-chevron" aria-hidden="true"></span>` +
+        `</button>` +
+        `<div class="collapse-body">` +
+          `<div class="milestones-list">` +
         milestones.map((m) => {
           const meta = [];
           if (m.y != null) meta.push("<span>" + m.y + "</span>");
@@ -2343,13 +2625,28 @@
               "<div class=\"milestone-mark\" aria-hidden=\"true\"><span class=\"dot-ring\"></span></div>" +
               "<div class=\"milestone-body\">" +
                 "<span class=\"label\">" + esc(m.label) + "</span>" +
-                (m.race ? "<span class=\"race\">" + esc(m.race) + "</span>" : "") +
+                (m.race || m.qp != null
+                  ? "<span class=\"race\">" +
+                      (m.race ? esc(m.race) : "") +
+                      (m.race && m.qp != null ? " · " : "") +
+                      (m.qp != null ? "QP " + esc(m.qp) : "") +
+                    "</span>"
+                  : "") +
                 "<div class=\"meta\">" + meta.join("") + "</div>" +
               "</div>" +
             "</div>"
           );
         }).join("") +
-        "</div>";
+          `</div>` +
+        `</div>`;
+      const btn = host.querySelector(".collapse-head");
+      if (btn) {
+        btn.addEventListener("click", () => {
+          milestonesCollapsed = !milestonesCollapsed;
+          renderMilestones(series);
+        });
+      }
+      renderCareerComparison();
     }
 
     function drawRaceChart(series) {
