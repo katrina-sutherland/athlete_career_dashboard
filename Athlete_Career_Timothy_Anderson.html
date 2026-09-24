@@ -435,40 +435,50 @@
     }
     .cmp-table-wrap {
       width: 100%;
-      overflow-x: auto;
-      overflow-y: visible;
+      overflow: visible;
       padding-top: 4px;
       padding-bottom: 4px;
     }
     .cmp-table {
       width: 100%;
+      table-layout: fixed;
       border-collapse: collapse;
       font-variant-numeric: tabular-nums;
-      min-width: 720px;
     }
     .cmp-table th,
     .cmp-table td {
       border: 1px solid rgba(255,255,255,0.08);
-      padding: 10px 8px;
+      padding: 12px 6px;
       text-align: center;
-      font-size: 12px;
-      line-height: 16px;
+      font-size: 14px;
+      line-height: 18px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
     .cmp-table thead th {
       background: rgba(255,255,255,0.04);
       color: var(--text-2);
       font-weight: 650;
-      font-size: 11px;
-      letter-spacing: 0.03em;
+      font-size: 12px;
+      letter-spacing: 0.02em;
       text-transform: uppercase;
+      line-height: 15px;
+      white-space: normal;
+      hyphens: auto;
+    }
+    .cmp-table thead th:first-child {
+      width: 11%;
+      font-size: 12px;
     }
     .cmp-table tbody th {
       text-align: left;
       color: var(--text);
       font-weight: 650;
       background: rgba(255,255,255,0.03);
-      white-space: nowrap;
-      padding-left: 12px;
+      white-space: normal;
+      padding-left: 10px;
+      font-size: 14px;
+      line-height: 18px;
     }
     .cmp-cell {
       position: relative;
@@ -522,7 +532,7 @@
       display: block;
     }
     .cmp-tip .tip-title {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 650;
       color: var(--text);
       margin-bottom: 6px;
@@ -532,8 +542,8 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      font-size: 11px;
-      line-height: 16px;
+      font-size: 12px;
+      line-height: 17px;
       color: var(--text-2);
       padding: 1px 0;
     }
@@ -2865,7 +2875,7 @@
             ? `<p class="sample-note">Preview with sample athlete data — percentages update when you provide the 7 international athletes.</p>`
             : "") +
           `<div class="cmp-table-wrap"><table class="cmp-table">` +
-            `<thead><tr><th scope="col">Age Milestone Achieved</th>${headCols}</tr></thead>` +
+            `<thead><tr><th scope="col">Age</th>${headCols}</tr></thead>` +
             `<tbody>${body}</tbody>` +
           `</table></div>` +
           `<p class="cmp-legend"><span class="cmp-tim-mark yes" style="display:inline-flex;vertical-align:middle;margin-right:4px">✓</span> Tim had achieved by this age &nbsp;·&nbsp; <span class="cmp-tim-mark no" style="display:inline-flex;vertical-align:middle;margin:0 4px">✗</span> Tim had not (yet)</p>` +
