@@ -128,6 +128,46 @@
     .legend[hidden] { display: none; }
     .field[hidden] { display: none; }
 
+    .pie-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      margin: 4px 0 20px;
+      padding: 12px 8px 4px;
+    }
+    .pie-wrap[hidden] { display: none; }
+    .pie-svg { width: min(280px, 100%); height: auto; flex: 0 0 auto; }
+    .pie-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-2);
+      min-width: 220px;
+    }
+    .pie-legend .row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      line-height: 18px;
+    }
+    .pie-legend .pct {
+      margin-left: auto;
+      color: var(--text);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .pie-title {
+      width: 100%;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-2);
+      margin: 0 0 4px;
+    }
+
     .milestones {
       margin: 20px 0 8px;
       padding: 20px 20px 8px;
@@ -389,6 +429,46 @@
 
     .field[hidden] { display: none; }
 
+    .pie-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      margin: 4px 0 20px;
+      padding: 12px 8px 4px;
+    }
+    .pie-wrap[hidden] { display: none; }
+    .pie-svg { width: min(280px, 100%); height: auto; flex: 0 0 auto; }
+    .pie-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-2);
+      min-width: 220px;
+    }
+    .pie-legend .row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      line-height: 18px;
+    }
+    .pie-legend .pct {
+      margin-left: auto;
+      color: var(--text);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .pie-title {
+      width: 100%;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-2);
+      margin: 0 0 4px;
+    }
+
   </style>
 </head>
 <body>
@@ -420,6 +500,7 @@
     </div>
     <div class="panel" id="panel-races" hidden>
       <div class="tiles tiles-2" id="race-tiles"></div>
+      <div class="pie-wrap" id="race-pie" hidden></div>
       <div class="chart-wrap" id="race-chart"></div>
       <div class="legend" id="race-legend">
         <span><span class="dot" style="width:11px;height:11px;background:#d4a017;opacity:0.55;vertical-align:middle"></span> Olympic Games</span>
@@ -444,435 +525,435 @@
 {
   "Timothy ANDERSON": {
     "MK1": [
-             {
-               "y": 2009,
-               "r": [
-                 [
-                   "Australian Open Penrith 2009",
-                   "ot"
-                 ],
-                 [
-                   "Australian Schools Championships Eildon 2009",
-                   "ot"
-                 ]
-               ],
-               "a": 15
-             },
-             {
-               "y": 2010,
-               "r": [
-                 [
-                   "World Championships Foix 2010",
-                   "uj"
-                 ]
-               ],
-               "a": 16
-             },
-             {
-               "y": 2012,
-               "r": [
-                 [
-                   "Oceania Championships Penrith 2012",
-                   "ot"
-                 ],
-                 [
-                   "World Championships Wausau 2012",
-                   "uj"
-                 ]
-               ],
-               "a": 18
-             },
-             {
-               "y": 2013,
-               "r": [
-                 [
-                   "World Championships Liptovsky Mikulas 2013",
-                   "uj"
-                 ]
-               ],
-               "a": 19
-             },
-             {
-               "y": 2014,
-               "r": [
-                 [
-                   "Australian Open Penrith 2014",
-                   "ot"
-                 ],
-                 [
-                   "Oceania Championships Penrith 2014",
-                   "ot"
-                 ],
-                 [
-                   "World Championships Penrith 2014",
-                   "uj"
-                 ]
-               ],
-               "a": 20
-             },
-             {
-               "y": 2015,
-               "r": [
-                 [
-                   "ICF World Ranking Penrith 2015",
-                   "wr"
-                 ],
-                 [
-                   "ICF World Ranking Ivrea 2015",
-                   "wr"
-                 ],
-                 [
-                   "ICF World Ranking Meran 2015",
-                   "wr"
-                 ],
-                 [
-                   "ICF World Ranking Tacen 2015",
-                   "wr"
-                 ],
-                 [
-                   "Pyrenees Cup La Seu 2015",
-                   "ot"
-                 ],
-                 [
-                   "Slovak Open Bratislava 2015",
-                   "ot"
-                 ],
-                 [
-                   "World Championships Foz do Iguassu 2015",
-                   "uj"
-                 ]
-               ],
-               "a": 21
-             },
-             {
-               "y": 2016,
-               "r": [
-                 [
-                   "ICF World Ranking Penrith 2016",
-                   "wr"
-                 ],
-                 [
-                   "World Cup Tacen 2016",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Prague 2016",
-                   "sg"
-                 ],
-                 [
-                   "World Championships Krakow 2016",
-                   "uj"
-                 ]
-               ],
-               "a": 22
-             },
-             {
-               "y": 2017,
-               "r": [
-                 [
-                   "Oceania Championships Auckland 2017",
-                   "ot"
-                 ],
-                 [
-                   "ICF World Ranking Penrith 2017",
-                   "wr"
-                 ],
-                 [
-                   "Pyrenees Cup Pau 2017",
-                   "ot"
-                 ],
-                 [
-                   "World Cup Augsburg 2017",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Prague 2017",
-                   "sg"
-                 ],
-                 [
-                   "World Championships Bratislava 2017",
-                   "uj"
-                 ],
-                 [
-                   "ICF World Ranking Bratislava 2017",
-                   "wr"
-                 ]
-               ],
-               "a": 23
-             },
-             {
-               "y": 2018,
-               "r": [
-                 [
-                   "Oceania Championships Auckland 2018",
-                   "ot"
-                 ],
-                 [
-                   "ICF World Ranking Penrith 2018",
-                   "wr"
-                 ],
-                 [
-                   "World Cup Augsburg 2018",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Krakow 2018",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Liptovsky Mikulas 2018",
-                   "sg"
-                 ],
-                 [
-                   "World Cup La Seu 2018",
-                   "sg"
-                 ],
-                 [
-                   "World Championships Deodoro, Rio 2018",
-                   "sg"
-                 ]
-               ],
-               "a": 24
-             },
-             {
-               "y": 2019,
-               "r": [
-                 [
-                   "Australian Open Penrith 2019",
-                   "ot"
-                 ],
-                 [
-                   "Oceania Championships Penrith 2019",
-                   "ot"
-                 ],
-                 [
-                   "World Cup Lee Valley 2019",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Bratislava 2019",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Tacen 2019",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Prague 2019",
-                   "sg"
-                 ],
-                 [
-                   "World Championships La Seu 2019",
-                   "sg"
-                 ]
-               ],
-               "a": 25
-             },
-             {
-               "y": 2020,
-               "r": [
-                 [
-                   "Oceania Championships Auckland 2020",
-                   "ot"
-                 ],
-                 [
-                   "Australian Open Penrith 2020",
-                   "ot"
-                 ]
-               ],
-               "a": 26
-             },
-             {
-               "y": 2022,
-               "r": [
-                 [
-                   "Oceania Championships Penrith 2022",
-                   "ot"
-                 ],
-                 [
-                   "Australian Open Penrith 2022",
-                   "ot"
-                 ],
-                 [
-                   "World Cup Pau 2022",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Prague 2022",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Tacen 2022",
-                   "sg"
-                 ],
-                 [
-                   "ICF World Ranking Augsburg 2022",
-                   "wr"
-                 ],
-                 [
-                   "World Championships Augsburg 2022",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Krakow 2022",
-                   "sg"
-                 ],
-                 [
-                   "World Cup La Seu 2022",
-                   "sg"
-                 ]
-               ],
-               "a": 28
-             },
-             {
-               "y": 2023,
-               "r": [
-                 [
-                   "Penrith Open Penrith 2023",
-                   "ot"
-                 ],
-                 [
-                   "Australian Open Penrith 2023",
-                   "ot"
-                 ],
-                 [
-                   "Pyrenees Cup La Seu 2023",
-                   "ot"
-                 ],
-                 [
-                   "World Cup Tacen 2023",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Prague 2023",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Augsburg 2023",
-                   "sg"
-                 ],
-                 [
-                   "World Cup La Seu 2023",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Vaires sur Marne 2023",
-                   "sg"
-                 ],
-                 [
-                   "World Championships Lee Valley 2023",
-                   "sg"
-                 ]
-               ],
-               "a": 29
-             },
-             {
-               "y": 2024,
-               "r": [
-                 [
-                   "Oceania Championships Penrith 2024",
-                   "ot"
-                 ],
-                 [
-                   "Australian Open Penrith 2024",
-                   "ot"
-                 ],
-                 [
-                   "World Cup Ivrea 2024",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Prague 2024",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Krakow 2024",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Augsburg 2024",
-                   "sg"
-                 ],
-                 [
-                   "Olympic Games Paris 2024",
-                   "ol"
-                 ],
-                 [
-                   "World Cup La Seu 2024",
-                   "sg"
-                 ]
-               ],
-               "a": 30
-             },
-             {
-               "y": 2025,
-               "r": [
-                 [
-                   "Oceania Championships Penrith 2025",
-                   "ot"
-                 ],
-                 [
-                   "Australian Open Penrith 2025",
-                   "ot"
-                 ],
-                 [
-                   "World Cup La Seu 2025",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Pau 2025",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Prague 2025",
-                   "sg"
-                 ],
-                 [
-                   "World Championships Penrith 2025",
-                   "sg"
-                 ]
-               ],
-               "a": 31
-             },
-             {
-               "y": 2026,
-               "r": [
-                 [
-                   "Oceania Championships Auckland 2026",
-                   "ot"
-                 ],
-                 [
-                   "Penrith Open Penrith 2026",
-                   "ot"
-                 ],
-                 [
-                   "Australian Open Penrith 2026",
-                   "ot"
-                 ],
-                 [
-                   "ICF World Ranking Oklahoma 2026",
-                   "wr"
-                 ],
-                 [
-                   "World Cup Prague 2026",
-                   "sg"
-                 ],
-                 [
-                   "World Championships Oklahoma 2026",
-                   "sg"
-                 ],
-                 [
-                   "World Cup Vaires sur Marne 2026",
-                   "sg"
-                 ],
-                 [
-                   "World Cup La Seu 2026",
-                   "sg"
-                 ]
-               ],
-               "a": 32
-             }
-           ]
+      {
+        "y": 2009,
+        "r": [
+          [
+            "Australian Open Penrith 2009",
+            "wr"
+          ],
+          [
+            "Australian Schools Championships Eildon 2009",
+            "ot"
+          ]
+        ],
+        "a": 15
+      },
+      {
+        "y": 2010,
+        "r": [
+          [
+            "World Championships Foix 2010",
+            "uj"
+          ]
+        ],
+        "a": 16
+      },
+      {
+        "y": 2012,
+        "r": [
+          [
+            "Oceania Championships Penrith 2012",
+            "ot"
+          ],
+          [
+            "World Championships Wausau 2012",
+            "uj"
+          ]
+        ],
+        "a": 18
+      },
+      {
+        "y": 2013,
+        "r": [
+          [
+            "World Championships Liptovsky Mikulas 2013",
+            "uj"
+          ]
+        ],
+        "a": 19
+      },
+      {
+        "y": 2014,
+        "r": [
+          [
+            "Australian Open Penrith 2014",
+            "wr"
+          ],
+          [
+            "Oceania Championships Penrith 2014",
+            "ot"
+          ],
+          [
+            "World Championships Penrith 2014",
+            "uj"
+          ]
+        ],
+        "a": 20
+      },
+      {
+        "y": 2015,
+        "r": [
+          [
+            "ICF World Ranking Penrith 2015",
+            "wr"
+          ],
+          [
+            "ICF World Ranking Ivrea 2015",
+            "wr"
+          ],
+          [
+            "ICF World Ranking Meran 2015",
+            "wr"
+          ],
+          [
+            "ICF World Ranking Tacen 2015",
+            "wr"
+          ],
+          [
+            "Pyrenees Cup La Seu 2015",
+            "wr"
+          ],
+          [
+            "Slovak Open Bratislava 2015",
+            "ot"
+          ],
+          [
+            "World Championships Foz do Iguassu 2015",
+            "uj"
+          ]
+        ],
+        "a": 21
+      },
+      {
+        "y": 2016,
+        "r": [
+          [
+            "ICF World Ranking Penrith 2016",
+            "wr"
+          ],
+          [
+            "World Cup Tacen 2016",
+            "sg"
+          ],
+          [
+            "World Cup Prague 2016",
+            "sg"
+          ],
+          [
+            "World Championships Krakow 2016",
+            "uj"
+          ]
+        ],
+        "a": 22
+      },
+      {
+        "y": 2017,
+        "r": [
+          [
+            "Oceania Championships Auckland 2017",
+            "ot"
+          ],
+          [
+            "ICF World Ranking Penrith 2017",
+            "wr"
+          ],
+          [
+            "Pyrenees Cup Pau 2017",
+            "wr"
+          ],
+          [
+            "World Cup Augsburg 2017",
+            "sg"
+          ],
+          [
+            "World Cup Prague 2017",
+            "sg"
+          ],
+          [
+            "World Championships Bratislava 2017",
+            "uj"
+          ],
+          [
+            "ICF World Ranking Bratislava 2017",
+            "wr"
+          ]
+        ],
+        "a": 23
+      },
+      {
+        "y": 2018,
+        "r": [
+          [
+            "Oceania Championships Auckland 2018",
+            "ot"
+          ],
+          [
+            "ICF World Ranking Penrith 2018",
+            "wr"
+          ],
+          [
+            "World Cup Augsburg 2018",
+            "sg"
+          ],
+          [
+            "World Cup Krakow 2018",
+            "sg"
+          ],
+          [
+            "World Cup Liptovsky Mikulas 2018",
+            "sg"
+          ],
+          [
+            "World Cup La Seu 2018",
+            "sg"
+          ],
+          [
+            "World Championships Deodoro, Rio 2018",
+            "sg"
+          ]
+        ],
+        "a": 24
+      },
+      {
+        "y": 2019,
+        "r": [
+          [
+            "Australian Open Penrith 2019",
+            "wr"
+          ],
+          [
+            "Oceania Championships Penrith 2019",
+            "ot"
+          ],
+          [
+            "World Cup Lee Valley 2019",
+            "sg"
+          ],
+          [
+            "World Cup Bratislava 2019",
+            "sg"
+          ],
+          [
+            "World Cup Tacen 2019",
+            "sg"
+          ],
+          [
+            "World Cup Prague 2019",
+            "sg"
+          ],
+          [
+            "World Championships La Seu 2019",
+            "sg"
+          ]
+        ],
+        "a": 25
+      },
+      {
+        "y": 2020,
+        "r": [
+          [
+            "Oceania Championships Auckland 2020",
+            "ot"
+          ],
+          [
+            "Australian Open Penrith 2020",
+            "wr"
+          ]
+        ],
+        "a": 26
+      },
+      {
+        "y": 2022,
+        "r": [
+          [
+            "Oceania Championships Penrith 2022",
+            "ot"
+          ],
+          [
+            "Australian Open Penrith 2022",
+            "wr"
+          ],
+          [
+            "World Cup Pau 2022",
+            "sg"
+          ],
+          [
+            "World Cup Prague 2022",
+            "sg"
+          ],
+          [
+            "World Cup Tacen 2022",
+            "sg"
+          ],
+          [
+            "ICF World Ranking Augsburg 2022",
+            "wr"
+          ],
+          [
+            "World Championships Augsburg 2022",
+            "sg"
+          ],
+          [
+            "World Cup Krakow 2022",
+            "sg"
+          ],
+          [
+            "World Cup La Seu 2022",
+            "sg"
+          ]
+        ],
+        "a": 28
+      },
+      {
+        "y": 2023,
+        "r": [
+          [
+            "Penrith Open Penrith 2023",
+            "wr"
+          ],
+          [
+            "Australian Open Penrith 2023",
+            "wr"
+          ],
+          [
+            "Pyrenees Cup La Seu 2023",
+            "wr"
+          ],
+          [
+            "World Cup Tacen 2023",
+            "sg"
+          ],
+          [
+            "World Cup Prague 2023",
+            "sg"
+          ],
+          [
+            "World Cup Augsburg 2023",
+            "sg"
+          ],
+          [
+            "World Cup La Seu 2023",
+            "sg"
+          ],
+          [
+            "World Cup Vaires sur Marne 2023",
+            "sg"
+          ],
+          [
+            "World Championships Lee Valley 2023",
+            "sg"
+          ]
+        ],
+        "a": 29
+      },
+      {
+        "y": 2024,
+        "r": [
+          [
+            "Oceania Championships Penrith 2024",
+            "ot"
+          ],
+          [
+            "Australian Open Penrith 2024",
+            "wr"
+          ],
+          [
+            "World Cup Ivrea 2024",
+            "sg"
+          ],
+          [
+            "World Cup Prague 2024",
+            "sg"
+          ],
+          [
+            "World Cup Krakow 2024",
+            "sg"
+          ],
+          [
+            "World Cup Augsburg 2024",
+            "sg"
+          ],
+          [
+            "Olympic Games Paris 2024",
+            "ol"
+          ],
+          [
+            "World Cup La Seu 2024",
+            "sg"
+          ]
+        ],
+        "a": 30
+      },
+      {
+        "y": 2025,
+        "r": [
+          [
+            "Oceania Championships Penrith 2025",
+            "ot"
+          ],
+          [
+            "Australian Open Penrith 2025",
+            "wr"
+          ],
+          [
+            "World Cup La Seu 2025",
+            "sg"
+          ],
+          [
+            "World Cup Pau 2025",
+            "sg"
+          ],
+          [
+            "World Cup Prague 2025",
+            "sg"
+          ],
+          [
+            "World Championships Penrith 2025",
+            "sg"
+          ]
+        ],
+        "a": 31
+      },
+      {
+        "y": 2026,
+        "r": [
+          [
+            "Oceania Championships Auckland 2026",
+            "ot"
+          ],
+          [
+            "Penrith Open Penrith 2026",
+            "wr"
+          ],
+          [
+            "Australian Open Penrith 2026",
+            "wr"
+          ],
+          [
+            "ICF World Ranking Oklahoma 2026",
+            "wr"
+          ],
+          [
+            "World Cup Prague 2026",
+            "sg"
+          ],
+          [
+            "World Championships Oklahoma 2026",
+            "sg"
+          ],
+          [
+            "World Cup Vaires sur Marne 2026",
+            "sg"
+          ],
+          [
+            "World Cup La Seu 2026",
+            "sg"
+          ]
+        ],
+        "a": 32
+      }
+    ]
   }
 }
   </script>
@@ -1932,7 +2013,7 @@
     }
     /* SNR medal milestone only (semi/final derived from RACE_RESULT_DETAILS).
        Eligible: ICF World Ranking, World Cup, SNR World Championships, Olympic Games,
-       Oceania Championships, Australian Open, Penrith Open. */
+       Oceania Championships. Australian Open, Penrith Open, and Pyrenees Cup count as ICF World Ranking races. */
     const RESULT_MILESTONES = [
       {"a": 32, "y": 2026, "label": "First SNR Medal", "race": "Oceania Championships Auckland 2026", "qp": 25.27}
     ];
@@ -1962,6 +2043,13 @@
       if (cumLegend) {
         cumLegend.hidden = tab !== "races" || raceMode !== "cum";
         if (raceMode !== "cum") cumLegend.innerHTML = "";
+      }
+      const racePie = document.getElementById("race-pie");
+      if (racePie) {
+        if (tab !== "races" || raceMode !== "cum") {
+          racePie.hidden = true;
+          racePie.innerHTML = "";
+        }
       }
       const ageDetail = document.getElementById("age-detail");
       if (ageDetail) {
@@ -2125,7 +2213,7 @@
       add(firstU23PhaseMilestone(series, "Semi"), "First U23 Semi Final");
       add(firstU23PhaseMilestone(series, "Final"), "First U23 Final");
       add(
-        firstRaceMatching(series, (name, kind) => kind === "wr" || /icf world ranking/i.test(name)),
+        firstRaceMatching(series, (name, kind) => kind === "wr" || /icf world ranking|australian open|penrith open|pyrenees cup/i.test(name)),
         "First ICF World Ranking Race"
       );
       add(
@@ -2511,6 +2599,88 @@
       host.hidden = false;
     }
 
+
+    const RACE_TYPE_PIE = [
+      { key: "ol", label: "Olympic Games", color: "#d4a017" },
+      { key: "sg", label: "SNR World Championships & World Cups", color: "#3fa266" },
+      { key: "uj", label: "U23 & JNR World Championships", color: "#e67e22" },
+      { key: "wr", label: "ICF World Ranking races", color: "#9386f2" },
+      { key: "ot", label: "All other races", color: "#5a9ce6" }
+    ];
+
+    function raceTypeKey(name, kind) {
+      const n = String(name || "");
+      const k = String(kind || "");
+      if (k === "ol" || /olympic/i.test(n)) return "ol";
+      if (k === "uj" || /\bjnr\b|junior|u23/i.test(n)) return "uj";
+      if (k === "sg" || /world cup|world championships/i.test(n)) return "sg";
+      if (k === "wr" || /icf world ranking|australian open|penrith open|pyrenees cup/i.test(n)) return "wr";
+      return "ot";
+    }
+
+    function raceTypeCounts(name) {
+      const byClass = RACES[name] || {};
+      const counts = { ol: 0, sg: 0, uj: 0, wr: 0, ot: 0 };
+      let total = 0;
+      Object.keys(byClass).forEach((cls) => {
+        (byClass[cls] || []).forEach((g) => {
+          (g.r || []).forEach((item) => {
+            const key = raceTypeKey(item[0], item[1]);
+            counts[key] = (counts[key] || 0) + 1;
+            total += 1;
+          });
+        });
+      });
+      return { counts, total };
+    }
+
+    function polar(cx, cy, r, angle) {
+      return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
+    }
+
+    function pieSlicePath(cx, cy, r, a0, a1) {
+      if (a1 - a0 >= Math.PI * 2 - 1e-6) {
+        return `M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy} A ${r} ${r} 0 1 1 ${cx - r} ${cy}`;
+      }
+      const [x0, y0] = polar(cx, cy, r, a0);
+      const [x1, y1] = polar(cx, cy, r, a1);
+      const large = (a1 - a0) > Math.PI ? 1 : 0;
+      return `M ${cx} ${cy} L ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1} Z`;
+    }
+
+    function renderRaceTypePie(name) {
+      const host = document.getElementById("race-pie");
+      if (!host) return;
+      const { counts, total } = raceTypeCounts(name);
+      if (!total) {
+        host.innerHTML = `<div class="empty" style="padding:12px 0">No races available for the pie chart.</div>`;
+        host.hidden = false;
+        return;
+      }
+      const cx = 120, cy = 120, r = 96;
+      let angle = -Math.PI / 2;
+      let slices = "";
+      const rows = [];
+      RACE_TYPE_PIE.forEach((t) => {
+        const n = counts[t.key] || 0;
+        if (!n) return;
+        const frac = n / total;
+        const a1 = angle + frac * Math.PI * 2;
+        slices += `<path d="${pieSlicePath(cx, cy, r, angle, a1)}" fill="${t.color}" stroke="#181818" stroke-width="2" opacity="0.9"><title>${esc(t.label)}: ${n} (${(frac * 100).toFixed(1)}%)</title></path>`;
+        rows.push({ ...t, n, pct: frac * 100 });
+        angle = a1;
+      });
+      const legend = rows.map((t) =>
+        `<div class="row"><span class="dot" style="width:11px;height:11px;background:${t.color};opacity:0.9;flex:0 0 auto"></span><span>${esc(t.label)}</span><span class="pct">${t.pct.toFixed(1)}%</span></div>`
+      ).join("");
+      host.innerHTML = `
+        <div class="pie-title">Race mix across career</div>
+        <svg class="pie-svg" viewBox="0 0 240 240" role="img" aria-label="Share of race types across career">${slices}</svg>
+        <div class="pie-legend">${legend}</div>
+      `;
+      host.hidden = false;
+    }
+
     function drawCumulativeChart(name) {
       const milestonesEl = document.getElementById("milestones");
       if (milestonesEl) { milestonesEl.hidden = true; milestonesEl.innerHTML = ""; }
@@ -2519,6 +2689,7 @@
       const classList = CLASS_ORDER.filter((c) => (byClass[c] || []).length);
       const all = classList.flatMap((c) => byClass[c]);
       renderCumulativeTiles(name);
+      renderRaceTypePie(name);
       host.innerHTML = "";
       const series = classList.map((cls) => {
         const aged = (byClass[cls] || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a);
