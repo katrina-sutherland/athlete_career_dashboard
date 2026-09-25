@@ -2294,12 +2294,12 @@
       return ticks;
     }
     const RANK_OVERLAY_COL = "#ffffff";
-    /* MK1-only cumulative-race IQR band — peers from 2026-09-25-1326 list
-       (dataset n=17 MK1: AIGNER, BEDA, CASTRYCK, CLARKE, CRESPO, ECHANIZ, EIGEL, GENNARO, GRIGAR, KAUZER, KREJCI, LLORENTE, NEVEU, PRINDIS, PRSKAVEC, SOUDI, TUNKA).
-       IQR from peers with recorded MK1 start ≤18 (CASTRYCK, ECHANIZ, GRIGAR, KREJCI, SOUDI).
-       Source list is WR-release CSV; race counts from MK1 results + Aus domestic.
-       Per age: Q1/Q3 → Tukey filter → recompute → non-decreasing Q1/Q3. */
-    const PEER_CUM_IQR_BAND = [{"a":16,"q1":2.5,"q3":3.0,"n":3},{"a":17,"q1":7.5,"q3":10.0,"n":3},{"a":18,"q1":12.5,"q3":16.5,"n":3},{"a":19,"q1":12.5,"q3":17.0,"n":5},{"a":20,"q1":14.0,"q3":27.0,"n":5},{"a":21,"q1":24.0,"q3":34.0,"n":5},{"a":22,"q1":40.0,"q3":41.5,"n":3},{"a":23,"q1":40.0,"q3":49.0,"n":4},{"a":24,"q1":43.5,"q3":61.25,"n":4},{"a":25,"q1":45.5,"q3":63.0,"n":3},{"a":26,"q1":45.75,"q3":63.0,"n":2},{"a":27,"q1":54.0,"q3":63.0,"n":2}];
+    /* MK1 cumulative IQR from WR POINTSR race slots (2026-09-25-1326).
+       Cohort start<=18 (n=10): BEDA, CASTRYCK, CLARKE, ECHANIZ, GENNARO,
+       GRIGAR, KREJCI, LLORENTE, PRSKAVEC, SOUDI.
+       Unique races across releases; age = race_year - birth_year;
+       Q1/Q3 → Tukey filter → recompute → non-decreasing. */
+    const PEER_CUM_IQR_BAND = [{"a":15,"q1":1.5,"q3":3.5,"n":3},{"a":16,"q1":3.0,"q3":7.0,"n":5},{"a":17,"q1":3.0,"q3":9.5,"n":8},{"a":18,"q1":6.0,"q3":9.5,"n":9},{"a":19,"q1":8.5,"q3":19.0,"n":10},{"a":20,"q1":11.5,"q3":28.5,"n":10},{"a":21,"q1":16.0,"q3":35.25,"n":10},{"a":22,"q1":21.5,"q3":43.5,"n":10},{"a":23,"q1":29.0,"q3":49.0,"n":9},{"a":24,"q1":31.0,"q3":56.0,"n":9},{"a":25,"q1":35.0,"q3":64.25,"n":8},{"a":26,"q1":39.5,"q3":72.0,"n":7},{"a":27,"q1":47.0,"q3":76.5,"n":7},{"a":28,"q1":52.25,"q3":77.75,"n":6},{"a":29,"q1":62.75,"q3":85.5,"n":6},{"a":30,"q1":76.0,"q3":91.0,"n":5},{"a":31,"q1":80.5,"q3":104.0,"n":4},{"a":32,"q1":96.0,"q3":117.0,"n":3},{"a":33,"q1":106.0,"q3":129.0,"n":3},{"a":34,"q1":106.0,"q3":129.0,"n":2}];
     const PEER_IQR_FILL = "rgba(255, 158, 128, 0.38)";
     const PEER_IQR_STROKE = "rgba(255, 130, 100, 0.55)";
     function rankingGroups() {
@@ -3469,7 +3469,7 @@
         legend.innerHTML = series.map((s) =>
           `<span><span class="dot" style="width:11px;height:11px;background:${s.color};opacity:0.75;vertical-align:middle"></span> ${esc(s.cls)}</span>`
         ).join("") +
-          `<span><span class="dot" style="width:14px;height:10px;border-radius:2px;background:${PEER_IQR_FILL};border:1px solid ${PEER_IQR_STROKE};vertical-align:middle"></span> BME medallist IQR</span>` +
+          `<span><span class="dot" style="width:14px;height:10px;border-radius:2px;background:${PEER_IQR_FILL};border:1px solid ${PEER_IQR_STROKE};vertical-align:middle"></span> WR peer race IQR</span>` +
           `<span><span class="dot" style="width:11px;height:3px;border-radius:1px;background:${RANK_OVERLAY_COL};vertical-align:middle"></span> World Ranking</span>`;
       }
       if (!all.length) {
