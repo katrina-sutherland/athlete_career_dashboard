@@ -2293,13 +2293,13 @@
       for (let v = step; v <= max; v += step) ticks.push(v);
       return ticks;
     }
-    const RANK_OVERLAY_COL = "#e8e8e8";
+    const RANK_OVERLAY_COL = "#ffffff";
     /* MK1 cumulative-race IQR band from 7 BME medallists
        (Castryck, Clarke, De Gennaro, Echaniz, Krejci, Prskavec, Soudi).
        Per age: cum race counts → Q1/Q3 → drop Tukey outliers → recompute Q1/Q3. */
     const PEER_CUM_IQR_BAND = [{"a":16,"q1":2.0,"q3":2.5,"n":3},{"a":17,"q1":6.5,"q3":9.0,"n":3},{"a":18,"q1":8.75,"q3":14.0,"n":4},{"a":19,"q1":12.5,"q3":19.5,"n":4},{"a":20,"q1":17.25,"q3":29.0,"n":4},{"a":21,"q1":25.5,"q3":37.0,"n":4},{"a":22,"q1":20.0,"q3":41.0,"n":5},{"a":23,"q1":1.25,"q3":41.75,"n":6},{"a":24,"q1":4.5,"q3":52.5,"n":6},{"a":25,"q1":11.0,"q3":38.0,"n":5},{"a":26,"q1":16.5,"q3":30.5,"n":4},{"a":27,"q1":24.5,"q3":28.0,"n":3},{"a":28,"q1":25.5,"q3":31.0,"n":3},{"a":29,"q1":32.0,"q3":38.5,"n":3},{"a":30,"q1":41.5,"q3":47.5,"n":3},{"a":31,"q1":51.5,"q3":58.0,"n":3},{"a":32,"q1":59.0,"q3":67.0,"n":3},{"a":33,"q1":67.0,"q3":78.5,"n":3},{"a":34,"q1":75.75,"q3":91.25,"n":2}];
-    const PEER_IQR_FILL = "rgba(72, 168, 156, 0.16)";
-    const PEER_IQR_STROKE = "rgba(48, 130, 118, 0.35)";
+    const PEER_IQR_FILL = "rgba(232, 148, 120, 0.18)";
+    const PEER_IQR_STROKE = "rgba(210, 120, 95, 0.32)";
     function rankingGroups() {
       return ((DATA[athlete] || {})[boatClass] || [])
         .filter((g) => g.a != null)
@@ -2320,12 +2320,12 @@
     function rankLineSvg(xOf, yRank, groups) {
       if (!(groups || []).length) return "";
       const path = groups.map((g, i) => `${i === 0 ? "M" : "L"} ${xOf(g.a)} ${yRank(g.best)}`).join(" ");
-      let s = `<path class="rank-line" d="${path}" fill="none" stroke="${RANK_OVERLAY_COL}" stroke-width="2" opacity="0.75"/>`;
+      let s = `<path class="rank-line" d="${path}" fill="none" stroke="${RANK_OVERLAY_COL}" stroke-width="2.5" opacity="1"/>`;
       groups.forEach((g) => {
         const x = xOf(g.a);
         const y = yRank(g.best);
         s += `<circle cx="${x}" cy="${y}" r="14" fill="transparent"/>`;
-        s += `<circle class="rank-pt" data-age="${g.a}" cx="${x}" cy="${y}" r="5" fill="${RANK_OVERLAY_COL}" stroke="#e8e8e8" stroke-width="1.5" opacity="0.9"/>`;
+        s += `<circle class="rank-pt" data-age="${g.a}" cx="${x}" cy="${y}" r="5" fill="${RANK_OVERLAY_COL}" stroke="#ffffff" stroke-width="1.5" opacity="1"/>`;
       });
       return s;
     }
@@ -3199,7 +3199,7 @@
       renderMilestones(series);
     }
 
-    const CLASS_LINE = { MK1: "#5a9ce6", WK1: "#5a9ce6", MC1: "#9386f2", WC1: "#9386f2", MX1: "#3fa266", WX1: "#c77dff" };
+    const CLASS_LINE = { MK1: "#7ec4ff", WK1: "#7ec4ff", MC1: "#b0a4ff", WC1: "#b0a4ff", MX1: "#5fd48a", WX1: "#dda6ff" };
 
     function renderCumulativeTiles(name) {
       const tiles = document.getElementById("race-tiles");
@@ -3518,12 +3518,12 @@
       });
       series.forEach((s) => {
         const path = s.points.map((p, i) => `${i === 0 ? "M" : "L"} ${xOf(p.a)} ${yCount(p.cum)}`).join(" ");
-        svg += `<path class="cum-line" data-class="${s.cls}" d="${path}" fill="none" stroke="${s.color}" stroke-width="2" opacity="0.75"/>`;
+        svg += `<path class="cum-line" data-class="${s.cls}" d="${path}" fill="none" stroke="${s.color}" stroke-width="2.5" opacity="1"/>`;
         s.points.forEach((p) => {
           const x = xOf(p.a);
           svg += `<g class="cum-pt" data-age="${p.a}" data-class="${p.cls}" style="cursor:pointer">`;
           svg += `<circle cx="${x}" cy="${yCount(p.cum)}" r="14" fill="transparent"/>`;
-          svg += `<circle class="cum-dot" data-age="${p.a}" cx="${x}" cy="${yCount(p.cum)}" r="5" fill="${s.color}" stroke="#e8e8e8" stroke-width="1.5" opacity="0.9"/>`;
+          svg += `<circle class="cum-dot" data-age="${p.a}" cx="${x}" cy="${yCount(p.cum)}" r="5" fill="${s.color}" stroke="#ffffff" stroke-width="1.5" opacity="1"/>`;
           svg += `</g>`;
         });
       });
@@ -3562,7 +3562,7 @@
           el.setAttribute("stroke-width", on ? "2.5" : "1.5");
         });
         host.querySelectorAll(".cum-line, .rank-line").forEach((el) => {
-          el.setAttribute("opacity", age == null ? "0.75" : "0.45");
+          el.setAttribute("opacity", age == null ? "1" : "0.55");
         });
       }
       function selectAge(age) {
