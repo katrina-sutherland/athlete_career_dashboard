@@ -2735,7 +2735,7 @@
        Rules:
        - JNR Final / JNR Medal: Junior World Championships only (overall ranks DB;
          Final≈top 10, Medal=top 3 in the Final)
-       - U23 Final / U23 Medal: U23 World Championships Final / podium only
+       - U23 Final / U23 Medal: U23 World Championships Final / podium only (ages 19–23; junior-age U23 results count as JNR only)
        - WC Top 30 / WC Top 20: first World Cup overall ≤30 / ≤20 (Final, else Semi if DNQ)
        - Top 100 / 50 / 20 WR: first ICF world ranking age (WR releases export)
        - SNR Final: first Final at World Cup / senior Worlds / Olympics
@@ -2743,7 +2743,7 @@
        Sources: BME race CSV, WR releases CSV, JNR Worlds Overall Ranking (K1 Men). */
     const CAREER_COMPARISON_IS_SAMPLE = false;
     const CAREER_COMPARISON_ATHLETES = [
-      { name: "Titouan CASTRYCK", jnrFinal: 17, jnrMedal: {age: 17, medal: "gold"}, u23Final: 17, u23Medal: {age: 17, medal: "gold"}, wcTop30: 18, wcTop20: 18, top100Wr: 18, top50Wr: 18, top20Wr: 19, snrFinal: 18, bmeMedal: {age: 20, medal: "silver"} },
+      { name: "Titouan CASTRYCK", jnrFinal: 17, jnrMedal: {age: 17, medal: "gold"}, u23Final: 19, u23Medal: {age: 19, medal: "bronze"}, wcTop30: 18, wcTop20: 18, top100Wr: 18, top50Wr: 18, top20Wr: 19, snrFinal: 18, bmeMedal: {age: 20, medal: "silver"} },
       { name: "Jakub KREJCI", jnrFinal: 17, jnrMedal: {age: 17, medal: "silver"}, u23Final: 19, u23Medal: {age: 19, medal: "gold"}, wcTop30: 18, wcTop20: 18, top100Wr: 17, top50Wr: 21, top20Wr: 22, snrFinal: 18, bmeMedal: {age: 22, medal: "silver"} },
       { name: "Pau ECHANIZ", jnrFinal: 17, jnrMedal: null, u23Final: 21, u23Medal: null, wcTop30: 20, wcTop20: 20, top100Wr: 20, top50Wr: 22, top20Wr: 23, snrFinal: 20, bmeMedal: {age: 23, medal: "bronze"} },
       { name: "Mathis SOUDI", jnrFinal: null, jnrMedal: null, u23Final: 23, u23Medal: null, wcTop30: 21, wcTop20: 21, top100Wr: 20, top50Wr: 24, top20Wr: null, snrFinal: 24, bmeMedal: {age: 24, medal: "bronze"} },
@@ -2851,7 +2851,7 @@ const CAREER_COMPARISON_COLS = [
     function firstU23MedalMilestone(series) {
       const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
       for (const g of aged) {
-        if (g.a == null || g.a > 23) continue;
+        if (g.a == null || g.a < 19 || g.a > 23) continue;
         for (const item of g.r || []) {
           const name = item[0] || "";
           const n = String(name);
@@ -2948,7 +2948,8 @@ const CAREER_COMPARISON_COLS = [
     /* JNR Final only at junior ages (≤18). U23 Final only through U23 ages (≤23). */
     function comparisonBandRelevant(key, band) {
       if (key === "jnrFinal" || key === "jnrMedal") return band !== "28+" && Number(band) <= 18;
-      if (key === "u23Final" || key === "u23Medal") return band !== "28+" && Number(band) <= 23;
+      // U23 age band only (19–23); age-18 row is junior-only
+      if (key === "u23Final" || key === "u23Medal") return band !== "28+" && Number(band) > 18 && Number(band) <= 23;
       return true;
     }
 
@@ -3045,7 +3046,7 @@ const CAREER_COMPARISON_COLS = [
         const ageLabel = band === "28+" ? "28+" : String(band);
         const cells = cols.map((col) => {
           if (!comparisonBandRelevant(col.key, band)) {
-            const why = (col.key === "jnrFinal" || col.key === "jnrMedal") ? "Junior age only (≤18)" : "U23 age only (≤23)";
+            const why = (col.key === "jnrFinal" || col.key === "jnrMedal") ? "Junior age only (≤18)" : "U23 age only (19–23)";
             return `<td class="cmp-cell na" title="${esc(why)}" aria-label="${esc(col.label)} not applicable at age ${esc(ageLabel)}"><span class="cmp-cell-main">—</span></td>`;
           }
           const cell = comparisonCell(athletes, band, col.key);
