@@ -2295,10 +2295,13 @@
     }
     const RANK_OVERLAY_COL = "#ffffff";
     /* MK1 cumulative IQR from WR POINTSR race slots (2026-09-25-1326).
-       All peers (n=17): AIGNER, BEDA, CASTRYCK, CLARKE, CRESPO, ECHANIZ, EIGEL, GENNARO, GRIGAR, KAUZER, KREJCI, LLORENTE, NEVEU, PRINDIS, PRSKAVEC, SOUDI, TUNKA.
+       Early-career peers with full WR history from ≤18 (n=10): BEDA, CASTRYCK,
+       CLARKE, ECHANIZ, GENNARO, GRIGAR, KREJCI, LLORENTE, PRSKAVEC, SOUDI.
+       (All 17 remain in the comparison set; late WR entrants excluded from IQR
+       so mid-career debuts do not flatten the cumulative band.)
        Unique races across releases; age = race_year - birth_year;
        Q1/Q3 → Tukey filter → recompute → non-decreasing. */
-    const PEER_CUM_IQR_BAND = [{"a":15,"q1":1.5,"q3":3.5,"n":3},{"a":16,"q1":3.0,"q3":7.0,"n":5},{"a":17,"q1":3.0,"q3":9.5,"n":8},{"a":18,"q1":6.0,"q3":9.5,"n":9},{"a":19,"q1":6.0,"q3":11.5,"n":12},{"a":20,"q1":6.0,"q3":16.0,"n":15},{"a":21,"q1":11.5,"q3":22.5,"n":15},{"a":22,"q1":16.5,"q3":36.0,"n":16},{"a":23,"q1":20.0,"q3":36.0,"n":15},{"a":24,"q1":24.75,"q3":52.25,"n":16},{"a":25,"q1":29.0,"q3":52.25,"n":15},{"a":26,"q1":30.5,"q3":52.25,"n":11},{"a":27,"q1":39.5,"q3":52.25,"n":11},{"a":28,"q1":48.5,"q3":55.0,"n":11},{"a":29,"q1":53.75,"q3":71.0,"n":12},{"a":30,"q1":58.0,"q3":79.75,"n":12},{"a":31,"q1":59.5,"q3":80.5,"n":11},{"a":32,"q1":63.5,"q3":80.5,"n":8},{"a":33,"q1":66.25,"q3":84.0,"n":8},{"a":34,"q1":69.25,"q3":89.25,"n":8},{"a":35,"q1":71.0,"q3":95.5,"n":7},{"a":36,"q1":75.5,"q3":104.5,"n":7},{"a":37,"q1":104.5,"q3":111.0,"n":3},{"a":38,"q1":104.5,"q3":111.0,"n":2},{"a":39,"q1":104.5,"q3":111.0,"n":2}];
+    const PEER_CUM_IQR_BAND = [{"a":15,"q1":1.5,"q3":3.5,"n":3},{"a":16,"q1":3.0,"q3":7.0,"n":5},{"a":17,"q1":3.0,"q3":9.5,"n":8},{"a":18,"q1":6.0,"q3":9.5,"n":9},{"a":19,"q1":8.5,"q3":19.0,"n":10},{"a":20,"q1":11.5,"q3":28.5,"n":10},{"a":21,"q1":16.0,"q3":35.25,"n":10},{"a":22,"q1":21.5,"q3":43.5,"n":10},{"a":23,"q1":29.0,"q3":49.0,"n":9},{"a":24,"q1":31.0,"q3":56.0,"n":9},{"a":25,"q1":35.0,"q3":64.25,"n":8},{"a":26,"q1":39.5,"q3":72.0,"n":7},{"a":27,"q1":47.0,"q3":76.5,"n":7},{"a":28,"q1":52.25,"q3":77.75,"n":6},{"a":29,"q1":62.75,"q3":85.5,"n":6},{"a":30,"q1":76.0,"q3":91.0,"n":5},{"a":31,"q1":80.5,"q3":104.0,"n":4},{"a":32,"q1":96.0,"q3":117.0,"n":3},{"a":33,"q1":106.0,"q3":129.0,"n":3},{"a":34,"q1":106.0,"q3":129.0,"n":2}];
     const PEER_IQR_FILL = "rgba(255, 158, 128, 0.38)";
     const PEER_IQR_STROKE = "rgba(255, 130, 100, 0.55)";
     function rankingGroups() {
