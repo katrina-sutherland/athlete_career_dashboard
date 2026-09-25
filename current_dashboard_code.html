@@ -2513,20 +2513,6 @@
       return null;
     }
 
-        function firstWorldCupPhaseMilestone(series, phase) {
-      const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
-      for (const g of aged) {
-        for (const item of g.r || []) {
-          const name = item[0] || "";
-          const kind = item[1] || "";
-          if (!(kind === "sg" && /world cup/i.test(name))) continue;
-          const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
-          if (reachedPhase(d, phase)) return { a: g.a, y: g.y, name: name, kind: kind };
-        }
-      }
-      return null;
-    }
-
     function buildCareerMilestones(series) {
       const rankGroups = ((DATA[athlete] || {})[boatClass] || []).filter((g) => g.a != null);
       const items = [];
@@ -2563,7 +2549,6 @@
         "First SNR World Championships"
       );
       add(firstSnrPhaseMilestone(series, "Semi"), "First SNR Semi Final");
-      add(firstWorldCupPhaseMilestone(series, "Semi"), "First World Cup Semi Final");
       add(firstSnrPhaseMilestone(series, "Final"), "First SNR Final");
       add(
         firstRankMilestone(rankGroups, (g) => g.best <= 100),
