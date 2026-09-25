@@ -2294,10 +2294,9 @@
       return ticks;
     }
     const RANK_OVERLAY_COL = "#ffffff";
-    /* MK1 cumulative-race IQR band — current BME peer CSV only
-       (dataset n=17: AIGNER, BEDA, CASTRYCK, CLARKE, CRESPO, ECHANIZ, EIGEL, GENNARO, GRIGAR, KAUZER, KREJCI, LLORENTE, NEVEU, PRINDIS, PRSKAVEC, SOUDI, TUNKA).
-       IQR from peers with recorded start ≤18 (CASTRYCK, ECHANIZ, GRIGAR, KREJCI, SOUDI); others
-       are left-censored mid-career in the export so they distort cumulative-by-age.
+    /* MK1-only cumulative-race IQR band — current BME peer CSV
+       (dataset n=17 MK1: AIGNER, BEDA, CASTRYCK, CLARKE, CRESPO, ECHANIZ, EIGEL, GENNARO, GRIGAR, KAUZER, KREJCI, LLORENTE, NEVEU, PRINDIS, PRSKAVEC, SOUDI, TUNKA).
+       IQR from peers with recorded MK1 start ≤18 (CASTRYCK, ECHANIZ, GRIGAR, KREJCI, SOUDI).
        Per age: Q1/Q3 → Tukey filter → recompute → non-decreasing Q1/Q3. */
     const PEER_CUM_IQR_BAND = [{"a":16,"q1":2.5,"q3":3.0,"n":3},{"a":17,"q1":7.5,"q3":10.0,"n":3},{"a":18,"q1":12.5,"q3":16.5,"n":3},{"a":19,"q1":12.5,"q3":17.0,"n":5},{"a":20,"q1":14.0,"q3":27.0,"n":5},{"a":21,"q1":24.0,"q3":34.0,"n":5},{"a":22,"q1":40.0,"q3":41.5,"n":3},{"a":23,"q1":40.0,"q3":49.0,"n":4},{"a":24,"q1":43.5,"q3":61.25,"n":4},{"a":25,"q1":45.5,"q3":63.0,"n":3},{"a":26,"q1":45.75,"q3":63.0,"n":2},{"a":27,"q1":54.0,"q3":63.0,"n":2}];
     const PEER_IQR_FILL = "rgba(255, 158, 128, 0.38)";
