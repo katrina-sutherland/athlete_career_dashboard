@@ -2555,8 +2555,10 @@
         if (g.a == null || g.a <= 18 || g.a > 23) continue;
         for (const item of g.r || []) {
           const name = item[0] || "";
-          const kind = item[1] || "";
-          if (!(kind === "uj" || /u23/i.test(name))) continue;
+          const n = String(name);
+          if (/euro/i.test(n)) continue;
+          const isU23Worlds = /world/i.test(n) && /u23|under.?23/i.test(n);
+          if (!isU23Worlds) continue;
           const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
           const ph = d.advancePhase || "";
           let hit = false;
@@ -2565,11 +2567,13 @@
           } else if (phase === "Final") {
             hit = ph === "Final" || ph === "FinalB" || d.finalBehindPct != null;
           }
-          if (hit) return { a: g.a, y: g.y, name: name, kind: kind };
+          if (hit) return { a: g.a, y: g.y, name: name, kind: item[1] || "" };
         }
       }
       return null;
     }
+
+
 
     /* SNR Semi/Final milestones: World Cup, senior World Championships, Olympics only. */
     function isSnrEligibleRace(name, kind) {
@@ -2727,24 +2731,21 @@
 
 
 /* Career Comparison: age when each athlete FIRST hit the benchmark (null = never / not in source).
-       Peer set = 17 MK1 athletes from progression comparison exports.
+       Peer set = 17 MK1 athletes. Euros do NOT count for JNR / U23 / BME.
        Rules:
-       - JNR Final / JNR Medal: Junior Worlds overall ranks DB (final ≤10 / medal ≤3),
-         plus race-export junior finals/podiums (e.g. Junior Euros) when earlier/only source
-       - U23 Final / U23 Medal: first Final / podium at U23 Worlds/Euros (race export)
-       - WC Top 30 / WC Top 20: first World Cup overall ≤30 / ≤20 (Final, else Semi if DNQ);
-         Clarke / Prskavec / De Gennaro corrected where race export is left-censored
+       - JNR Final / JNR Medal: Junior World Championships only (overall ranks DB;
+         Final≈top 10, Medal=top 3 in the Final)
+       - U23 Final / U23 Medal: U23 World Championships Final / podium only
+       - WC Top 30 / WC Top 20: first World Cup overall ≤30 / ≤20 (Final, else Semi if DNQ)
        - Top 100 / 50 / 20 WR: first ICF world ranking age (WR releases export)
        - SNR Final: first Final at World Cup / senior Worlds / Olympics
-       - BME Medal: first podium at Olympics or senior World Championships (K1 individual,
-         or K1 team Worlds when that was the first BME); ages corrected from published
-         results where the race export is left-censored mid-career
-       Sources: BME race CSV, WR releases CSV, JNR Worlds Overall Ranking.csv. */
+       - BME Medal: first podium at Olympics or senior World Championships only
+       Sources: BME race CSV, WR releases CSV, JNR Worlds Overall Ranking (K1 Men). */
     const CAREER_COMPARISON_IS_SAMPLE = false;
     const CAREER_COMPARISON_ATHLETES = [
       { name: "Titouan CASTRYCK", jnrFinal: 17, jnrMedal: {age: 17, medal: "gold"}, u23Final: 17, u23Medal: {age: 17, medal: "gold"}, wcTop30: 18, wcTop20: 18, top100Wr: 18, top50Wr: 18, top20Wr: 19, snrFinal: 18, bmeMedal: {age: 20, medal: "silver"} },
       { name: "Jakub KREJCI", jnrFinal: 17, jnrMedal: {age: 17, medal: "silver"}, u23Final: 19, u23Medal: {age: 19, medal: "gold"}, wcTop30: 18, wcTop20: 18, top100Wr: 17, top50Wr: 21, top20Wr: 22, snrFinal: 18, bmeMedal: {age: 22, medal: "silver"} },
-      { name: "Pau ECHANIZ", jnrFinal: 17, jnrMedal: {age: 18, medal: "silver"}, u23Final: 21, u23Medal: null, wcTop30: 20, wcTop20: 20, top100Wr: 20, top50Wr: 22, top20Wr: 23, snrFinal: 20, bmeMedal: {age: 23, medal: "bronze"} },
+      { name: "Pau ECHANIZ", jnrFinal: 17, jnrMedal: null, u23Final: 21, u23Medal: null, wcTop30: 20, wcTop20: 20, top100Wr: 20, top50Wr: 22, top20Wr: 23, snrFinal: 20, bmeMedal: {age: 23, medal: "bronze"} },
       { name: "Mathis SOUDI", jnrFinal: null, jnrMedal: null, u23Final: 23, u23Medal: null, wcTop30: 21, wcTop20: 21, top100Wr: 20, top50Wr: 24, top20Wr: null, snrFinal: 24, bmeMedal: {age: 24, medal: "bronze"} },
       { name: "Joe CLARKE", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 21, wcTop20: 22, top100Wr: 19, top50Wr: 21, top20Wr: 23, snrFinal: 24, bmeMedal: {age: 24, medal: "gold"} },
       { name: "Jiri PRSKAVEC", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 18, wcTop20: 18, top100Wr: 18, top50Wr: 18, top20Wr: 18, snrFinal: 22, bmeMedal: {age: 22, medal: "gold"} },
@@ -2753,9 +2754,9 @@
       { name: "Marcello BEDA", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 24, wcTop20: 24, top100Wr: 21, top50Wr: 24, top20Wr: 28, snrFinal: 26, bmeMedal: {age: 26, medal: "silver"} },
       { name: "Joan CRESPO", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 28, wcTop20: 33, top100Wr: 19, top50Wr: 23, top20Wr: 23, snrFinal: 31, bmeMedal: {age: 21, medal: "bronze"} },
       { name: "Pavel EIGEL", jnrFinal: 16, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 29, wcTop20: null, top100Wr: 19, top50Wr: 23, top20Wr: null, snrFinal: 26, bmeMedal: {age: 28, medal: "bronze"} },
-      { name: "Jakub GRIGAR", jnrFinal: 15, jnrMedal: {age: 15, medal: "bronze"}, u23Final: 22, u23Medal: {age: 22, medal: "gold"}, wcTop30: 22, wcTop20: 22, top100Wr: 16, top50Wr: 19, top20Wr: 19, snrFinal: 19, bmeMedal: {age: 24, medal: "silver"} },
+      { name: "Jakub GRIGAR", jnrFinal: 15, jnrMedal: {age: 15, medal: "bronze"}, u23Final: null, u23Medal: null, wcTop30: 22, wcTop20: 22, top100Wr: 16, top50Wr: 19, top20Wr: 19, snrFinal: 19, bmeMedal: {age: 24, medal: "silver"} },
       { name: "Peter KAUZER", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 36, wcTop20: 36, top100Wr: 24, top50Wr: 24, top20Wr: 24, snrFinal: 32, bmeMedal: {age: 26, medal: "gold"} },
-      { name: "David LLORENTE", jnrFinal: null, jnrMedal: null, u23Final: 23, u23Medal: null, wcTop30: 23, wcTop20: 23, top100Wr: 20, top50Wr: 21, top20Wr: 22, snrFinal: 23, bmeMedal: {age: 23, medal: "silver"} },
+      { name: "David LLORENTE", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 23, wcTop20: 23, top100Wr: 20, top50Wr: 21, top20Wr: 22, snrFinal: 23, bmeMedal: {age: 23, medal: "silver"} },
       { name: "Boris NEVEU", jnrFinal: 18, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 33, wcTop20: 33, top100Wr: 21, top50Wr: 21, top20Wr: 23, snrFinal: 33, bmeMedal: {age: 23, medal: "silver"} },
       { name: "Vit PRINDIS", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 27, wcTop20: 27, top100Wr: 20, top50Wr: 21, top20Wr: 25, snrFinal: 30, bmeMedal: {age: 28, medal: "silver"} },
       { name: "Ondrej TUNKA", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 26, wcTop20: 26, top100Wr: 20, top50Wr: 23, top20Wr: 25, snrFinal: 25, bmeMedal: {age: 27, medal: "gold"} },
@@ -2782,14 +2783,18 @@ const CAREER_COMPARISON_COLS = [
         if (g.a == null || g.a > 18) continue;
         for (const item of g.r || []) {
           const name = item[0] || "";
-          const kind = item[1] || "";
-          if (!(kind === "uj" || /\bjnr\b|junior/i.test(name))) continue;
+          const n = String(name);
+          if (/euro/i.test(n)) continue;
+          const isJnrWorlds = /world/i.test(n) && /junior|jnr|jr/i.test(n);
+          if (!isJnrWorlds) continue;
           const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
-          if (reachedPhase(d, phase)) return { a: g.a, y: g.y, name: name, kind: kind };
+          if (reachedPhase(d, phase)) return { a: g.a, y: g.y, name: name, kind: item[1] || "" };
         }
       }
       return null;
     }
+
+
 
     function firstWcTop30Milestone(series) {
       const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
@@ -2828,13 +2833,9 @@ const CAREER_COMPARISON_COLS = [
         if (g.a == null || g.a > 18) continue;
         for (const item of g.r || []) {
           const name = item[0] || "";
-          const kind = item[1] || "";
           const n = String(name);
-          const hasJnr = /junior|\bjnr\b|\bjr\b/i.test(n);
-          const hasU23 = /u23|under.?23/i.test(n);
-          // Junior-named / combined Junior&U23 at ≤18, or uj without a pure U23 label
-          const ok = hasJnr || (kind === "uj" && !hasU23);
-          if (!ok) continue;
+          if (/euro/i.test(n)) continue;
+          if (!(/world/i.test(n) && /junior|jnr|jr/i.test(n))) continue;
           const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
           if (d.overall != null && d.overall >= 1 && d.overall <= 3) {
             const medal = d.overall === 1 ? "gold" : d.overall === 2 ? "silver" : "bronze";
@@ -2845,19 +2846,17 @@ const CAREER_COMPARISON_COLS = [
       return null;
     }
 
+
+
     function firstU23MedalMilestone(series) {
       const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
       for (const g of aged) {
         if (g.a == null || g.a > 23) continue;
         for (const item of g.r || []) {
           const name = item[0] || "";
-          const kind = item[1] || "";
           const n = String(name);
-          const hasJnr = /junior|\bjnr\b|\bjr\b/i.test(n);
-          const hasU23 = /u23|under.?23/i.test(n);
-          // U23-named events, or junior/uj at ages 19–23
-          const ok = hasU23 || ((hasJnr || kind === "uj") && g.a >= 19);
-          if (!ok) continue;
+          if (/euro/i.test(n)) continue;
+          if (!(/world/i.test(n) && /u23|under.?23/i.test(n))) continue;
           const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
           if (d.overall != null && d.overall >= 1 && d.overall <= 3) {
             const medal = d.overall === 1 ? "gold" : d.overall === 2 ? "silver" : "bronze";
@@ -2867,6 +2866,8 @@ const CAREER_COMPARISON_COLS = [
       }
       return null;
     }
+
+
 
     function firstBmeMedalMilestone(series) {
       const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
@@ -2875,8 +2876,9 @@ const CAREER_COMPARISON_COLS = [
           const name = item[0] || "";
           const kind = item[1] || "";
           const n = String(name);
+          if (/euro/i.test(n) || /test event/i.test(n)) continue;
           const isBme = kind === "ol" || /olympic/i.test(n) ||
-            (kind === "sg" && /world championships/i.test(n) && !/world cup/i.test(n));
+            (kind === "sg" && /world championships/i.test(n) && !/world cup/i.test(n) && !/junior|u23|under.?23|\bjnr\b/i.test(n));
           if (!isBme) continue;
           const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
           if (d.overall != null && d.overall >= 1 && d.overall <= 3) {
