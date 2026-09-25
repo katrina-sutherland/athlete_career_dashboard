@@ -3207,9 +3207,8 @@
       // Open races with a junior/U23 category place: show overall field rank
       if (detail && detail.categoryPlace != null) return "Overall Rank";
       const ph = detail && detail.advancePhase;
-      // CSV RANK is phase place; only Final RANK is the overall/final placing
-      if (ph === "Final" || ph === "FinalB") return "Overall Rank";
-      if (ph === "Semi") return "Semi Rank";
+      // Semi place is overall when DNQ final; Final place is overall when they reach final
+      if (ph === "Final" || ph === "FinalB" || ph === "Semi") return "Overall Rank";
       return "Heat Rank";
     }
 
