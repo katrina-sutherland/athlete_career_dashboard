@@ -16,7 +16,7 @@
       --fill: #2a2a2a;
       --accent: #5a9ce6;
       --green: #3fa266;
-      --purple: #9386f2;
+      --purple: #c4b5ff;
       --gray-border: #9a9a9a;
     }
     * { box-sizing: border-box; }
@@ -479,11 +479,10 @@
       position: relative;
       color: var(--text);
       font-weight: 600;
-      cursor: default;
+      cursor: help;
       transition: background 0.12s ease;
     }
     .cmp-cell.has-hits {
-      cursor: help;
       font-weight: 700;
     }
     .cmp-cell.has-hits:hover,
@@ -509,7 +508,7 @@
       top: auto;
       transform: translateX(-50%);
       min-width: 200px;
-      max-width: 280px;
+      max-width: 320px;
       padding: 10px 12px;
       border-radius: 8px;
       border: 1px solid var(--stroke);
@@ -591,6 +590,22 @@
     }
     .cmp-medal.bronze {
       background: linear-gradient(145deg, #e0a070 0%, #cd7f32 45%, #8a5520 100%);
+    }
+    .cmp-tip .tip-section {
+      font-size: 10px;
+      font-weight: 650;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin: 8px 0 3px;
+    }
+    .cmp-tip .tip-section:first-of-type { margin-top: 4px; }
+    .cmp-tip .tip-row.miss {
+      opacity: 0.72;
+    }
+    .cmp-tip .tip-row.miss .tip-age {
+      font-weight: 500;
+      color: var(--text-3);
     }
     .cmp-tip .tip-empty {
       font-size: 11px;
@@ -789,7 +804,7 @@
         <span><span class="dot" style="width:11px;height:11px;background:#d4a017;opacity:0.55;vertical-align:middle"></span> Olympic Games</span>
         <span><span class="dot" style="width:11px;height:11px;background:#3fa266;opacity:0.55;vertical-align:middle"></span> SNR World Championships &amp; World Cups</span>
         <span><span class="dot" style="width:11px;height:11px;background:#e67e22;opacity:0.55;vertical-align:middle"></span> U23 &amp; JNR World Championships</span>
-        <span><span class="dot" style="width:11px;height:11px;background:#9386f2;opacity:0.55;vertical-align:middle"></span> ICF World Ranking races</span>
+        <span><span class="dot" style="width:11px;height:11px;background:#c4b5ff;opacity:0.55;vertical-align:middle"></span> ICF World Ranking races</span>
         <span><span class="dot" style="width:11px;height:11px;background:#5a9ce6;opacity:0.55;vertical-align:middle"></span> All other races</span>
         <span><span class="dot" style="width:11px;height:3px;border-radius:1px;background:#e8e8e8;vertical-align:middle"></span> World Ranking</span>
       </div>
@@ -2423,7 +2438,7 @@
        heat/advance values = athlete total time as % of phase winner
        (100 = equal; 108.81 = 8.81% slower), using TOTAL_TIME else RAW+pen. */
     const RACE_RESULT_DETAILS = {"World Cup Augsburg 2017":{"overall":27,"heatBehindPct":104.2,"advanceBehindPct":111.88,"advancePhase":"Semi"},"World Cup Prague 2017":{"overall":26,"heatBehindPct":105.92},"World Championships Deodoro, Rio 2018":{"overall":28,"heatBehindPct":108.4},"World Cup Augsburg 2018":{"overall":16,"heatBehindPct":104.52,"advanceBehindPct":103.79,"advancePhase":"Semi"},"World Cup Krakow 2018":{"overall":29,"heatBehindPct":107.15},"World Cup La Seu 2018":{"overall":26,"heatBehindPct":104.42},"World Cup Liptovsky Mikulas 2018":{"overall":25,"heatBehindPct":105.87,"advanceBehindPct":108.59,"advancePhase":"Semi"},"World Championships La Seu 2019":{"overall":17,"heatBehindPct":105.57,"advanceBehindPct":104.78,"advancePhase":"Semi"},"World Cup Bratislava 2019":{"overall":24,"heatBehindPct":106.73,"advanceBehindPct":110.61,"advancePhase":"Semi"},"World Cup Lee Valley 2019":{"overall":26,"heatBehindPct":108.23,"advanceBehindPct":110.53,"advancePhase":"Semi"},"World Cup Prague 2019":{"overall":25,"heatBehindPct":105.96},"World Cup Tacen 2019":{"overall":40,"heatBehindPct":116.69},"Australian Open Penrith 2020":{"overall":38,"heatBehindPct":100.84,"advanceBehindPct":164.17,"advancePhase":"Semi"},"Oceania Championships Auckland 2020":{"overall":40,"heatBehindPct":173.3,"heat2BehindPct":163.14},"Australian Open Penrith 2022":{"overall":2,"advanceBehindPct":101.53,"advancePhase":"Final","heatBehindPct":103.53,"semiBehindPct":102.32},"ICF World Ranking Augsburg 2022":{"overall":20,"heatBehindPct":100.17,"advanceBehindPct":108.18,"advancePhase":"Semi"},"World Championships Augsburg 2022":{"overall":33,"heatBehindPct":102.84,"advanceBehindPct":154.61,"advancePhase":"Semi"},"World Cup Krakow 2022":{"overall":27,"heatBehindPct":101.27,"advanceBehindPct":108.1,"advancePhase":"Semi"},"World Cup La Seu 2022":{"overall":22,"heatBehindPct":105.4,"advanceBehindPct":111.61,"advancePhase":"Semi"},"World Cup Pau 2022":{"overall":15,"heatBehindPct":101.13,"advanceBehindPct":104.71,"advancePhase":"Semi"},"World Cup Prague 2022":{"overall":21,"heatBehindPct":101.21,"advanceBehindPct":105.54,"advancePhase":"Semi"},"World Cup Tacen 2022":{"overall":12,"heatBehindPct":106.57,"advanceBehindPct":105.71,"advancePhase":"Semi"},"Australian Open Penrith 2023":{"overall":1,"heatBehindPct":106.63,"advanceBehindPct":100.0,"advancePhase":"Final","semiBehindPct":100.0},"Penrith Open Penrith 2023":{"overall":2,"advanceBehindPct":102.6,"advancePhase":"Final","heatBehindPct":104.49},"Pyrenees Cup La Seu 2023":{"overall":2,"heatBehindPct":102.5,"advanceBehindPct":101.43,"advancePhase":"Final"},"World Championships Lee Valley 2023":{"overall":5,"heatBehindPct":100.92,"advanceBehindPct":103.48,"advancePhase":"Final"},"World Cup Augsburg 2023":{"overall":21,"heatBehindPct":101.79,"advanceBehindPct":107.84,"advancePhase":"Semi"},"World Cup La Seu 2023":{"overall":8,"heatBehindPct":103.02,"advanceBehindPct":107.4,"advancePhase":"Final"},"World Cup Prague 2023":{"overall":22,"heatBehindPct":104.26,"advanceBehindPct":108.31,"advancePhase":"Semi"},"World Cup Tacen 2023":{"overall":7,"heatBehindPct":108.81,"advanceBehindPct":108.43,"advancePhase":"Final"},"World Cup Vaires sur Marne 2023":{"overall":20,"heatBehindPct":100.25,"advanceBehindPct":111.23,"advancePhase":"Semi"},"Australian Open Penrith 2024":{"overall":5,"heatBehindPct":100.71,"advanceBehindPct":103.9,"advancePhase":"Final"},"Oceania Championships Penrith 2024":{"overall":4,"heatBehindPct":100.61,"advanceBehindPct":104.94,"advancePhase":"Final","semiBehindPct":101.48},"Olympic Games Paris 2024":{"overall":7,"heatBehindPct":105.57,"advanceBehindPct":103.04,"advancePhase":"Final"},"World Cup Augsburg 2024":{"overall":5,"heatBehindPct":109.44,"advanceBehindPct":103.45,"advancePhase":"Final"},"World Cup Ivrea 2024":{"overall":32,"heatBehindPct":103.35,"advanceBehindPct":167.8,"advancePhase":"Semi"},"World Cup Krakow 2024":{"overall":31,"heatBehindPct":102.82,"advanceBehindPct":112.25,"advancePhase":"Semi"},"World Cup La Seu 2024":{"overall":32,"heatBehindPct":103.53,"advanceBehindPct":111.84,"advancePhase":"Semi"},"World Cup Prague 2024":{"overall":56,"heatBehindPct":162.28},"Australian Open Penrith 2025":{"overall":8,"heatBehindPct":102.04,"advanceBehindPct":108.42,"advancePhase":"Final"},"Oceania Championships Penrith 2025":{"overall":5,"heatBehindPct":103.08,"advanceBehindPct":105.19,"advancePhase":"Final"},"World Championships Penrith 2025":{"overall":10,"heatBehindPct":101.71,"advanceBehindPct":104.02,"advancePhase":"Final"},"World Cup La Seu 2025":{"overall":74,"heatBehindPct":165.3},"World Cup Pau 2025":{"overall":21,"heatBehindPct":108.61},"World Cup Prague 2025":{"overall":47,"heatBehindPct":163.7},"Australian Open Penrith 2026":{"overall":4,"heatBehindPct":100.0,"advanceBehindPct":104.13,"advancePhase":"Final"},"ICF World Ranking Oklahoma 2026":{"overall":13,"heatBehindPct":110.14,"advanceBehindPct":107.8,"advancePhase":"FinalB"},"Oceania Championships Auckland 2026":{"overall":1,"heatBehindPct":106.83,"advanceBehindPct":100.0,"advancePhase":"Final"},"Penrith Open Penrith 2026":{"overall":4,"heatBehindPct":103.98,"advanceBehindPct":102.55,"advancePhase":"Final"},"World Cup La Seu 2026":{"overall":8,"heatBehindPct":103.21,"advanceBehindPct":108.25,"advancePhase":"Final"},"World Cup Prague 2026":{"overall":12,"heatBehindPct":104.28,"advanceBehindPct":168.71,"advancePhase":"Final"},"World Cup Vaires sur Marne 2026":{"overall":74,"heatBehindPct":269.01},"World Championships Oklahoma 2026":{"overall":12,"heatBehindPct":101.86,"semiBehindPct":104.81,"advanceBehindPct":163.02,"advancePhase":"Final"},"Oceania Championships Penrith 2019":{"overall":7,"heatBehindPct":103.99,"semiBehindPct":103.46,"advanceBehindPct":104.63,"advancePhase":"Final"},"Australian Open Penrith 2019":{"overall":17,"heatBehindPct":104.0,"advanceBehindPct":107.01,"advancePhase":"Semi"},"World Championships Bratislava 2017":{"overall":48},"World Championships Foz do Iguassu 2015":{"overall":16,"heatBehindPct":110.5,"advanceBehindPct":106.19,"advancePhase":"Semi"},"World Championships Krakow 2016":{"overall":40,"heatBehindPct":108.07,"advancePhase":"Semi"},"World Cup Prague 2016":{"overall":32,"heatBehindPct":107.11,"advanceBehindPct":117.34,"advancePhase":"Semi"},"World Cup Tacen 2016":{"overall":31,"heatBehindPct":104.78,"advanceBehindPct":112.1,"advancePhase":"Semi"},"World Championships Foix 2010":{"overall":48,"heatBehindPct":112.38},"World Championships Liptovsky Mikulas 2013":{"overall":41,"heatBehindPct":112.06},"World Championships Penrith 2014":{"overall":30,"heatBehindPct":111.78,"advanceBehindPct":161.31,"advancePhase":"Semi"},"Oceania Championships Penrith 2012":{"overall":14,"heatBehindPct":108.83,"advanceBehindPct":110.45,"advancePhase":"Semi","categoryPlace":2,"categoryLabel":"JNR"},"Australian Open Penrith 2009":{"overall":57,"heatBehindPct":126.83,"categoryPlace":11,"categoryLabel":"JNR"},"Australian Schools Championships Eildon 2009":{"overall":16,"advanceBehindPct":108.89,"advancePhase":"Final","categoryPlace":4,"categoryLabel":"U15"},"World Championships Wausau 2012":{"overall":16,"heatBehindPct":110.05,"advanceBehindPct":105.81,"advancePhase":"Semi"},"Australian Open Penrith 2012":{"overall":79,"heatBehindPct":165.72,"heat2BehindPct":124.07,"advanceBehindPct":111.96,"advancePhase":"Semi"},"Australian Nationals 2012":{"heatBehindPct":109.26,"heat2BehindPct":108.48},"Australian Open Penrith 2013":{"overall":22,"heatBehindPct":104.47,"heat2BehindPct":108.3,"advanceBehindPct":114.76,"advancePhase":"Semi"},"Australian Nationals 2013":{"heatBehindPct":111.91,"heat2BehindPct":112.73},"Australian Open Penrith 2014":{"overall":5,"heatBehindPct":167.87,"heat2BehindPct":105.14,"semiBehindPct":109.17,"advanceBehindPct":102.31,"advancePhase":"Final"},"Oceania Championships Penrith 2014":{"overall":19,"heatBehindPct":167.47,"heat2BehindPct":111.65,"advanceBehindPct":107.97,"advancePhase":"Semi"},"Australian Open Penrith 2015":{"overall":16,"heatBehindPct":107.97,"advanceBehindPct":107.28,"advancePhase":"Semi"},"Australian Nationals 2015":{"heatBehindPct":106.32,"heat2BehindPct":109.26},"Australian Open Penrith 2016":{"overall":25,"heatBehindPct":114.6,"heat2BehindPct":114.76,"advanceBehindPct":105.99,"advancePhase":"Semi"},"Oceania Championships Penrith 2016":{"overall":22,"heatBehindPct":106.11,"heat2BehindPct":105.6,"advanceBehindPct":108.46,"advancePhase":"Semi"},"Australian Nationals 2016":{"overall":3,"heatBehindPct":101.57,"heat2BehindPct":100.5,"advanceBehindPct":101.03,"advancePhase":"Final"},"Australian Open Penrith 2017":{"overall":18,"heatBehindPct":107.75,"advanceBehindPct":107.74,"advancePhase":"Semi"},"Oceania Championships Auckland 2017":{"overall":10,"heatBehindPct":106.13,"semiBehindPct":106.56,"advanceBehindPct":167.55,"advancePhase":"Final"},"Australian Nationals 2017":{"overall":1,"heatBehindPct":100.96,"heat2BehindPct":103.1,"advanceBehindPct":100.0,"advancePhase":"Final"},"Australian Open Penrith 2018":{"overall":7,"heatBehindPct":107.57,"semiBehindPct":100.73,"advanceBehindPct":110.64,"advancePhase":"Final"},"Oceania Championships Auckland 2018":{"overall":9,"heatBehindPct":106.07,"semiBehindPct":107.15,"advanceBehindPct":106.82,"advancePhase":"Final"},"Australian Nationals 2018":{"overall":4,"heatBehindPct":101.62,"heat2BehindPct":100.45,"advanceBehindPct":107.15,"advancePhase":"Final"},"Australian Nationals 2019":{"overall":3,"heatBehindPct":101.7,"heat2BehindPct":100.0,"semiBehindPct":101.8,"advanceBehindPct":102.69,"advancePhase":"Final"},"Australian Nationals 2020":{"overall":3,"heatBehindPct":100.0,"semiBehindPct":100.1,"advanceBehindPct":102.2,"advancePhase":"Final"},"Penrith Open 1 Penrith 2021":{"heatBehindPct":100.0,"heat2BehindPct":156.49,"overall":3},"Penrith Open 2 Penrith 2021":{"heatBehindPct":103.8,"overall":5},"Penrith Open 3 Penrith 2021":{"heatBehindPct":104.76,"heat2BehindPct":104.54,"overall":3},"Penrith Open 4 Penrith 2021":{"heatBehindPct":101.77,"heat2BehindPct":100.0,"overall":1},"Penrith Open 5 Penrith 2021":{"heatBehindPct":100.0,"heat2BehindPct":104.03,"overall":2},"Penrith Open 6 Penrith 2021":{"heatBehindPct":105.56,"heat2BehindPct":166.77,"overall":3},"Australian Nationals 2022":{"heatBehindPct":100.0,"heat2BehindPct":104.47,"semiBehindPct":100.0,"advanceBehindPct":101.47,"advancePhase":"Final","overall":2},"Oceania Championships Penrith 2022":{"heatBehindPct":158.81,"semiBehindPct":100.0,"advanceBehindPct":105.49,"advancePhase":"Final","overall":3},"Selection Event 3 Bradys 2013":{"overall":7,"heatBehindPct":195.28,"advanceBehindPct":100.0,"advancePhase":"FinalB"},"Selection Event 4 Bradys 2013":{"overall":4,"heatBehindPct":108.75,"advanceBehindPct":105.95,"advancePhase":"Final"}};
-    const RACE_COL = { ol: "#d4a017", sg: "#3fa266", uj: "#e67e22", wr: "#9386f2", ot: "#5a9ce6", o: "#5a9ce6", m: "#3fa266" };
+    const RACE_COL = { ol: "#d4a017", sg: "#3fa266", uj: "#e67e22", wr: "#c4b5ff", ot: "#5a9ce6", o: "#5a9ce6", m: "#3fa266" };
     const RACE_OPACITY = 0.55;
 
     function render() {
@@ -2708,33 +2723,37 @@
     }
 
 
-    /* Career Comparison: age when each athlete FIRST hit the benchmark (null = never / not in source).
+/* Career Comparison: age when each athlete FIRST hit the benchmark (null = never / not in source).
        Rules:
        - JNR Final / U23 Final: first Final at Junior or U23 Worlds/Euros (MK1)
-         Display: JNR column only on age ≤18 rows; U23 column only on age ≤23 rows (later ages blacked out)
-       - WC Top 30: first World Cup overall ≤30 = Final rank, else Semi rank if DNQ final
-       - Top 100 / 50 / 20 WR: first age reaching that ICF world ranking (World_Ranking_Select_Athletes.csv + Soudi export, MK1)
+       - JNR Medal / U23 Medal: first podium (≤3) at Junior or U23 Worlds/Euros
+         Display: JNR columns only on age ≤18 rows; U23 columns only on age ≤23 rows (later ages blacked out)
+       - WC Top 30 / WC Top 20: first World Cup overall ≤30 / ≤20 = Final rank, else Semi rank if DNQ final
+       - Top 100 / 50 / 20 WR: first age reaching that ICF world ranking
        - SNR Final: first Final at World Cup / senior Worlds / Olympics
        - BME Medal: first podium (≤3) at Olympics or senior Worlds → { age, medal: gold|silver|bronze }
-       Source: Race_Experience_ByAge.csv + De Gennaro export. */
+       Source: peer race exports + Tim RACE_RESULT_DETAILS / ranking series. */
     const CAREER_COMPARISON_IS_SAMPLE = false;
-    const CAREER_COMPARISON_ATHLETES = [
-      { name: "Titouan CASTRYCK", jnrFinal: 18, u23Final: 17, wcTop30: 18, top100Wr: 18, top50Wr: 18, top20Wr: 19, snrFinal: 18, bmeMedal: {age: 20, medal: "silver"} },
-      { name: "Jakub KREJCI", jnrFinal: 17, u23Final: 19, wcTop30: 18, top100Wr: 17, top50Wr: 21, top20Wr: 22, snrFinal: 18, bmeMedal: {age: 22, medal: "silver"} },
-      { name: "Pau ECHANIZ", jnrFinal: 18, u23Final: 21, wcTop30: 20, top100Wr: 20, top50Wr: 22, top20Wr: 23, snrFinal: 20, bmeMedal: {age: 23, medal: "bronze"} },
-      { name: "Mathis SOUDI", jnrFinal: null, u23Final: 23, wcTop30: 21, top100Wr: 20, top50Wr: 24, top20Wr: null, snrFinal: 24, bmeMedal: {age: 24, medal: "bronze"} },
-      { name: "Joe CLARKE", jnrFinal: null, u23Final: null, wcTop30: 27, top100Wr: 19, top50Wr: 21, top20Wr: 23, snrFinal: 24, bmeMedal: {age: 24, medal: "gold"} },
-      { name: "Jiri PRSKAVEC", jnrFinal: null, u23Final: null, wcTop30: 26, top100Wr: 18, top50Wr: 18, top20Wr: 18, snrFinal: 22, bmeMedal: {age: 22, medal: "gold"} },
-      { name: "Giovanni DE GENNARO", jnrFinal: null, u23Final: null, wcTop30: 24, top100Wr: 19, top50Wr: 19, top20Wr: 24, snrFinal: 24, bmeMedal: {age: 30, medal: "silver"} },
+const CAREER_COMPARISON_ATHLETES = [
+      { name: "Titouan CASTRYCK", jnrFinal: 18, jnrMedal: {age: 18, medal: "gold"}, u23Final: 17, u23Medal: {age: 17, medal: "gold"}, wcTop30: 18, wcTop20: 18, top100Wr: 18, top50Wr: 18, top20Wr: 19, snrFinal: 18, bmeMedal: {age: 20, medal: "silver"} },
+      { name: "Jakub KREJCI", jnrFinal: 17, jnrMedal: {age: 17, medal: "silver"}, u23Final: 19, u23Medal: {age: 19, medal: "gold"}, wcTop30: 18, wcTop20: 18, top100Wr: 17, top50Wr: 21, top20Wr: 22, snrFinal: 18, bmeMedal: {age: 22, medal: "silver"} },
+      { name: "Pau ECHANIZ", jnrFinal: 18, jnrMedal: {age: 18, medal: "silver"}, u23Final: 21, u23Medal: null, wcTop30: 20, wcTop20: 20, top100Wr: 20, top50Wr: 22, top20Wr: 23, snrFinal: 20, bmeMedal: {age: 23, medal: "bronze"} },
+      { name: "Mathis SOUDI", jnrFinal: null, jnrMedal: null, u23Final: 23, u23Medal: null, wcTop30: 21, wcTop20: 21, top100Wr: 20, top50Wr: 24, top20Wr: null, snrFinal: 24, bmeMedal: {age: 24, medal: "bronze"} },
+      { name: "Joe CLARKE", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 27, wcTop20: 27, top100Wr: 19, top50Wr: 21, top20Wr: 23, snrFinal: 24, bmeMedal: {age: 24, medal: "gold"} },
+      { name: "Jiri PRSKAVEC", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 26, wcTop20: 26, top100Wr: 18, top50Wr: 18, top20Wr: 18, snrFinal: 22, bmeMedal: {age: 22, medal: "gold"} },
+      { name: "Giovanni DE GENNARO", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 24, wcTop20: 24, top100Wr: 19, top50Wr: 19, top20Wr: 24, snrFinal: 24, bmeMedal: {age: 30, medal: "silver"} },
     ];
     const CAREER_COMPARISON_AGES = [18, 21, 23, 25, 28, "28+"];
-    const CAREER_COMPARISON_COLS = [
+const CAREER_COMPARISON_COLS = [
       { key: "jnrFinal", label: "JNR Final", color: "#e67e22" },
+      { key: "jnrMedal", label: "JNR Medal", color: "#e67e22" },
       { key: "u23Final", label: "U23 Final", color: "#e67e22" },
+      { key: "u23Medal", label: "U23 Medal", color: "#e67e22" },
       { key: "wcTop30", label: "WC Top 30", color: "#3fa266" },
-      { key: "top100Wr", label: "Top 100 WR", color: "#9386f2" },
-      { key: "top50Wr", label: "Top 50 WR", color: "#7b6ce0" },
-      { key: "top20Wr", label: "Top 20 WR", color: "#5f52c7" },
+      { key: "wcTop20", label: "WC Top 20", color: "#3fa266" },
+      { key: "top100Wr", label: "Top 100 WR", color: "#c4b5ff" },
+      { key: "top50Wr", label: "Top 50 WR", color: "#b39cff" },
+      { key: "top20Wr", label: "Top 20 WR", color: "#9d7cff" },
       { key: "snrFinal", label: "SNR Final", color: "#3fa266" },
       { key: "bmeMedal", label: "BME Medal", color: "#d4a017" }
     ];
@@ -2770,6 +2789,68 @@
       return null;
     }
 
+
+    function firstWcTop20Milestone(series) {
+      const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
+      for (const g of aged) {
+        for (const item of g.r || []) {
+          const name = item[0] || "";
+          const kind = item[1] || "";
+          if (!(kind === "sg" && /world cup/i.test(name))) continue;
+          const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
+          const overall = d.overall;
+          if (overall != null && overall <= 20) return { a: g.a, y: g.y, name: name, overall: overall };
+        }
+      }
+      return null;
+    }
+
+    function firstJnrMedalMilestone(series) {
+      const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
+      for (const g of aged) {
+        if (g.a == null || g.a > 18) continue;
+        for (const item of g.r || []) {
+          const name = item[0] || "";
+          const kind = item[1] || "";
+          const n = String(name);
+          const hasJnr = /junior|\bjnr\b|\bjr\b/i.test(n);
+          const hasU23 = /u23|under.?23/i.test(n);
+          // Junior-named / combined Junior&U23 at ≤18, or uj without a pure U23 label
+          const ok = hasJnr || (kind === "uj" && !hasU23);
+          if (!ok) continue;
+          const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
+          if (d.overall != null && d.overall >= 1 && d.overall <= 3) {
+            const medal = d.overall === 1 ? "gold" : d.overall === 2 ? "silver" : "bronze";
+            return { a: g.a, y: g.y, name: name, medal: medal };
+          }
+        }
+      }
+      return null;
+    }
+
+    function firstU23MedalMilestone(series) {
+      const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
+      for (const g of aged) {
+        if (g.a == null || g.a > 23) continue;
+        for (const item of g.r || []) {
+          const name = item[0] || "";
+          const kind = item[1] || "";
+          const n = String(name);
+          const hasJnr = /junior|\bjnr\b|\bjr\b/i.test(n);
+          const hasU23 = /u23|under.?23/i.test(n);
+          // U23-named events, or junior/uj at ages 19–23
+          const ok = hasU23 || ((hasJnr || kind === "uj") && g.a >= 19);
+          if (!ok) continue;
+          const d = (RACE_RESULT_DETAILS && RACE_RESULT_DETAILS[name]) || {};
+          if (d.overall != null && d.overall >= 1 && d.overall <= 3) {
+            const medal = d.overall === 1 ? "gold" : d.overall === 2 ? "silver" : "bronze";
+            return { a: g.a, y: g.y, name: name, medal: medal };
+          }
+        }
+      }
+      return null;
+    }
+
     function firstBmeMedalMilestone(series) {
       const aged = (series || []).filter((g) => g.a != null).slice().sort((a, b) => a.a - b.a || a.y - b.y);
       for (const g of aged) {
@@ -2793,8 +2874,11 @@
     function buildTimComparisonProfile(series) {
       const rankGroups = ((DATA[athlete] || {})[boatClass] || []).filter((g) => g.a != null);
       const jnr = firstJnrPhaseMilestone(series, "Final");
+      const jnrMed = firstJnrMedalMilestone(series);
       const u23 = firstU23PhaseMilestone(series, "Final");
+      const u23Med = firstU23MedalMilestone(series);
       const wc30 = firstWcTop30Milestone(series);
+      const wc20 = firstWcTop20Milestone(series);
       const snr = firstSnrPhaseMilestone(series, "Final");
       const bme = firstBmeMedalMilestone(series);
       const top100 = firstRankMilestone(rankGroups, (g) => g.best <= 100);
@@ -2803,8 +2887,11 @@
       return {
         name: athlete || "Timothy ANDERSON",
         jnrFinal: jnr ? jnr.a : null,
+        jnrMedal: jnrMed ? { age: jnrMed.a, medal: jnrMed.medal } : null,
         u23Final: u23 ? u23.a : null,
+        u23Medal: u23Med ? { age: u23Med.a, medal: u23Med.medal } : null,
         wcTop30: wc30 ? wc30.a : null,
+        wcTop20: wc20 ? wc20.a : null,
         top100Wr: top100 ? top100.a : null,
         top50Wr: top50 ? top50.a : null,
         top20Wr: top20 ? top20.a : null,
@@ -2841,28 +2928,35 @@
 
     /* JNR Final only at junior ages (≤18). U23 Final only through U23 ages (≤23). */
     function comparisonBandRelevant(key, band) {
-      if (key === "jnrFinal") return band !== "28+" && Number(band) <= 18;
-      if (key === "u23Final") return band !== "28+" && Number(band) <= 23;
+      if (key === "jnrFinal" || key === "jnrMedal") return band !== "28+" && Number(band) <= 18;
+      if (key === "u23Final" || key === "u23Medal") return band !== "28+" && Number(band) <= 23;
       return true;
+    }
+
+    function comparisonIsMedalKey(key) {
+      return key === "bmeMedal" || key === "jnrMedal" || key === "u23Medal";
     }
 
     function comparisonCell(athletes, band, key) {
       const hits = [];
+      const misses = [];
       athletes.forEach((ath) => {
         const raw = ath[key];
-        if (comparisonAchievedBy(raw, band)) {
-          hits.push({
-            name: ath.name,
-            age: comparisonMilestoneAge(raw),
-            medal: key === "bmeMedal" ? comparisonMilestoneMedal(raw) : null
-          });
-        }
+        const row = {
+          name: ath.name,
+          age: comparisonMilestoneAge(raw),
+          medal: comparisonIsMedalKey(key) ? comparisonMilestoneMedal(raw) : null
+        };
+        if (comparisonAchievedBy(raw, band)) hits.push(row);
+        else misses.push(row);
       });
-      hits.sort((a, b) => a.age - b.age || String(a.name).localeCompare(String(b.name)));
+      hits.sort((a, b) => (a.age ?? 99) - (b.age ?? 99) || String(a.name).localeCompare(String(b.name)));
+      misses.sort((a, b) => String(a.name).localeCompare(String(b.name)));
       const n = athletes.length || 1;
-      const pct = Math.round((hits.length / n) * 1000) / 10; // one decimal
-      return { hits, pct, count: hits.length, total: athletes.length };
+      const pct = Math.round((hits.length / n) * 1000) / 10;
+      return { hits, misses, pct, count: hits.length, total: athletes.length };
     }
+
 
 
     function timMilestoneStatus(tim, band, key) {
@@ -2872,7 +2966,7 @@
       return {
         yes: yes,
         age: age,
-        medal: key === "bmeMedal" ? comparisonMilestoneMedal(raw) : null
+        medal: comparisonIsMedalKey(key) ? comparisonMilestoneMedal(raw) : null
       };
     }
 
@@ -2895,17 +2989,25 @@
       );
     }
 
-    function comparisonTipRow(h) {
+    function comparisonTipRow(h, missed) {
       const medal = h.medal
         ? `<span class="cmp-medal ${esc(h.medal)}" title="${esc(h.medal)}" aria-label="${esc(h.medal)} medal"></span>`
         : "";
+      let ageLabel;
+      if (missed) {
+        if (h.age != null) ageLabel = `Age ${h.age} (later)`;
+        else ageLabel = "Not achieved";
+      } else {
+        ageLabel = `Age ${h.age}`;
+      }
       return (
-        `<div class="tip-row">` +
+        `<div class="tip-row${missed ? " miss" : ""}">` +
           `<span class="tip-row-main">${medal}<span class="tip-name">${esc(h.name)}</span></span>` +
-          `<span class="tip-age">Age ${h.age}</span>` +
+          `<span class="tip-age">${esc(ageLabel)}</span>` +
         `</div>`
       );
     }
+
 
 
     function renderCareerComparison() {
@@ -2925,19 +3027,23 @@
         const ageLabel = band === "28+" ? "28+" : String(band);
         const cells = cols.map((col) => {
           if (!comparisonBandRelevant(col.key, band)) {
-            const why = col.key === "jnrFinal" ? "Junior age only (≤18)" : "U23 age only (≤23)";
+            const why = (col.key === "jnrFinal" || col.key === "jnrMedal") ? "Junior age only (≤18)" : "U23 age only (≤23)";
             return `<td class="cmp-cell na" title="${esc(why)}" aria-label="${esc(col.label)} not applicable at age ${esc(ageLabel)}"><span class="cmp-cell-main">—</span></td>`;
           }
           const cell = comparisonCell(athletes, band, col.key);
           const timHit = timMilestoneStatus(tim, band, col.key);
-          const tipRows = cell.hits.length
-            ? cell.hits.map((h) => comparisonTipRow(h)).join("")
-            : `<div class="tip-empty">No athletes hit this by age ${esc(ageLabel)}</div>`;
+          const hitRows = cell.hits.length
+            ? `<div class="tip-section">Achieved (${cell.hits.length})</div>` + cell.hits.map((h) => comparisonTipRow(h, false)).join("")
+            : `<div class="tip-section">Achieved (0)</div><div class="tip-empty">No athletes hit this by age ${esc(ageLabel)}</div>`;
+          const missRows = cell.misses.length
+            ? `<div class="tip-section">Not by ${esc(ageLabel)} (${cell.misses.length})</div>` + cell.misses.map((h) => comparisonTipRow(h, true)).join("")
+            : "";
           const tip =
             `<div class="cmp-tip" role="tooltip">` +
               `<div class="tip-title">${esc(col.label)} by ${esc(ageLabel)} · ${cell.count}/${cell.total}</div>` +
               comparisonTimTip(timHit, ageLabel) +
-              tipRows +
+              hitRows +
+              missRows +
             `</div>`;
           const cls = "cmp-cell" + (cell.count ? " has-hits" : " zero");
           const pctLabel = cell.total ? (Number.isInteger(cell.pct) ? cell.pct + "%" : cell.pct.toFixed(1) + "%") : "—";
@@ -3007,13 +3113,13 @@
         return { key: "snr", color: "#3fa266", glow: "rgba(63,162,102,0.16)" };
       }
       if (/Top 20/i.test(L)) {
-        return { key: "wr20", color: "#5f52c7", glow: "rgba(95,82,199,0.16)" };
+        return { key: "wr20", color: "#9d7cff", glow: "rgba(157,124,255,0.16)" };
       }
       if (/Top 50/i.test(L)) {
-        return { key: "wr50", color: "#7b6ce0", glow: "rgba(123,108,224,0.16)" };
+        return { key: "wr50", color: "#b39cff", glow: "rgba(179,156,255,0.16)" };
       }
       if (/Top 100|World Ranking|WRR|ICF World Ranking|Career Best/i.test(L)) {
-        return { key: "wr", color: "#9386f2", glow: "rgba(147,134,242,0.16)" };
+        return { key: "wr", color: "#c4b5ff", glow: "rgba(196,181,255,0.16)" };
       }
       return { key: "ot", color: "#5a9ce6", glow: "rgba(90,156,230,0.16)" };
     }
@@ -3366,7 +3472,7 @@
       { key: "ol", label: "Olympic Games", color: "#d4a017" },
       { key: "sg", label: "SNR World Championships & World Cups", color: "#3fa266" },
       { key: "uj", label: "U23 & JNR World Championships", color: "#e67e22" },
-      { key: "wr", label: "ICF World Ranking races", color: "#9386f2" },
+      { key: "wr", label: "ICF World Ranking races", color: "#c4b5ff" },
       { key: "ot", label: "All other races", color: "#5a9ce6" }
     ];
 
@@ -3715,7 +3821,7 @@
           const cx = xOf(group.a) + xJitter(group, i);
           const cy = yOf(rel[1]);
           const isCareerBest = careerBestAge != null && group.a === careerBestAge && rel[1] === careerBestRank;
-          const fill = isCareerBest ? "#9386f2" : "#5a9ce6";
+          const fill = isCareerBest ? "#c4b5ff" : "#5a9ce6";
           const r = isCareerBest ? 8 : 6.5;
           svg += `<g class="best-pt" data-age="${group.a}" style="cursor:pointer">
             <circle cx="${cx}" cy="${cy}" r="14" fill="transparent"/>
