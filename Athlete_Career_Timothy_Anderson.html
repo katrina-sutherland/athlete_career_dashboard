@@ -2294,6 +2294,12 @@
       return ticks;
     }
     const RANK_OVERLAY_COL = "#e8e8e8";
+    /* MK1 cumulative-race IQR band from 7 BME medallists
+       (Castryck, Clarke, De Gennaro, Echaniz, Krejci, Prskavec, Soudi).
+       Per age: cum race counts → Q1/Q3 → drop Tukey outliers → recompute Q1/Q3. */
+    const PEER_CUM_IQR_BAND = [{"a":16,"q1":2.0,"q3":2.5,"n":3},{"a":17,"q1":6.5,"q3":9.0,"n":3},{"a":18,"q1":8.75,"q3":14.0,"n":4},{"a":19,"q1":12.5,"q3":19.5,"n":4},{"a":20,"q1":17.25,"q3":29.0,"n":4},{"a":21,"q1":25.5,"q3":37.0,"n":4},{"a":22,"q1":20.0,"q3":41.0,"n":5},{"a":23,"q1":1.25,"q3":41.75,"n":6},{"a":24,"q1":4.5,"q3":52.5,"n":6},{"a":25,"q1":11.0,"q3":38.0,"n":5},{"a":26,"q1":16.5,"q3":30.5,"n":4},{"a":27,"q1":24.5,"q3":28.0,"n":3},{"a":28,"q1":25.5,"q3":31.0,"n":3},{"a":29,"q1":32.0,"q3":38.5,"n":3},{"a":30,"q1":41.5,"q3":47.5,"n":3},{"a":31,"q1":51.5,"q3":58.0,"n":3},{"a":32,"q1":59.0,"q3":67.0,"n":3},{"a":33,"q1":67.0,"q3":78.5,"n":3},{"a":34,"q1":75.75,"q3":91.25,"n":2}];
+    const PEER_IQR_FILL = "rgba(196, 72, 72, 0.32)";
+    const PEER_IQR_STROKE = "rgba(168, 48, 48, 0.55)";
     function rankingGroups() {
       return ((DATA[athlete] || {})[boatClass] || [])
         .filter((g) => g.a != null)
@@ -3461,6 +3467,7 @@
         legend.innerHTML = series.map((s) =>
           `<span><span class="dot" style="width:11px;height:11px;background:${s.color};opacity:0.75;vertical-align:middle"></span> ${esc(s.cls)}</span>`
         ).join("") +
+          `<span><span class="dot" style="width:14px;height:10px;border-radius:2px;background:${PEER_IQR_FILL};border:1px solid ${PEER_IQR_STROKE};vertical-align:middle"></span> BME medallist IQR</span>` +
           `<span><span class="dot" style="width:11px;height:3px;border-radius:1px;background:${RANK_OVERLAY_COL};vertical-align:middle"></span> World Ranking</span>`;
       }
       if (!all.length) {
@@ -3472,8 +3479,16 @@
         return;
       }
       const rankGroups = rankingGroups();
-      const ages = [...new Set(series.flatMap((s) => s.points.map((p) => p.a)).concat(rankGroups.map((g) => g.a)))].sort((a, b) => a - b);
-      const maxCum = Math.max(...series.map((s) => s.points[s.points.length - 1].cum));
+      const iqrBand = (PEER_CUM_IQR_BAND || []).slice().sort((a, b) => a.a - b.a);
+      const ages = [...new Set(
+        series.flatMap((s) => s.points.map((p) => p.a))
+          .concat(rankGroups.map((g) => g.a))
+          .concat(iqrBand.map((b) => b.a))
+      )].sort((a, b) => a - b);
+      const maxCum = Math.max(
+        ...series.map((s) => s.points[s.points.length - 1].cum),
+        ...(iqrBand.length ? iqrBand.map((b) => b.q3) : [0])
+      );
       const countMax = niceMax(Math.max(maxCum, 4));
       const countStep = countMax <= 20 ? 5 : countMax <= 50 ? 10 : countMax <= 100 ? 20 : 25;
       const countTicks = [];
@@ -3504,6 +3519,13 @@
       });
       const rightLabelX = chartW - 22;
       svg += `<text x="${rightLabelX}" y="${yMid}" fill="#5a9ce6" font-size="14" font-weight="700" text-anchor="middle" transform="rotate(90, ${rightLabelX}, ${yMid})">CUMULATIVE RACES</text>`;
+      if (iqrBand.length >= 2) {
+        const top = iqrBand.map((b, i) => `${i === 0 ? "M" : "L"} ${xOf(b.a)} ${yCount(b.q3)}`).join(" ");
+        const bot = iqrBand.slice().reverse().map((b) => `L ${xOf(b.a)} ${yCount(b.q1)}`).join(" ");
+        svg += `<path class="peer-iqr-band" d="${top} ${bot} Z" fill="${PEER_IQR_FILL}" stroke="none" style="pointer-events:none"/>`;
+        svg += `<path d="${iqrBand.map((b, i) => `${i === 0 ? "M" : "L"} ${xOf(b.a)} ${yCount(b.q3)}`).join(" ")}" fill="none" stroke="${PEER_IQR_STROKE}" stroke-width="1" opacity="0.7" style="pointer-events:none"/>`;
+        svg += `<path d="${iqrBand.map((b, i) => `${i === 0 ? "M" : "L"} ${xOf(b.a)} ${yCount(b.q1)}`).join(" ")}" fill="none" stroke="${PEER_IQR_STROKE}" stroke-width="1" opacity="0.7" style="pointer-events:none"/>`;
+      }
       const slotW = plotW / Math.max(ages.length, 1);
       ages.forEach((a) => {
         const x = xOf(a);
