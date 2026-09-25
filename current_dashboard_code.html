@@ -599,6 +599,9 @@
       letter-spacing: 0.03em;
       margin: 8px 0 3px;
     }
+    .cmp-tip .tip-section.hit {
+      color: #3fa266;
+    }
     .cmp-tip .tip-section:first-of-type { margin-top: 4px; }
     .cmp-tip .tip-row.miss {
       opacity: 0.72;
@@ -3045,8 +3048,8 @@ const CAREER_COMPARISON_COLS = [
           const cell = comparisonCell(athletes, band, col.key);
           const timHit = timMilestoneStatus(tim, band, col.key);
           const hitRows = cell.hits.length
-            ? `<div class="tip-section">Achieved (${cell.hits.length})</div>` + cell.hits.map((h) => comparisonTipRow(h, false)).join("")
-            : `<div class="tip-section">Achieved (0)</div><div class="tip-empty">No athletes hit this by age ${esc(ageLabel)}</div>`;
+            ? `<div class="tip-section hit">Achieved (${cell.hits.length})</div>` + cell.hits.map((h) => comparisonTipRow(h, false)).join("")
+            : `<div class="tip-section hit">Achieved (0)</div><div class="tip-empty">No athletes hit this by age ${esc(ageLabel)}</div>`;
           const missRows = cell.misses.length
             ? `<div class="tip-section">Not by ${esc(ageLabel)} (${cell.misses.length})</div>` + cell.misses.map((h) => comparisonTipRow(h, true)).join("")
             : "";
