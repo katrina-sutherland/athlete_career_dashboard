@@ -2724,24 +2724,36 @@
 
 
 /* Career Comparison: age when each athlete FIRST hit the benchmark (null = never / not in source).
+       Peer set = 17 MK1 athletes from progression comparison exports.
        Rules:
-       - JNR Final / U23 Final: first Final at Junior or U23 Worlds/Euros (MK1)
-       - JNR Medal / U23 Medal: first podium (≤3) at Junior or U23 Worlds/Euros
-         Display: JNR columns only on age ≤18 rows; U23 columns only on age ≤23 rows (later ages blacked out)
-       - WC Top 30 / WC Top 20: first World Cup overall ≤30 / ≤20 = Final rank, else Semi rank if DNQ final
-       - Top 100 / 50 / 20 WR: first age reaching that ICF world ranking
+       - JNR Final / JNR Medal: Junior Worlds overall ranks DB (final ≤10 / medal ≤3),
+         plus race-export junior finals/podiums (e.g. Junior Euros) when earlier/only source
+       - U23 Final / U23 Medal: first Final / podium at U23 Worlds/Euros (race export)
+       - WC Top 30 / WC Top 20: first World Cup overall ≤30 / ≤20 (Final, else Semi if DNQ);
+         Clarke / Prskavec / De Gennaro corrected where race export is left-censored
+       - Top 100 / 50 / 20 WR: first ICF world ranking age (WR releases export)
        - SNR Final: first Final at World Cup / senior Worlds / Olympics
-       - BME Medal: first podium (≤3) at Olympics or senior Worlds → { age, medal: gold|silver|bronze }
-       Source: peer race exports + Tim RACE_RESULT_DETAILS / ranking series. */
+       - BME Medal: first podium at Olympics or senior World Championships only
+       Sources: BME race CSV, WR releases CSV, JNR Worlds Overall Ranking.csv. */
     const CAREER_COMPARISON_IS_SAMPLE = false;
-const CAREER_COMPARISON_ATHLETES = [
-      { name: "Titouan CASTRYCK", jnrFinal: 18, jnrMedal: {age: 18, medal: "gold"}, u23Final: 17, u23Medal: {age: 17, medal: "gold"}, wcTop30: 18, wcTop20: 18, top100Wr: 18, top50Wr: 18, top20Wr: 19, snrFinal: 18, bmeMedal: {age: 20, medal: "silver"} },
+    const CAREER_COMPARISON_ATHLETES = [
+      { name: "Titouan CASTRYCK", jnrFinal: 17, jnrMedal: {age: 17, medal: "gold"}, u23Final: 17, u23Medal: {age: 17, medal: "gold"}, wcTop30: 18, wcTop20: 18, top100Wr: 18, top50Wr: 18, top20Wr: 19, snrFinal: 18, bmeMedal: {age: 20, medal: "silver"} },
       { name: "Jakub KREJCI", jnrFinal: 17, jnrMedal: {age: 17, medal: "silver"}, u23Final: 19, u23Medal: {age: 19, medal: "gold"}, wcTop30: 18, wcTop20: 18, top100Wr: 17, top50Wr: 21, top20Wr: 22, snrFinal: 18, bmeMedal: {age: 22, medal: "silver"} },
-      { name: "Pau ECHANIZ", jnrFinal: 18, jnrMedal: {age: 18, medal: "silver"}, u23Final: 21, u23Medal: null, wcTop30: 20, wcTop20: 20, top100Wr: 20, top50Wr: 22, top20Wr: 23, snrFinal: 20, bmeMedal: {age: 23, medal: "bronze"} },
+      { name: "Pau ECHANIZ", jnrFinal: 17, jnrMedal: {age: 18, medal: "silver"}, u23Final: 21, u23Medal: null, wcTop30: 20, wcTop20: 20, top100Wr: 20, top50Wr: 22, top20Wr: 23, snrFinal: 20, bmeMedal: {age: 23, medal: "bronze"} },
       { name: "Mathis SOUDI", jnrFinal: null, jnrMedal: null, u23Final: 23, u23Medal: null, wcTop30: 21, wcTop20: 21, top100Wr: 20, top50Wr: 24, top20Wr: null, snrFinal: 24, bmeMedal: {age: 24, medal: "bronze"} },
-      { name: "Joe CLARKE", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 27, wcTop20: 27, top100Wr: 19, top50Wr: 21, top20Wr: 23, snrFinal: 24, bmeMedal: {age: 24, medal: "gold"} },
-      { name: "Jiri PRSKAVEC", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 26, wcTop20: 26, top100Wr: 18, top50Wr: 18, top20Wr: 18, snrFinal: 22, bmeMedal: {age: 22, medal: "gold"} },
-      { name: "Giovanni DE GENNARO", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 24, wcTop20: 24, top100Wr: 19, top50Wr: 19, top20Wr: 24, snrFinal: 24, bmeMedal: {age: 30, medal: "silver"} },
+      { name: "Joe CLARKE", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 21, wcTop20: 22, top100Wr: 19, top50Wr: 21, top20Wr: 23, snrFinal: 24, bmeMedal: {age: 24, medal: "gold"} },
+      { name: "Jiri PRSKAVEC", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 18, wcTop20: 18, top100Wr: 18, top50Wr: 18, top20Wr: 18, snrFinal: 22, bmeMedal: {age: 22, medal: "gold"} },
+      { name: "Giovanni DE GENNARO", jnrFinal: 18, jnrMedal: {age: 18, medal: "gold"}, u23Final: null, u23Medal: null, wcTop30: 23, wcTop20: 23, top100Wr: 19, top50Wr: 19, top20Wr: 24, snrFinal: 24, bmeMedal: {age: 30, medal: "silver"} },
+      { name: "Hannes AIGNER", jnrFinal: 17, jnrMedal: {age: 17, medal: "bronze"}, u23Final: null, u23Medal: null, wcTop30: 30, wcTop20: 30, top100Wr: 20, top50Wr: 20, top20Wr: 21, snrFinal: 27, bmeMedal: {age: 30, medal: "gold"} },
+      { name: "Marcello BEDA", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 24, wcTop20: 24, top100Wr: 21, top50Wr: 24, top20Wr: 28, snrFinal: 26, bmeMedal: {age: 26, medal: "silver"} },
+      { name: "Joan CRESPO", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 28, wcTop20: 33, top100Wr: 19, top50Wr: 23, top20Wr: 23, snrFinal: 31, bmeMedal: {age: 31, medal: "bronze"} },
+      { name: "Pavel EIGEL", jnrFinal: 16, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 29, wcTop20: null, top100Wr: 19, top50Wr: 23, top20Wr: null, snrFinal: 26, bmeMedal: null },
+      { name: "Jakub GRIGAR", jnrFinal: 15, jnrMedal: {age: 15, medal: "bronze"}, u23Final: 22, u23Medal: {age: 22, medal: "gold"}, wcTop30: 22, wcTop20: 22, top100Wr: 16, top50Wr: 19, top20Wr: 19, snrFinal: 19, bmeMedal: {age: 24, medal: "silver"} },
+      { name: "Peter KAUZER", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 36, wcTop20: 36, top100Wr: 24, top50Wr: 24, top20Wr: 24, snrFinal: 32, bmeMedal: {age: 33, medal: "silver"} },
+      { name: "David LLORENTE", jnrFinal: null, jnrMedal: null, u23Final: 23, u23Medal: null, wcTop30: 23, wcTop20: 23, top100Wr: 20, top50Wr: 21, top20Wr: 22, snrFinal: 23, bmeMedal: {age: 23, medal: "silver"} },
+      { name: "Boris NEVEU", jnrFinal: 18, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 33, wcTop20: 33, top100Wr: 21, top50Wr: 21, top20Wr: 23, snrFinal: 33, bmeMedal: {age: 35, medal: "gold"} },
+      { name: "Vit PRINDIS", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 27, wcTop20: 27, top100Wr: 20, top50Wr: 21, top20Wr: 25, snrFinal: 30, bmeMedal: {age: 33, medal: "gold"} },
+      { name: "Ondrej TUNKA", jnrFinal: null, jnrMedal: null, u23Final: null, u23Medal: null, wcTop30: 26, wcTop20: 26, top100Wr: 20, top50Wr: 23, top20Wr: 25, snrFinal: 25, bmeMedal: null },
     ];
     const CAREER_COMPARISON_AGES = [18, 21, 23, 25, 28, "28+"];
 const CAREER_COMPARISON_COLS = [
