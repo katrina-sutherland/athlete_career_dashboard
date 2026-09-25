@@ -2294,11 +2294,12 @@
       return ticks;
     }
     const RANK_OVERLAY_COL = "#ffffff";
-    /* MK1 cumulative-race IQR band from BME medallist peers with early recorded careers
-       (CASTRYCK, CORNU, DELASSUS, ECHANIZ, FERRAZZI, HEGGE, HOCEVAR, KREJCI, SOUDI; n=9; start age ≤ 18).
-       Per age: cum race counts → Q1/Q3 → Tukey outliers removed → Q1/Q3 recomputed,
-       then Q1/Q3 made non-decreasing with age (cumulative races only grow). */
-    const PEER_CUM_IQR_BAND = [{"a":15,"q1":4.0,"q3":6.0,"n":2},{"a":16,"q1":4.0,"q3":6.0,"n":3},{"a":17,"q1":4.25,"q3":7.25,"n":6},{"a":18,"q1":7.25,"q3":13.25,"n":8},{"a":19,"q1":12.5,"q3":19.5,"n":8},{"a":20,"q1":17.25,"q3":30.5,"n":8},{"a":21,"q1":20.5,"q3":41.0,"n":7},{"a":22,"q1":23.0,"q3":41.0,"n":6},{"a":23,"q1":26.0,"q3":47.0,"n":5},{"a":24,"q1":33.0,"q3":59.0,"n":5},{"a":25,"q1":39.5,"q3":70.5,"n":4},{"a":26,"q1":43.0,"q3":70.5,"n":2},{"a":27,"q1":53.0,"q3":70.5,"n":2}];
+    /* MK1 cumulative-race IQR band from BME medallist peers
+       (CASTRYCK, CLARKE, CORNU, DELASSUS, DELFOUR, ECHANIZ, FERRAZZI, GENNARO, HEGGE, HOCEVAR, KREJCI, POLACZYK, PRSKAVEC, SOUDI; n=14).
+       Early careers (start ≤18) included from first age; left-censored mid-career
+       starts join after 3 observed seasons. Per age: Q1/Q3 → Tukey filter →
+       recompute, then enforce non-decreasing Q1/Q3 (cumulative races only grow). */
+    const PEER_CUM_IQR_BAND = [{"a":15,"q1":4.0,"q3":6.0,"n":2},{"a":16,"q1":4.0,"q3":6.0,"n":3},{"a":17,"q1":4.25,"q3":7.25,"n":6},{"a":18,"q1":7.25,"q3":13.25,"n":8},{"a":19,"q1":12.5,"q3":19.5,"n":8},{"a":20,"q1":17.25,"q3":30.5,"n":8},{"a":21,"q1":20.5,"q3":41.0,"n":7},{"a":22,"q1":23.0,"q3":41.0,"n":6},{"a":23,"q1":26.0,"q3":47.0,"n":5},{"a":24,"q1":33.0,"q3":59.0,"n":5},{"a":25,"q1":38.0,"q3":70.0,"n":5},{"a":26,"q1":38.0,"q3":70.0,"n":5},{"a":27,"q1":38.0,"q3":70.0,"n":5},{"a":28,"q1":38.0,"q3":70.0,"n":3},{"a":29,"q1":38.0,"q3":70.0,"n":3},{"a":30,"q1":38.0,"q3":70.0,"n":5},{"a":31,"q1":38.0,"q3":70.0,"n":5},{"a":32,"q1":38.0,"q3":70.0,"n":5},{"a":33,"q1":38.0,"q3":75.0,"n":5},{"a":34,"q1":38.0,"q3":75.75,"n":4},{"a":35,"q1":38.0,"q3":75.75,"n":2},{"a":36,"q1":43.5,"q3":75.75,"n":2},{"a":37,"q1":57.0,"q3":75.75,"n":2},{"a":38,"q1":71.0,"q3":75.75,"n":2}];
     const PEER_IQR_FILL = "rgba(255, 158, 128, 0.38)";
     const PEER_IQR_STROKE = "rgba(255, 130, 100, 0.55)";
     function rankingGroups() {
