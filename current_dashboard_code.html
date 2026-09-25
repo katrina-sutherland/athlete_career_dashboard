@@ -845,7 +845,7 @@
           ],
           [
             "Oceania Championships Penrith 2012",
-            "ot"
+            "wr"
           ],
           [
             "Australian Nationals 2012",
@@ -885,7 +885,7 @@
           ],
           [
             "Oceania Championships Penrith 2014",
-            "ot"
+            "wr"
           ],
           [
             "World Championships Penrith 2014",
@@ -955,7 +955,7 @@
         "r": [
           [
             "Oceania Championships Auckland 2017",
-            "ot"
+            "wr"
           ],
           [
             "ICF World Ranking Penrith 2017",
@@ -989,7 +989,7 @@
         "r": [
           [
             "Oceania Championships Auckland 2018",
-            "ot"
+            "wr"
           ],
           [
             "ICF World Ranking Penrith 2018",
@@ -1027,7 +1027,7 @@
           ],
           [
             "Oceania Championships Penrith 2019",
-            "ot"
+            "wr"
           ],
           [
             "World Cup Lee Valley 2019",
@@ -1057,7 +1057,7 @@
         "r": [
           [
             "Oceania Championships Auckland 2020",
-            "ot"
+            "wr"
           ],
           [
             "Australian Open Penrith 2020",
@@ -1071,7 +1071,7 @@
         "r": [
           [
             "Oceania Championships Penrith 2022",
-            "ot"
+            "wr"
           ],
           [
             "Australian Open Penrith 2022",
@@ -1155,7 +1155,7 @@
         "r": [
           [
             "Oceania Championships Penrith 2024",
-            "ot"
+            "wr"
           ],
           [
             "Australian Open Penrith 2024",
@@ -1193,7 +1193,7 @@
         "r": [
           [
             "Oceania Championships Penrith 2025",
-            "ot"
+            "wr"
           ],
           [
             "Australian Open Penrith 2025",
@@ -1223,7 +1223,7 @@
         "r": [
           [
             "Oceania Championships Auckland 2026",
-            "ot"
+            "wr"
           ],
           [
             "Penrith Open Penrith 2026",
@@ -2537,7 +2537,7 @@
       add(firstU23PhaseMilestone(series, "Semi"), "First U23 Semi Final");
       add(firstU23PhaseMilestone(series, "Final"), "First U23 Final");
       add(
-        firstRaceMatching(series, (name, kind) => kind === "wr" || /icf world ranking|australian open|penrith open|pyrenees cup/i.test(name)),
+        firstRaceMatching(series, (name, kind) => kind === "wr" || /icf world ranking|australian open|penrith open|pyrenees cup|oceania/i.test(name)),
         "First ICF World Ranking Race"
       );
       add(
@@ -3260,7 +3260,7 @@
       if (k === "ol" || /olympic/i.test(n)) return "ol";
       if (k === "uj" || /\bjnr\b|junior|u23/i.test(n)) return "uj";
       if (k === "sg" || /world cup|world championships/i.test(n)) return "sg";
-      if (k === "wr" || /icf world ranking|australian open|penrith open|pyrenees cup/i.test(n)) return "wr";
+      if (k === "wr" || /icf world ranking|australian open|penrith open|pyrenees cup|oceania/i.test(n)) return "wr";
       return "ot";
     }
 
