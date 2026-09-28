@@ -2459,10 +2459,14 @@
       if (raceLegend) raceLegend.hidden = tab !== "races" || raceMode !== "year";
       const milestonesEl = document.getElementById("milestones");
       if (milestonesEl) milestonesEl.hidden = tab !== "races" || raceMode !== "year";
-      const cmpEl = document.getElementById("career-comparison");
-      if (cmpEl && (tab !== "races" || raceMode !== "year")) {
-        cmpEl.hidden = true;
-        cmpEl.innerHTML = "";
+      if (tab !== "races" || raceMode !== "year") {
+        ["career-comparison", "career-race-exp"].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.hidden = true;
+            el.innerHTML = "";
+          }
+        });
       }
       const cumLegend = document.getElementById("cum-legend");
       if (cumLegend) {
