@@ -2943,6 +2943,7 @@ const CAREER_COMPARISON_COLS = [
       "Ondrej TUNKA": { a0: 18, c: [1,3,5,8,11,15,21,28,35,42,53,58,59,61,70,72,76,80,80] }
     };
     const CAREER_RACE_EXP_ROWS = [10, 20, 30, 40, 50, 60, 70, 80, 90, "100+"];
+    const CAREER_RACE_EXP_COLOR = "#7ec4ff";
     let raceExpCollapsed = false;
 
     function racesAtAge(cum, age) {
@@ -3043,7 +3044,8 @@ const CAREER_COMPARISON_COLS = [
               timLine + hitRows + missRows +
             `</div>`;
           const pctLabel = total ? (Number.isInteger(pct) ? pct + "%" : pct.toFixed(1) + "%") : "—";
-          const tint = hits.length ? `background: ${col.color}12; color: ${col.color};` : `color: ${col.color}99;`;
+          const color = CAREER_RACE_EXP_COLOR;
+          const tint = hits.length ? `background: ${color}14; color: ${color};` : `color: ${color}99;`;
           const markTitle = timRaces == null
             ? `Tim has not achieved ${col.label}`
             : `Tim achieved ${col.label} at ${timRaces} races (age ${timAge})`;
@@ -3061,7 +3063,7 @@ const CAREER_COMPARISON_COLS = [
       }).join("");
 
       const headCols = cols.map((c) =>
-        `<th scope="col" class="cmp-col-head" style="color:${c.color};border-bottom:2px solid ${c.color}">${esc(c.label)}</th>`
+        `<th scope="col" class="cmp-col-head" style="color:${CAREER_RACE_EXP_COLOR};border-bottom:2px solid ${CAREER_RACE_EXP_COLOR}">${esc(c.label)}</th>`
       ).join("");
       host.hidden = false;
       host.className = "milestones collapsible-panel career-comparison" + (raceExpCollapsed ? " is-collapsed" : "");
