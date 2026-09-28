@@ -814,6 +814,7 @@
       <div class="legend" id="cum-legend" hidden></div>
       <div id="milestones" class="milestones collapsible-panel" hidden></div>
       <div id="career-comparison" class="milestones collapsible-panel career-comparison" hidden></div>
+      <div id="career-race-exp" class="milestones collapsible-panel career-comparison" hidden></div>
       <div class="cum-detail-row" id="cum-detail-row" hidden>
         <div id="age-detail" class="age-detail" hidden>
           <div class="age-detail-head">
@@ -2918,6 +2919,136 @@ const CAREER_COMPARISON_COLS = [
     let milestonesCollapsed = false;
     let comparisonCollapsed = false;
 
+    const CAREER_RACE_EXP_ATHLETES = [
+      { name: "Titouan CASTRYCK", r10: 18, r20: 19, r30: 20, r40: 21, r50: 22, r60: null, r70: null, r80: null, r90: null, r100: null },
+      { name: "Jakub KREJCI", r10: 19, r20: 21, r30: 22, r40: 23, r50: 23, r60: 24, r70: null, r80: null, r90: null, r100: null },
+      { name: "Pau ECHANIZ", r10: 19, r20: 22, r30: 23, r40: 24, r50: 24, r60: 25, r70: null, r80: null, r90: null, r100: null },
+      { name: "Mathis SOUDI", r10: 19, r20: 23, r30: 25, r40: 27, r50: null, r60: null, r70: null, r80: null, r90: null, r100: null },
+      { name: "Joe CLARKE", r10: 20, r20: 22, r30: 24, r40: 26, r50: 27, r60: 30, r70: 31, r80: 33, r90: null, r100: null },
+      { name: "Jiri PRSKAVEC", r10: 17, r20: 19, r30: 20, r40: 22, r50: 24, r60: 25, r70: 26, r80: 29, r90: 30, r100: 31 },
+      { name: "Giovanni DE GENNARO", r10: 19, r20: 20, r30: 22, r40: 23, r50: 24, r60: 25, r70: 27, r80: 29, r90: 30, r100: 31 },
+      { name: "Hannes AIGNER", r10: 21, r20: 23, r30: 24, r40: 25, r50: 27, r60: 28, r70: 29, r80: 33, r90: 34, r100: 36 },
+      { name: "Marcello BEDA", r10: 21, r20: 23, r30: 27, r40: 27, r50: 28, r60: 30, r70: 30, r80: 31, r90: null, r100: null },
+      { name: "Joan CRESPO", r10: 21, r20: 24, r30: 25, r40: 27, r50: 28, r60: 30, r70: 33, r80: 34, r90: null, r100: null },
+      { name: "Pavel EIGEL", r10: 21, r20: 23, r30: 25, r40: 27, r50: 29, r60: 35, r70: 36, r80: null, r90: null, r100: null },
+      { name: "Jakub GRIGAR", r10: 16, r20: 18, r30: 19, r40: 20, r50: 21, r60: 22, r70: 25, r80: 26, r90: 28, r100: 28 },
+      { name: "Peter KAUZER", r10: 24, r20: 26, r30: 27, r40: 28, r50: 29, r60: 31, r70: 32, r80: 34, r90: 35, r100: 36 },
+      { name: "David LLORENTE", r10: 21, r20: 22, r30: 23, r40: 26, r50: 28, r60: 29, r70: 29, r80: 30, r90: null, r100: null },
+      { name: "Boris NEVEU", r10: 23, r20: 25, r30: 27, r40: 29, r50: 32, r60: 33, r70: 36, r80: 38, r90: null, r100: null },
+      { name: "Vit PRINDIS", r10: 21, r20: 23, r30: 25, r40: 26, r50: 28, r60: 29, r70: 30, r80: 33, r90: 34, r100: 35 },
+      { name: "Ondrej TUNKA", r10: 23, r20: 25, r30: 26, r40: 28, r50: 28, r60: 32, r70: 34, r80: null, r90: null, r100: null },
+    ];
+    const CAREER_RACE_EXP_THRESHOLDS = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+    const CAREER_RACE_EXP_COLOR = "#7ec4ff";
+    let raceExpCollapsed = false;
+
+    function timRaceThresholdAges() {
+      const out = {};
+      let cum = 0;
+      raceSeries(athlete, boatClass)
+        .filter((g) => g.a != null)
+        .sort((x, y) => x.a - y.a)
+        .forEach((g) => {
+          cum += (g.r || []).length;
+          CAREER_RACE_EXP_THRESHOLDS.forEach((t) => {
+            if (out["r" + t] == null && cum >= t) out["r" + t] = g.a;
+          });
+        });
+      CAREER_RACE_EXP_THRESHOLDS.forEach((t) => { if (out["r" + t] == null) out["r" + t] = null; });
+      out.total = cum;
+      return out;
+    }
+
+    function renderCareerRaceExperience() {
+      const host = document.getElementById("career-race-exp");
+      if (!host) return;
+      const show = tab === "races" && raceMode === "year";
+      if (!show) {
+        host.hidden = true;
+        host.innerHTML = "";
+        return;
+      }
+      const athletes = CAREER_RACE_EXP_ATHLETES || [];
+      const color = CAREER_RACE_EXP_COLOR;
+      const tim = timRaceThresholdAges();
+      const body = CAREER_COMPARISON_AGES.map((band) => {
+        const ageLabel = band === "28+" ? "28+" : String(band);
+        const cells = CAREER_RACE_EXP_THRESHOLDS.map((t) => {
+          const key = "r" + t;
+          const colLabel = t === 100 ? "100+ races" : t + " races";
+          const hits = [];
+          const misses = [];
+          athletes.forEach((ath) => {
+            const a = ath[key];
+            if (comparisonAchievedBy(a, band)) hits.push({ name: ath.name, a });
+            else misses.push({ name: ath.name });
+          });
+          hits.sort((x, y) => x.a - y.a || x.name.localeCompare(y.name));
+          misses.sort((x, y) => x.name.localeCompare(y.name));
+          const total = athletes.length;
+          const pct = total ? Math.round((hits.length / total) * 1000) / 10 : 0;
+          const timAge = tim[key];
+          const timYes = comparisonAchievedBy(timAge, band);
+          const timLine = comparisonTimTip({ yes: timYes, age: timAge }, ageLabel);
+          const hitRows = hits.length
+            ? `<div class="tip-section hit">Achieved (${hits.length})</div>` +
+              hits.map((h) => `<div class="tip-row"><span class="tip-row-main"><span class="tip-name">${esc(h.name)}</span></span><span class="tip-age">Age ${esc(h.a)}</span></div>`).join("")
+            : `<div class="tip-section hit">Achieved (0)</div><div class="tip-empty">No athletes reached ${t} races by age ${esc(ageLabel)}</div>`;
+          const missRows = misses.length
+            ? `<div class="tip-section">Not yet achieved (${misses.length})</div>` +
+              misses.map((h) => `<div class="tip-row miss"><span class="tip-row-main"><span class="tip-name">${esc(h.name)}</span></span></div>`).join("")
+            : "";
+          const tip =
+            `<div class="cmp-tip" role="tooltip">` +
+              `<div class="tip-title">${esc(colLabel)} by ${esc(ageLabel)} · ${hits.length}/${total}</div>` +
+              timLine + hitRows + missRows +
+            `</div>`;
+          const pctLabel = total ? (Number.isInteger(pct) ? pct + "%" : pct.toFixed(1) + "%") : "—";
+          const tint = hits.length ? `background: ${color}14; color: ${color};` : `color: ${color}99;`;
+          const markTitle = timYes
+            ? `Tim reached ${t} races at age ${timAge}`
+            : (timAge != null ? `Tim reached ${t} races at age ${timAge} (not by ${ageLabel})` : `Tim has not reached ${t} races`);
+          return (
+            `<td class="cmp-cell${hits.length ? " has-hits" : " zero"}" tabindex="0" style="${tint}">` +
+              `<span class="cmp-cell-main">` +
+                `<span class="cmp-pct">${pctLabel}</span>` +
+                `<span class="cmp-tim-mark ${timYes ? "yes" : "no"}" title="${esc(markTitle)}" aria-label="${esc(markTitle)}">${timYes ? "✓" : "✗"}</span>` +
+              `</span>` +
+              tip +
+            `</td>`
+          );
+        }).join("");
+        return `<tr><th scope="row">Age ${esc(ageLabel)}</th>${cells}</tr>`;
+      }).join("");
+
+      const headCols = CAREER_RACE_EXP_THRESHOLDS.map((t) =>
+        `<th scope="col" class="cmp-col-head" style="color:${color};border-bottom:2px solid ${color}">${t === 100 ? "100+" : t} Races</th>`
+      ).join("");
+      host.hidden = false;
+      host.className = "milestones collapsible-panel career-comparison" + (raceExpCollapsed ? " is-collapsed" : "");
+      host.innerHTML =
+        `<button type="button" class="collapse-head" aria-expanded="${raceExpCollapsed ? "false" : "true"}">` +
+          `<h3>Career Race Experience Development</h3>` +
+          `<span class="milestones-count">${athletes.length} athletes · Tim ✓/✗</span>` +
+          `<span class="collapse-chevron" aria-hidden="true"></span>` +
+        `</button>` +
+        `<div class="collapse-body">` +
+          `<div class="cmp-table-wrap"><table class="cmp-table">` +
+            `<thead><tr><th scope="col">Age</th>${headCols}</tr></thead>` +
+            `<tbody>${body}</tbody>` +
+          `</table></div>` +
+          `<p class="cmp-legend">% of athletes who had competed in at least that many races by that age (peers: unique World Ranking races; Tim: races in Cumulative Races) &nbsp;·&nbsp; <span class="cmp-tim-mark yes" style="display:inline-flex;vertical-align:middle;margin-right:4px">✓</span> Tim had reached it &nbsp;·&nbsp; <span class="cmp-tim-mark no" style="display:inline-flex;vertical-align:middle;margin:0 4px">✗</span> Tim had not (yet)</p>` +
+        `</div>`;
+      const btn = host.querySelector(".collapse-head");
+      if (btn) {
+        btn.addEventListener("click", () => {
+          raceExpCollapsed = !raceExpCollapsed;
+          renderCareerRaceExperience();
+        });
+      }
+    }
+
+
     function comparisonMilestoneAge(value) {
       if (value == null || value === "") return null;
       if (typeof value === "object") {
@@ -3027,6 +3158,7 @@ const CAREER_COMPARISON_COLS = [
 
 
     function renderCareerComparison() {
+      renderCareerRaceExperience();
       const host = document.getElementById("career-comparison");
       if (!host) return;
       const show = tab === "races" && raceMode === "year";
