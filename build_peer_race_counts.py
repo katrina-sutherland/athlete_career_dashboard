@@ -149,7 +149,10 @@ for age in sorted({a for ath in cohort for a in series[ath]}):
     prev = (q1, q3)
     band.append({"a": age, "q1": round(q1, 2), "q3": round(q3, 2), "n": len(kept)})
 
-json.dump({"band": band, "thresholds": thresholds, "added": added, "cohort": sorted(cohort)},
+cum_by_age = {ath: {"a0": min(s), "c": [s[a] for a in range(min(s), max(s) + 1)]}
+              for ath, s in series.items()}
+json.dump({"band": band, "thresholds": thresholds, "added": added, "cohort": sorted(cohort),
+           "cum": cum_by_age},
           open("/tmp/peer_race_counts.json", "w"), indent=1)
 print("cohort", len(cohort), sorted(cohort))
 print(json.dumps(band, separators=(",", ":")))
