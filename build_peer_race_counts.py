@@ -75,6 +75,28 @@ if use_domestic:
             races[ath][name] = y
             added[ath].append(name)
 
+base_starts = {ath: min(y for y in r.values()) - birth[ath] for ath, r in races.items()}
+
+# Junior Worlds appearances (K1 Men) not present in the WR exports. Only
+# years the WR data cannot already contain are added; cohort membership stays
+# on base_starts so isolated junior races do not pull late-WR athletes in.
+JNR_WORLDS_MISSING = {
+    "Titouan CASTRYCK": [2021],
+    "Giovanni DE GENNARO": [2008],
+    "Ondrej TUNKA": [2008],
+    "Pavel EIGEL": [2006, 2008],
+    "Hannes AIGNER": [2006],
+    "Boris NEVEU": [2004],
+    "Joan CRESPO": [2004, 2006],
+    "Peter KAUZER": [2000],
+}
+if "--no-jnr" not in sys.argv:
+    for ath, years in JNR_WORLDS_MISSING.items():
+        for y in years:
+            name = f"Junior World Championships {y}"
+            races[ath][name] = y
+            added[ath].append(name)
+
 series, starts, thresholds = {}, {}, {}
 for ath, r in races.items():
     by_age = defaultdict(int)
@@ -112,7 +134,7 @@ def tukey_filter(vals):
     return kept if len(kept) >= 2 else vals
 
 
-cohort = [a for a, s in starts.items() if s <= 18]
+cohort = [a for a, s in base_starts.items() if s <= 18]
 band, prev = [], None
 for age in sorted({a for ath in cohort for a in series[ath]}):
     if age < 15 or age > 34:
